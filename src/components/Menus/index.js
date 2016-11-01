@@ -70,8 +70,8 @@ export default class Menus extends Component {
             <Menu.Item key="12">电池包处理信息</Menu.Item>
           </SubMenu>
           <SubMenu key="sub3" title={<span><Icon type="setting" /><span>电池设定信息管理</span></span>}>
-            <Menu.Item key="13">电池参数设定</Menu.Item>
-            <Menu.Item key="14">电池退役设定</Menu.Item>
+            <Menu.Item key="/admin/batterySet/batteryParamsSet">电池参数设定</Menu.Item>
+            <Menu.Item key="/admin/batterySet/batteryRetireSet">电池退役设定</Menu.Item>
             <Menu.Item key="15">电池回收费用设定</Menu.Item>
             <Menu.Item key="16">回收管理点管理</Menu.Item>
             <Menu.Item key="17">处理企业管理</Menu.Item>

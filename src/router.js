@@ -13,7 +13,8 @@ import SysParamsSet from './routes/sys/SysParamsSet';
 import SysLogs from './routes/sys/SysLogs';
 import ServiceRunMG from './routes/sys/ServiceRunMG';
 
-
+import BatteryParamsSet from './routes/batterySet/BatteryParamsSet';
+import BatteryRetireSet from './routes/batterySet/BatteryRetireSet';
 import Admin from './routes/admin';
 import Layout from './routes/layout';
 export default function ({ history  }) {
@@ -33,7 +34,10 @@ export default function ({ history  }) {
             <Route path="sysParamsSet" component={SysParamsSet} breadcrumbName="系统参数设置" />
             <Route path="sysLogs" component={SysLogs} breadcrumbName="系统日志" />
             <Route path="serviceRunMG" component={ServiceRunMG} breadcrumbName="服务运行管理" />
-
+          </Route>
+          <Route path="batterySet" breadcrumbName="电池设定信息管理">
+            <Route path="batteryParamsSet" component={BatteryParamsSet} breadcrumbName="电池参数设定" />
+            <Route path="batteryRetireSet" component={BatteryRetireSet} breadcrumbName="电池退役设定" />
           </Route>
         </Route>
       </Route>

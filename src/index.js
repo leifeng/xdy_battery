@@ -23,6 +23,10 @@ app.model(require('./models/sysLogsModel'));//日志管理
 app.model(require('./models/serviceRunMGModel'));//服务运行管理
 
 
+app.model(require('./models/batteryParamsSetModel'));//电池参数设定
+app.model(require('./models/batteryRetireSetModel'));//电池退役设定
+
+
 // 4. Router
 app.router(require('./router'));
 
