@@ -6,7 +6,7 @@ import TopBar from '../components/TopBar/index'
 import styles from './admin.less';
 function Admin(props, {router}) {
   const {dispatch, children, admin} = props
-  const {visible,url} = admin;
+  const {visible, url, openKeys} = admin;
   const topBarProps = {
     visible,
     visibleChangeFN(visible) {
@@ -26,7 +26,7 @@ function Admin(props, {router}) {
   return (
     <div className="clear" className={styles.normal}>
       <div className={styles.left}>
-        <Menus router={router} url={url} />
+        <Menus router={router} url={url} openKeys={openKeys} />
       </div>
       <div className={styles.right}>
         <TopBar {...topBarProps} />

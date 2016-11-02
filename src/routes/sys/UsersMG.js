@@ -26,13 +26,24 @@ function UsersMG({dispatch, usersMG}) {
         }
       })
     } else {
-      dispatch({
-        type: 'usersMG/visibleState',
-        data: {
-          modalType: type,
-          visible: true
-        }
-      })
+      if (type === 'add') {
+        dispatch({
+          type: 'usersMG/recordState',
+          data: {
+            modalType: type,
+            record: null
+          }
+        })
+      } else {
+        dispatch({
+          type: 'usersMG/visibleState',
+          data: {
+            modalType: type,
+            visible: true
+          }
+        })
+      }
+
     }
 
   }

@@ -5,7 +5,7 @@ import styles from './index.less';
 function TopBar({visible, visibleChangeFN, toUrl}) {
   const content = (
     <div className={styles.pop}>
-      <a onClick={() => { toUrl('/login') } }>修改密码</a>
+      <a onClick={() => { toUrl('/admin/password') } }>修改密码</a>
       <a onClick={() => { toUrl('/login') } }>退出</a>
     </div>
   )

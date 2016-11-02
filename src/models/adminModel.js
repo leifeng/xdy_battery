@@ -5,14 +5,22 @@ export default {
 
   state: {
     visible: false,
-    url: ''
+    url: '',
+    openKeys: []
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
+      const arr = ['sys', 'batteryBasic', 'batterySet', 'batteryRec', 'report'];
+      const openKeys = arr.filter((item, i) => {
+        return location.pathname.indexOf(item) > 0
+      });
       dispatch({
         type: 'urlState',
-        url: location.pathname
+        data: {
+          url: location.pathname,
+          openKeys: openKeys
+        }
       })
     },
   },
@@ -28,7 +36,8 @@ export default {
       return {...state, visible: action.payload }
     },
     urlState(state, action) {
-      return {...state, url: action.url }
+      const {url, openKeys} = action.data
+      return {...state, url, openKeys }
     }
   },
 
