@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryTakeMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,52 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      // transferId: 123,
+      // recycleId: 123,
+      // createTime: '2016-11-7',
+      // status: 1,
+      // companyId: 123,
+      // toAddress: 'ABC',
+      // confirmTime: '2016-11-7',
+      // confirmMan: 'ABC',
+      // transferMan: 'ABC',
+      // toTime: '2016-11-7',
+      // reportCard: 'ABC',
+      // reportDan: 'ABC'
+      transferId: 'KS762486',
+      recycleId: 'WQ21457',
+      recycleCompanyId: '37854',
+      createTime: '2016-11-7',
+      status: '知豆确认，提醒',
+      companyId: 65213,
+      toAddress: '北京五道口',
+      transferMan: '李四',
+      transferPhone: 13519235816,
+      toTime: '2016-11-7',
+      tackMan: '张三',
+      tackPhone: '18516234518',
+      reportCard: 'ABC',
+      reportDan: '王明',
+      confirmTime: '2016-11-7',
+      confirmMan: 'ABC',
+      remak: '退役电池提货单管理'
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryRec/batteryTakeMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryRec/batteryTakeMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

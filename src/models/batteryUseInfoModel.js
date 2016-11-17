@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryUseInfo'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,46 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      id: '123',
+      useType: '保养',
+      vin: 'LJU70W1Z2GG081532',
+      carPlate: '冀F6555',
+      master: '李四',
+      masterPhone: '13125687562',
+      sysCode: '1080',
+      bmsCode: 'ABC',
+      batsCode: 'ABC',
+      moduleCode: 'ABC',
+      batCode: 'ABC',
+      repairTime: '2016-11-7',
+      repairMile: 100,
+      repairDesc: '充电故障',
+      faultCause: 'ABC',
+      faultModel: 'ABC',
+      companyId: 111,
+      repairCompany: 'ABC',
+      repairPhone: '13125683692',
+      repairAddress: '北京市暂安处甲2号院',
+      repairMan: '张三',
+      createTime: '2016-11-7',
+      remark: 'ABC'
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryBasic/batteryUseInfo') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryBasic/batteryUseInfo') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

@@ -1,22 +1,39 @@
 import React, { PropsType } from 'react';
 import styles from './index.less'
+import _ from 'lodash';
+import Forms from '../Forms';
 import { Form, Row, Col, Input, Button, Icon } from 'antd';
 const FormItem = Form.Item;
 function SearchForm({children, handleSearch, forms, form}) {
-  const { getFieldDecorator, resetFields } = form;
+  const { resetFields, validateFields } = form;
   const formItemLayout = {
-    labelCol: { span: 5 },
-    wrapperCol: { span: 19 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
   };
   function handleReset() {
     resetFields();
+  }
+  function onSubmit(e) {
+    e.preventDefault();
+    validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      let values = Object.assign({}, fieldsValue)
+      const dateTypeField = _.filter(forms, { type: 'DatePicker' });
+      _.map(dateTypeField, (item, index) => {
+        const name = item['field']
+        values[name] = fieldsValue[name].format('YYYY-MM-DD')
+      })
+      handleSearch(values);
+    })
   }
   return (
     <div className={styles.normal}>
       <Form
         horizontal
         className={styles.searchform}
-        onSubmit={handleSearch}
+        onSubmit={onSubmit}
         >
         <Row gutter={40}>
           {forms.map((item, i) => {
@@ -25,9 +42,7 @@ function SearchForm({children, handleSearch, forms, form}) {
                 {...formItemLayout}
                 label={item.label}
                 >
-                {getFieldDecorator(item.label)(
-                  <Input placeholder="placeholder" />
-                )}
+                <Forms {...item} form={form} />
               </FormItem>
             </Col>
           })}

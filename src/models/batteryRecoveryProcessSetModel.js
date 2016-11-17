@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryRecoveryProcessSet'
 import { parse } from 'qs'
 
 export default {
@@ -13,7 +13,15 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      id: 45,
+      processCode: '321564',
+      processType: '付费流程',
+      process: '付款单',
+      processNode: '11',
+      nodeId: '22',
+      status: '可用'
+    }],
     record: null
   },
   subscriptions: {

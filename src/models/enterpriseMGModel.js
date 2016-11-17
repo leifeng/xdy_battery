@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/enterpriseMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,50 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      // company: 'QWE',
+      // nickName: 'QWE',
+      // address: 'QWE',
+      // longitude: 150.000,
+      // latitude: 30.000,
+      // linkMan: 'QWE',
+      // linkMobile: 18519234578,
+      // status: 1,
+      // createTime: '2016 - 11 - 4',
+      // creator: 'test',
+      // editTime: '2016 - 11 - 4',
+      // editor: 'test',
+      // remark: 'dssdfdsf'
+      province: '北京',
+      city: '北京市',
+      company: '智信中心',
+      nickName: '智信',
+      Company_type: '知豆公司',
+      address: '北京市五道口',
+      longitude: 168.000,
+      latitude: 36.000,
+      linkMan: '李四',
+      linkPhone: 13500000555,
+      dealMan: '张三',
+      dealPhone: 15023561478,
+      maxValue: 100,
+      status: 0
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batterySet/enterpriseMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batterySet/enterpriseMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

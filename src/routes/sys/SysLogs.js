@@ -10,31 +10,33 @@ function SysLogs({dispatch, sysLogs}) {
   const dic = { 0: '女', 1: '男' }
 
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a href="#">{text}</a>,
+    title: '应用程序',
+    dataIndex: 'application',
+    key: 'application',
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '异常类型',
+    dataIndex: 'logType',
+    key: 'logType',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '日志信息',
+    dataIndex: 'log',
+    key: 'log',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '日志明细',
+    dataIndex: 'logDesc',
+    key: 'logDesc',
   }];
 
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '应用程序', field: 'application', type: 'Input' },
+      {
+        label: '异常类型', field: 'logType', type: 'Select', dic: [
+          { name: '报警类型', value: 1 },
+          { name: '错误类型', value: 0 }
+        ]
+      }
     ]
   };
 

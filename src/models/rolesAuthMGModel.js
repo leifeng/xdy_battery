@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/rolesAuthMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,23 +13,46 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      roleId: '角色1',
+      functionId: '功能1',
+      rightIds: '权限1',
+      status: '可用',
+      createTime: '2016-11-4',
+      creator: 'test',
+      editTime: '2016-11-4',
+      editor: 'test',
+      remark: '角色权限'
+
+    },
+    {
+      roleId: '角色2',
+      functionId: '功能2',
+      rightIds: '权限2',
+      status: '可用',
+      createTime: '2016-11-4',
+      creator: 'test',
+      editTime: '2016-11-4',
+      editor: 'test',
+      remark: '角色权限'
+
+    }],
     record: null
 
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/sys/rolesAuthMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+   // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/sys/rolesAuthMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

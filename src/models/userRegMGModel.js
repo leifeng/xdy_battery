@@ -13,7 +13,9 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      
+    }],
         record:null
 
   },

@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryBasicInfo'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,45 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      id:123,
+      batsCode: 'ABC',
+      sysCode: 'ABC',
+      batsSpecCode: 'ABC',
+      batType: '单体',
+      batNum: 123,
+      batKind: '三元锂',
+      batsModel: 'ABC',
+      materielId: 'ABC',
+      supplierId: 'ABC',
+      supplier: 'ABC',
+      supplierPhone: 'ABC',
+      totalModel: 'ABC',
+      quality: 'ABC',
+      capacity: 'ABC',
+      voltage: 'ABC',
+      carType: 'ABC',
+      cycleNum: 3,
+      produceTime: '2016-11-7',
+      produceAddress: 'ABC',
+      createTime: '2016-11-7',
+      remark: 'ABC'
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryBasic/batteryBasicInfo') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryBasic/batteryBasicInfo') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

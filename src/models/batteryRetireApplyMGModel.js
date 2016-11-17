@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryRetireApplyMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,7 +13,29 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      id: 653,
+      listId: '8456',
+      batsCode: '58464565',
+      checkTime: '2016-11-14',
+      checkMan: '李四',
+      capacity: 100,
+      voltage: 20,
+      retireStatus: '容量20%以下',
+      junkClass: '一级',
+      checkFile: 'a',
+      checkPic: 'b',
+      codePic: 'c',
+      dealWay: '再生处理',
+      dealCompanyId: '54556',
+      remark: '电池退役申请',
+      useDays: 1000,
+      companyId: 666,
+      status: '已提交、通知',
+      qcCheckTime: '2016-11-14',
+      qcCheckMan: '李四',
+      qcCheckRemark: '审核通过'
+    }],
     record: null
   },
   subscriptions: {

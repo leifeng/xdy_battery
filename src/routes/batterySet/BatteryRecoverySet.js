@@ -37,25 +37,54 @@ function BatteryRecoverySet({dispatch, batteryRecoverySet}) {
     }
   }
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '月结单号',
+    dataIndex: 'statementsId',
+    key: 'statementsId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '回收单号',
+    dataIndex: 'recyclesId',
+    key: 'recyclesId',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '电池代付费用',
+    dataIndex: 'recycleFee',
+    key: 'recycleFee',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '电池回收佣金',
+    dataIndex: 'transportUnit',
+    key: 'transportUnit',
+  },  {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+  },  {
+    title: '单据生成时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
+  },  {
+    title: '单据确认时间',
+    dataIndex: 'confirmTime',
+    key: 'confirmTime',
+  },  {
+    title: '单据确认人',
+    dataIndex: 'confirmMan',
+    key: 'confirmMan',
+  },  {
+    title: '财务确认时间',
+    dataIndex: 'financialConfirmTime',
+    key: 'financialConfirmTime',
+  },  {
+    title: '财务确认人',
+    dataIndex: 'financialConfirmMan',
+    key: 'financialConfirmMan',
+  },  {
+    title: '支付确认时间',
+    dataIndex: 'payConfirmTime',
+    key: 'payConfirmTime',
+  },  {
+    title: '支付确认人',
+    dataIndex: 'payConfirmMan',
+    key: 'payConfirmMan',
   }, {
     title: '操作',
     key: 'action',

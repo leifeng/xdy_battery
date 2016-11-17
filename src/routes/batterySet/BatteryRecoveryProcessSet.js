@@ -37,25 +37,60 @@ function BatteryRecoveryProcessSet({dispatch, batteryRecoveryProcessSet}) {
     }
   }
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '编号',
+    dataIndex: 'id',
+    key: 'id',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
+    title: '流程编号',
+    dataIndex: 'Process_code',
     key: 'age',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
+    title: '流程类型',
+    dataIndex: 'process_type',
     key: 'sex',
     render: (text, record) => {
       return dic[text]
     }
   }, {
-    title: '地址',
-    dataIndex: 'address',
+    title: '流程名称',
+    dataIndex: 'Process',
     key: 'address',
+  }, {
+    title: '流程节点名称',
+    dataIndex: 'Process_node',
+    key: 'address',
+  }, {
+    title: '流程节点序号',
+    dataIndex: 'Node_id',
+    key: 'address',
+  }, {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text, record) => {
+      return dic[text]
+    }
+  }, {
+    title: '创建时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
+  }, {
+    title: '创建人',
+    dataIndex: 'creator',
+    key: 'creator',
+  }, {
+    title: '修改时间',
+    dataIndex: 'editTime',
+    key: 'editTime',
+  }, {
+    title: '修改人',
+    dataIndex: 'editor',
+    key: 'editor',
+  }, {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark',
   }, {
     title: '操作',
     key: 'action',

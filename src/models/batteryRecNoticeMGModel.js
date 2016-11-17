@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryRecNoticeMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,45 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      // batsId: 'ABC',
+      // batId: 'ABC',
+      // execStatus: 123,
+      // replaceBatsId: 123,
+      // replaceBatId: 123,
+      // execContent: 'ABC',
+      // execCompany: 'ABC',
+      // execTime: '2016-11-7',
+      // execAddress: 'ABC',
+      // execMan: 'ABC',
+      // remark: 'ABC'
+      id: 632,
+      replaceId: 234,
+      noticeTime: '2016-11-14',
+      companyId: '回收管理点',
+      company: '知豆公司',
+      companyPhone: '13578951245',
+      status: '通知',
+      sureTime: '2016-11-14',
+      sureMan: '李四',
+      invalidTime: '2016-11-14',
+      createTime: '2016-11-14'
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryRec/batteryRecNoticeMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryRec/batteryRecNoticeMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

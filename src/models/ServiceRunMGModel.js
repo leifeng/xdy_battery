@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/serviceRunMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,24 +13,31 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      service: 'TS系统',
+      status: '开始',
+      runTime: '2016-11-11',
+      runReason: 'ABC',
+      dealWay: 'ABC',
+      remark: 'ABC'
+    }],
     record: null
 
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/sys/serviceRunMG') {
-          console.log('subscriptions')
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/sys/serviceRunMG') {
+    //       console.log('subscriptions')
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

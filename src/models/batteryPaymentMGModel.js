@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryPaymentMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,7 +13,23 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      id: 342,
+      transferId: 835,
+      companyType: '电池梯次利用企业',
+      companyId: 4216,
+      totalFee: 200,
+      status: '作废',
+      createTime: '2016-11-14',
+      confirmTime: '2016-11-15',
+      confirmMan: '李四',
+      payTime: '2016-11-15',
+      payMan: '张三',
+      companyConfirmTime: '2016-11-15',
+      companyConfirmMan: '张明',
+      remak: '电池处理支付'
+
+    }],
     record: null
   },
   subscriptions: {

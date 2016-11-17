@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryRecAccountsMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,7 +13,22 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      id: 632,
+      statementsId: 562,
+      companyId: 3452,
+      recycleFee: 100,
+      commission: 20,
+      createTime: '2016-11-11',
+      status: '回收管理点确认，结束',
+      confirmTime: '2016-11-14',
+      confirmMan: '李四',
+      payTime: '2016-11-13',
+      payMan: '张三',
+      confirmPayTime: '2016-11-14',
+      confirmPayMan: '张明',
+      remak: '月度结算'
+    }],
     record: null
   },
   subscriptions: {

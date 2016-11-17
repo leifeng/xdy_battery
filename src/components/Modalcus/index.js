@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.less';
+import _ from 'lodash';
 import { Modal, Form, Input } from 'antd';
 const FormItem = Form.Item;
 import Forms from '../Forms';
@@ -18,7 +19,6 @@ class Modalcus extends Component {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
     };
-    // const _record = Object.assign({}, record)
     return (
       <Modal title={title}
         visible={visible}
@@ -46,12 +46,18 @@ class Modalcus extends Component {
     e.preventDefault();
   }
   onOk() {
-    this.props.form.validateFields((err, values) => {
+    const {modalForms} = this.props;
+    this.props.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
       }
+      let values = Object.assign({}, fieldsValue)
+      const dateTypeField = _.filter(modalForms, { type: 'DatePicker' })
+      _.map(dateTypeField, (item, index) => {
+        const name = item['field']
+        values[name] = fieldsValue[name].format('YYYY-MM-DD')
+      })
       this.props.onOk(values);
-      console.log(values);
     });
   }
 }

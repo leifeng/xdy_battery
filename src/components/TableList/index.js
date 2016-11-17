@@ -2,9 +2,9 @@ import React from 'react';
 import { Table, Button, Icon } from 'antd'
 import styles from './index.less'
 
-function TableList({tableProps, pageProps, openModal, curd}) {
+function TableList({tableProps, pageProps, openModal, deleteForids, curd}) {
   console.log('TableList')
-  const {rowSelection = null, columns, data, selectedRowKeys = [], loading, expandedRowRender = null} = tableProps;
+  const {rowSelection = null, columns, data, rowKey, selectedRowKeys = [], loading, expandedRowRender } = tableProps;
   const {onShowSizeChange, onChange, pageSize, current, total} = pageProps;
 
 
@@ -13,7 +13,10 @@ function TableList({tableProps, pageProps, openModal, curd}) {
     current,
     pageSize,
     total,
-    showSizeChanger: true,
+    size: 'big',
+    showQuickJumper: true,
+    showTotal: total => `共 ${total} 条记录`,
+    showSizeChanger: false,
     onShowSizeChange,
     onChange
   };
@@ -21,7 +24,7 @@ function TableList({tableProps, pageProps, openModal, curd}) {
     <div>
       <div className={styles.delall}>
         <Button type="primary" onClick={() => { openModal('add') } } style={{ display: curd.indexOf('c') !== -1 ? 'inline-block' : 'none' }}><Icon type="plus" />添加</Button>
-        <Button type="primary" disabled={!hasSelected} style={{ display: curd.indexOf('d') !== -1 ? 'inline-block' : 'none' }}><Icon type="delete" />批量删除</Button>
+        <Button type="primary" onClick={deleteForids} disabled={!hasSelected} style={{ display: curd.indexOf('d') !== -1 ? 'inline-block' : 'none' }}><Icon type="delete" />批量删除</Button>
       </div>
       <Table
         rowSelection={rowSelection}
@@ -29,8 +32,8 @@ function TableList({tableProps, pageProps, openModal, curd}) {
         dataSource={data}
         loading={loading}
         pagination={pagination}
-        rowKey={record => record.id}
-        expandedRowRender={record => <p>{record.haha}</p>}
+        rowKey={rowKey}
+        expandedRowRender={expandedRowRender}
         size="middle"
         />
     </div>
@@ -38,8 +41,10 @@ function TableList({tableProps, pageProps, openModal, curd}) {
 }
 TableList.defaultProps = {
   curd: 'curd',
+  rowKey: 'id',
   tableProps: null,
   pageProps: null,
-  openModal:()=>{}
+  openModal: () => { },
+  deleteForids: () => { }
 }
 export default TableList;

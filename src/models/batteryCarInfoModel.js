@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryCarInfo'
 import { parse } from 'qs'
 
 export default {

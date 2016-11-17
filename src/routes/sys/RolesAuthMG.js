@@ -17,6 +17,7 @@ function RolesAuthMG({dispatch, rolesAuthMG}) {
       id
     })
   }
+
   function openModal(type, record) {
     if (record) {
       dispatch({
@@ -27,41 +28,51 @@ function RolesAuthMG({dispatch, rolesAuthMG}) {
         }
       })
     } else {
-      dispatch({
-        type: 'rolesAuthMG/visibleState',
-        data: {
-          modalType: type,
-          visible: true
-        }
-      })
+      if (type === 'add') {
+        dispatch({
+          type: 'rolesAuthMG/recordState',
+          data: {
+            modalType: type,
+            record: null
+          }
+        })
+      } else {
+        dispatch({
+          type: 'rolesAuthMG/visibleState',
+          data: {
+            modalType: type,
+            visible: true
+          }
+        })
+      }
     }
   }
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a href="#">{text}</a>,
+    title: '角色编号',
+    dataIndex: 'roleId',
+    key: 'roleId',
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '功能界面编号',
+    dataIndex: 'functionId',
+    key: 'functionId',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '权限编号',
+    dataIndex: 'rightIds',
+    key: 'rightIds',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+  }, {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark',
   }, {
     title: '操作',
     key: 'action',
     render: (text, record) => (
       <span>
-        <a onClick={() => openModal('edit',record)}>编辑</a>
+        <a onClick={() => openModal('edit', record)}>编辑</a>
         <span className="ant-divider" />
         <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
           <a>删除</a>
@@ -72,7 +83,15 @@ function RolesAuthMG({dispatch, rolesAuthMG}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '角色编号', field: 'roleId', type: 'Input' },
+      { label: '功能界面编号', field: 'functionId', type: 'Input' },
+      { label: '权限编号', field: 'rightIds', type: 'Input' },
+      {
+        label: '状态', field: 'status', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
+        ]
+      }
     ]
   };
 
@@ -132,15 +151,16 @@ function RolesAuthMG({dispatch, rolesAuthMG}) {
       })
     },
     modalForms: [
-      { label: '用户名', field: 'name', type: 'Input' },
-      { label: '年龄', field: 'age', type: 'InputNumber' },
-      { label: '地址', field: 'address', type: 'Input' },
+      { label: '角色编号', field: 'roleId', type: 'Input' },
+      { label: '功能界面编号', field: 'functionId', type: 'Input' },
+      { label: '权限编号', field: 'rightIds', type: 'Input' },
       {
-        label: '性别', field: 'sex', type: 'Radio', dic: [
-          { name: '男', value: 1 },
-          { name: '女', value: 0 }
+        label: '状态', field: 'status', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
         ]
-      }
+      },
+      { label: '备注', field: 'remark', type: 'TextArea' }
     ]
   }
   const NewModalcus = () =>

@@ -22,6 +22,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
+  const _opts={credentials:'include',headers:{'Content-Type': 'application/json'},...options}
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)

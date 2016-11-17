@@ -23,25 +23,54 @@ function BatteryProcessNoticeMG({dispatch, batteryProcessNoticeMG}) {
     }
   }
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '通知编号',
+    dataIndex: 'transferId',
+    key: 'transferId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '回收单号',
+    dataIndex: 'recycleId',
+    key: 'recycleId',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '创建时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+  }, {
+    title: '电池处理企业',
+    dataIndex: 'companyId',
+    key: 'companyId',
+  }, {
+    title: '动力电池处理移交地',
+    dataIndex: 'toAddress',
+    key: 'toAddress',
+  }, {
+    title: '移交企业确认时间',
+    dataIndex: 'confirmTime',
+    key: 'confirmTime',
+  }, {
+    title: '确认人',
+    dataIndex: 'confirmMan',
+    key: 'confirmMan',
+  }, {
+    title: '移交人',
+    dataIndex: 'transferMan',
+    key: 'transferMan',
+  }, {
+    title: '动力电池移交处理企业时间',
+    dataIndex: 'toTime',
+    key: 'toTime',
+  }, {
+    title: '收货人身份证上传',
+    dataIndex: 'reportCard',
+    key: 'reportCard',
+  }, {
+    title: '收货移交单上传',
+    dataIndex: 'reportDan',
+    key: 'reportDan',
   }, {
     title: '操作',
     key: 'action',

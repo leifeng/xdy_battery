@@ -10,25 +10,54 @@ function BatteryProcessInfo({dispatch, batteryProcessInfo}) {
   const dic = { 0: '女', 1: '男' }
 
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '移交编号',
+    dataIndex: 'transferId',
+    key: 'transferId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '电池包编号',
+    dataIndex: 'batsId',
+    key: 'batsId',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '模组编号',
+    dataIndex: 'batId',
+    key: 'batId',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '到货日期',
+    dataIndex: 'arriveTime',
+    key: 'arriveTime',
+  }, {
+    title: '电池处理企业',
+    dataIndex: 'companyId',
+    key: 'companyId',
+  }, {
+    title: '处置状态',
+    dataIndex: 'dealStatus',
+    key: 'dealStatus',
+  }, {
+    title: '处置时间',
+    dataIndex: 'dealTime',
+    key: 'dealTime',
+  }, {
+    title: '产物',
+    dataIndex: 'materials',
+    key: 'materials',
+  }, {
+    title: '产物状态',
+    dataIndex: 'materialStatus',
+    key: 'materialStatus',
+  }, {
+    title: '产生处理时间',
+    dataIndex: 'createDealTime',
+    key: 'createDealTime',
+  }, {
+    title: '创建时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
+  }, {
+    title: '创建人',
+    dataIndex: 'creator',
+    key: 'creator',
   }];
 
   const searchFormProps = {

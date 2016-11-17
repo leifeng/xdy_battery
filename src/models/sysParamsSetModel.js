@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/sysParamsSet'
 import { parse } from 'qs'
 
 export default {
@@ -13,23 +13,47 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
-        record:null
+    data: [{
+      fieldCode: 'ABC',
+      fieldName: 'ABC',
+      paramValue: 'ABC',
+      paramName: 'ABC',
+      relativeId: 'ABC',
+      status: '可用',
+      createTime:'2016 - 11 - 4',
+      creator: 'test',
+      editTime:'2016 - 11 - 4',
+      editor: 'test',
+      remark: '系统参数设置'
+    },{
+      fieldCode: 'DEF',
+      fieldName: 'DEF',
+      paramValue: 'DEF',
+      paramName: 'DEF',
+      relativeId: 'DEF',
+      status: '可用',
+      createTime:'2016 - 11 - 4',
+      creator: 'test',
+      editTime:'2016 - 11 - 4',
+      editor: 'test',
+      remark: '系统参数设置'
+    }],
+    record: null
 
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/sys/sysParamsSet') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/sys/sysParamsSet') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

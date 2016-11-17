@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryRecoverySet'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,44 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      // statementsId: 123,
+      // recyclesId: 123,
+      // recycleFee: 100,
+      // transportUnit: 100,
+      // status: 1,
+      // createTime: '2016-11-7',
+      // confirmTime: '2016-11-7',
+      // confirmMan: '刘明',
+      // financialConfirmTime: '2016-11-7',
+      // financialConfirmMan: '刘明',
+      // payConfirmTime: '2016-11-7',
+      // payConfirmMan: '刘明'
+      companyType: '回收管理点',
+      companyId: 5635,
+      batKind: '三元锂',
+      feeName: '电池单体报价',
+      feeValue: 30,
+      status: '可用'
+
+
+
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batterySet/batteryRecoverySet') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batterySet/batteryRecoverySet') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

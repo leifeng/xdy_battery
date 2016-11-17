@@ -28,41 +28,56 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
         }
       })
     } else {
-      dispatch({
-        type: 'serviceRunMG/visibleState',
-        data: {
-          modalType: type,
-          visible: true
-        }
-      })
+      if (type === 'add') {
+        dispatch({
+          type: 'serviceRunMG/recordState',
+          data: {
+            modalType: type,
+            record: null
+          }
+        })
+      } else {
+        dispatch({
+          type: 'serviceRunMG/visibleState',
+          data: {
+            modalType: type,
+            visible: true
+          }
+        })
+      }
     }
   }
+
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a href="#">{text}</a>,
+    title: '服务名称',
+    dataIndex: 'service',
+    key: 'service',
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '运行状态',
+    dataIndex: 'status',
+    key: 'status',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '当前时间',
+    dataIndex: 'runTime',
+    key: 'runTime',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '异常原因',
+    dataIndex: 'runReason',
+    key: 'runReason',
+  }, {
+    title: '解决方案',
+    dataIndex: 'dealWay',
+    key: 'dealWay',
+  }, {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark',
   }, {
     title: '操作',
     key: 'action',
     render: (text, record) => (
       <span>
-        <a  onClick={() => openModal('edit',record)}>编辑</a>
+        <a onClick={() => openModal('edit', record)}>编辑</a>
         <span className="ant-divider" />
         <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
           <a>删除</a>
@@ -73,7 +88,13 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '服务名称', field: 'service', type: 'Input' },
+      {
+        label: '运行状态', field: 'status', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
+        ]
+      },
     ]
   };
 
@@ -133,15 +154,17 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
       })
     },
     modalForms: [
-      { label: '用户名', field: 'name', type: 'Input' },
-      { label: '年龄', field: 'age', type: 'InputNumber' },
-      { label: '地址', field: 'address', type: 'Input' },
+      { label: '服务名称', field: 'service', type: 'Input' },
+      { label: '当前时间', field: 'runTime', type: 'Input' },
+      { label: '异常原因', field: 'runReason', type: 'Input' },
+      { label: '解决方案', field: 'dealWay', type: 'Input' },
       {
-        label: '性别', field: 'sex', type: 'Radio', dic: [
-          { name: '男', value: 1 },
-          { name: '女', value: 0 }
+        label: '运行状态', field: 'status', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
         ]
-      }
+      },
+      { label: '备注', field: 'remark', type: 'TextArea' },
     ]
   }
   const NewModalcus = () =>

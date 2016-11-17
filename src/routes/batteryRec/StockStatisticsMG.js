@@ -10,25 +10,38 @@ function StockStatisticsMG({dispatch, stockStatisticsMG}) {
   const dic = { 0: '女', 1: '男' }
 
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '退役单号',
+    dataIndex: 'recycleId',
+    key: 'recycleId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '电池包编号',
+    dataIndex: 'batsId',
+    key: 'batsId',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '电池种类',
+    dataIndex: 'batKind',
+    key: 'batKind',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '回收企业编号',
+    dataIndex: 'companyId',
+    key: 'companyId',
+  }, {
+    title: '回收企业',
+    dataIndex: 'recycleCompany',
+    key: 'recycleCompany',
+  }, {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+  }, {
+    title: '入库时间',
+    dataIndex: 'inTime',
+    key: 'inTime',
+  }, {
+    title: '处理时间',
+    dataIndex: 'dealTime',
+    key: 'dealTime',
   }];
 
   const searchFormProps = {

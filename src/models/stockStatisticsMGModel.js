@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/stockStatisticsMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,32 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      recycleId: 'LK542657652',
+      batsCode: '36459462',
+      batKind: '铅酸',
+      companyId: 45215,
+      company: '知豆公司',
+      status: '处理企业已付费',
+      inTime: '2016-11-7',
+      dealTime: '2016-11-7',
+      reamk:'电池库存'
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryRec/stockStatisticsMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryRec/stockStatisticsMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

@@ -11,15 +11,12 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {
-      const arr = ['sys', 'batteryBasic', 'batterySet', 'batteryRec', 'report'];
-      const openKeys = arr.filter((item, i) => {
-        return location.pathname.indexOf(item) > 0
-      });
+      const pathname=location.pathname;
       dispatch({
         type: 'urlState',
         data: {
-          url: location.pathname,
-          openKeys: openKeys
+          url: pathname,
+          openKeys: [].concat(pathname.split('/')[2])
         }
       })
     },

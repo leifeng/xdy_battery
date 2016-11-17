@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/authMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,27 +13,36 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
-    record:null
+    data: [{
+      name: '权限1',
+      status: '可用',
+      remark: '权限管理'
+    },
+    {
+      name: '权限2',
+      status: '不可用',
+      remark: '权限管理'
+    }],
+    record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/sys/authMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/sys/authMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {
     *query({args}, {select, call, put}) {
-      yield put({ type: 'loadingState', data: true });
+      //yield put({ type: 'loadingState', data: true });
       const pageSize = yield select(state => state.authMG.pageSize)
       const current = yield select(state => state.authMG.current)
       const params = { current, pageSize,...args }

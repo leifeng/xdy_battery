@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/usersAuthMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,33 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
-    record:null
+    data: [{
+      userId:'李四',
+		  roleId:'角色1',
+		  status:'可用',
+      remark: '用户与角色'
+	},
+  {
+      userId:'李四',
+		  roleId:'角色2',
+		  status:'不可用',
+      remark: '用户与角色'
+	}],
+    record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/sys/usersAuthMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/sys/usersAuthMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {
@@ -45,7 +56,10 @@ export default {
         })
       }
     },
-    *create() { },
+    *create({args}, {select, call, put}) {
+      yield put({ type: 'loadingState', data: true });
+
+    },
     *remove({id}, {call, put}) {
       yield put({ type: 'loadingState', data: true });
       const {data} = yield call(remove, { id })

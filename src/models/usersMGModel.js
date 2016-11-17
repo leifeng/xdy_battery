@@ -13,22 +13,42 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      account: 'zhangsan',
+      name: '张三',
+      nickName: '张工',
+      userType: '知豆公司',
+      status: '可用',
+      companyId: '电池再生处理企业',
+      dueDate: '2016-11-4',
+      remark: '备注1'
+
+    },
+    {
+      account: 'lisi',
+      name: '李四',
+      nickName: '李工',
+      userType: '回收管理点',
+      status: '不可用',
+      companyId: '电池梯次利用企业',
+      dueDate: '2016-11-4',
+      remark: '备注2'
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/sys/usersMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/sys/usersMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

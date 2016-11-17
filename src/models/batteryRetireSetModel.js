@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryRetireSet'
 import { parse } from 'qs'
 
 export default {
@@ -13,29 +13,68 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+// batsId:123,
+// batId:123,
+// vin:'LU123465487',
+// recycleCompany:'AF',
+// setTime:'2016-11-7',
+// retireTime:'2016-11-7',
+// retireStatus:'11',
+// dealWay:'abc',
+// usedCompany:'abc',
+// temp1:'abc',
+// temp2:'abc',
+// temp3:'abc',
+// temp4:'abc',
+// status:1,
+// remark:'abc',
+// createTime:'2016-11-7',
+// creator:'abc',
+// checkTime:'2016-11-7',
+// checkMan:'abc',
+// checkRemark:'abc',
+// editTime:'2016-11-7',
+// editor:'abc',
+// editRemark:'abc'
+id:252,
+batKind:'三元锂',
+defineClass:'一级',
+days:2,
+batStatus:'电池采购、入库',
+voltage:'25',
+capacity:'100',
+cycleNum:10,
+status:'可用',
+createTime:'2016-11-14',
+creator:'李四',
+editTime:'2016-11-14',
+deiTor:'张三',
+remark:'电池设定处理'
+
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batterySet/batteryRetireSet') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batterySet/batteryRetireSet') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {
     *query({args}, {select, call, put}) {
       yield put({ type: 'loadingState', data: true });
-      const pageSize = yield select(state => state.batteryParamsSet.pageSize)
-      const current = yield select(state => state.batteryParamsSet.current)
+      const pageSize = yield select(state => state.batteryRetireSet.pageSize)
+      const current = yield select(state => state.batteryRetireSet.current)
       const params = { current, pageSize,...args }
       const {data} = yield call(query, parse(params));
       if (data.success) {

@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove } from '../services/batteryProcessInfo'
 import { parse } from 'qs'
 
 export default {
@@ -13,22 +13,40 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
+    data: [{
+      id: 123,
+      transferId: 2564923545,
+      Deal_id: '30254879',
+      Bats_code: '56987134',
+      module_code: '546879',
+      Bat_code: '6413113',
+      arriveTime: '2016-11-7',
+      companyId: 123,
+      dealStatus: 123,
+      dealTime: '2016-11-7',
+      dealQuality: '非常满意',
+      address: '北京市暂安处',
+      linkMan: '李四',
+      linkPhone: '15933222985',
+      createTime: '2016-11-7',
+      creator: 'zhangsan',
+      getTime: '2016-11-7'
+    }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryBasic/batteryProcessInfo') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryBasic/batteryProcessInfo') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

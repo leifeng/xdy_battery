@@ -1,0 +1,82 @@
+.login {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-image: url(../assets/denglubejing.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.position {
+  margin: 200px auto 0;
+  width: 548px;
+  height: 485px;
+  position: relative;
+}
+
+.bg {
+  width: 2000px;
+  height: 2000px;
+  position: absolute;
+  background-image: url(../assets/beijing.png);
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.form {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  h2 {
+    color: #1fb5ac;
+    text-align: center;
+    margin-top: 110px;
+    margin-bottom: 50px;
+    font-size: 30px;
+    font-weight: normal;
+  }
+  label {
+    color: #ccc;
+    font-size: 14px;
+  }
+  input[type=checkbox] {
+    margin-right: 10px;
+  }
+  input[type=text], input[type=password] {
+    width: 370px;
+    height: 42px;
+    line-height: 42px;
+    border: 1px solid #929293;
+    border-radius: 4px;
+    text-indent: 10px;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    font-size: 16px;
+    &:focus{
+      outline:2px solid #1fb5ac;
+    }
+  }
+}
+
+.remember {
+  margin: 0 auto 10px auto;
+  width: 370px;
+}
+
+.btn {
+  width: 370px;
+  height: 44px;
+  line-height: 44px;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+  background-color: #1fb5ac;
+  &:hover {
+    color: #fff;
+  }
+}

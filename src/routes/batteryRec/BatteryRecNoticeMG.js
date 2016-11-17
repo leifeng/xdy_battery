@@ -10,25 +10,50 @@ function BatteryRecNoticeMG({dispatch, batteryRecNoticeMG}) {
   const dic = { 0: '女', 1: '男' }
 
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '电池包编号',
+    dataIndex: 'batsId',
+    key: 'batsId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '模组编号',
+    dataIndex: 'batId',
+    key: 'batId',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '执行情况',
+    dataIndex: 'execStatus',
+    key: 'execStatus',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '更换电池编号',
+    dataIndex: 'replaceBatsId',
+    key: 'replaceBatsId',
+  }, {
+    title: '更换电池模组编号',
+    dataIndex: 'replaceBatId',
+    key: 'replaceBatId',
+  }, {
+    title: '执行内容',
+    dataIndex: 'execContent',
+    key: 'execContent',
+  }, {
+    title: '执行厂商',
+    dataIndex: 'execCompany',
+    key: 'execCompany',
+  }, {
+    title: '执行时间',
+    dataIndex: 'execTime',
+    key: 'execTime',
+  }, {
+    title: '执行地点',
+    dataIndex: 'execAddress',
+    key: 'execAddress',
+  }, {
+    title: '执行人',
+    dataIndex: 'execMan',
+    key: 'execMan',
+  }, {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark',
   }];
 
   const searchFormProps = {

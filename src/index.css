@@ -1,0 +1,47 @@
+:global {
+  html, body, #root {
+    height: 100%;
+  }
+  .bower {
+    margin: 90px auto;
+    width: 850px
+  }
+  .bower h1 {
+    font-size: 60px
+  }
+  .bower a {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin-left: 50px;
+    position: relative;
+    color: #777
+  }
+  .bower i {
+    position: absolute;
+    bottom: -30px;
+    left: 26%
+  }
+  .chrome, .firefox, .ie9, .opera, .safari {
+    background-repeat: no-repeat;
+    background-size: 100%
+  }
+  .chrome {
+    background-image: url(/assets/bower/chrome2.png)
+  }
+  .firefox {
+    background-image: url(/assets/bower/firefox2.png)
+  }
+  .ie9 {
+    background-image: url(/assets/bower/ie2.png)
+  }
+  .opera {
+    background-image: url(/assets/bower/opera2.png)
+  }
+  .safari {
+    background-image: url(/assets/bower/safari2.png)
+  }
+  .bower .icon {
+    margin-top: 50px
+  }
+}

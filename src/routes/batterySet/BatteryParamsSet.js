@@ -27,41 +27,71 @@ function BatteryParamsSet({dispatch, batteryParamsSet}) {
         }
       })
     } else {
-      dispatch({
-        type: 'batteryParamsSet/visibleState',
-        data: {
-          modalType: type,
-          visible: true
-        }
-      })
+      if (type === 'add') {
+        dispatch({
+          type: 'batteryParamsSet/recordState',
+          data: {
+            modalType: type,
+            record: null
+          }
+        })
+      } else {
+        dispatch({
+          type: 'batteryParamsSet/visibleState',
+          data: {
+            modalType: type,
+            visible: true
+          }
+        })
+      }
     }
   }
+
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '字段编号',
+    dataIndex: 'fieldCode',
+    key: 'fieldCode',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '字段名称',
+    dataIndex: 'fieldName',
+    key: 'fieldName',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
+    title: '参数值',
+    dataIndex: 'paramId',
+    key: 'paramId',
     render: (text, record) => {
       return dic[text]
     }
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '参数名称',
+    dataIndex: 'paramName',
+    key: 'paramName',
+  }, {
+    title: '对应编号',
+    dataIndex: 'relativeId',
+    key: 'relativeId',
+  }, {
+    title: '企业编号',
+    dataIndex: 'companyId',
+    key: 'companyId',
+  }, {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text, record) => {
+      return dic[text]
+    }
+  }, {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark',
   }, {
     title: '操作',
     key: 'action',
     render: (text, record) => (
       <span>
-        <a  onClick={() => openModal('edit',record)}>编辑</a>
+        <a onClick={() => openModal('edit', record)}>编辑</a>
         <span className="ant-divider" />
         <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
           <a>删除</a>
@@ -72,7 +102,14 @@ function BatteryParamsSet({dispatch, batteryParamsSet}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '字段编号', field: 'fieldCode', type: 'Input' },
+      { label: '字段名称', field: 'fieldName', type: 'Input' },
+      {
+        label: '状态', field: 'status', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
+        ]
+      }
     ]
   };
 
@@ -132,15 +169,20 @@ function BatteryParamsSet({dispatch, batteryParamsSet}) {
       })
     },
     modalForms: [
-      { label: '用户名', field: 'name', type: 'Input' },
-      { label: '年龄', field: 'age', type: 'InputNumber' },
-      { label: '地址', field: 'address', type: 'Input' },
+      { label: '字段编号', field: 'fieldCode', type: 'Input' },
+      { label: '字段名称', field: 'fieldName', type: 'Input' },
+      { label: '参数值', field: 'paramId', type: 'Input' },
+      { label: '参数名称', field: 'paramName', type: 'Input' },
+      { label: '对应编号', field: 'relativeId', type: 'Input' },
+      { label: '企业编号', field: 'companyId', type: 'Input' },
       {
-        label: '性别', field: 'sex', type: 'Radio', dic: [
-          { name: '男', value: 1 },
-          { name: '女', value: 0 }
+        label: '状态', field: 'status', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
         ]
-      }
+      },
+      { label: '备注', field: 'remark', type: 'TextArea' }
+
     ]
   }
   const NewModalcus = () =>

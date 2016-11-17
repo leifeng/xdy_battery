@@ -1,4 +1,4 @@
-import { query, create, update, remove } from '../services/usersMG'
+import { query, create, update, remove, removes } from '../services/rolesMG'
 import { parse } from 'qs'
 
 export default {
@@ -13,24 +13,33 @@ export default {
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [],
-        record:null
+    data: [{
+      name: '角色1',
+      status: '可用',
+      remark: '角色管理'
+    },
+    {
+      name: '角色2',
+      status: '不可用',
+      remark: '角色管理'
+    }],
+    record: null
 
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/sys/rolesMG') {
-          console.log('subscriptions')
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/sys/rolesMG') {
+    //       console.log('subscriptions')
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {
@@ -47,7 +56,15 @@ export default {
         })
       }
     },
-    *create() { },
+    *create({args}, { call, put}) {
+      const {data} = yield call(create, parse(args))
+      if (data.success) {
+        yield put({
+          type: 'createSuccess',
+          data
+        })
+      }
+    },
     *remove({id}, {call, put}) {
       yield put({ type: 'loadingState', data: true });
       const {data} = yield call(remove, { id })
@@ -58,7 +75,28 @@ export default {
         })
       }
     },
-    *update() { },
+    *removeForids({ids}, {call, put}) {
+      console.log(ids)
+      yield put({ type: 'loadingState', data: true });
+      const {data} = yield call(removes, { ids })
+      if (data && data.success) {
+        yield put({
+          type: 'querySuccess',
+          data
+        })
+      }
+    },
+    *update({args}, {select, call, put}) {
+      const record = yield select(state => state.rolesMG.record)
+      const params = {...args, id: record.id }
+      const {data} = yield call(update, { data: params })
+      if (data.success) {
+        yield put({
+          type: 'updateSuccess',
+          data
+        })
+      }
+    },
   },
 
   reducers: {
@@ -71,10 +109,18 @@ export default {
       const newList = state.data.filter(item => item.id !== id);
       return {...state, data: newList, loading: false }
     },
+    createSuccess(state, action) {
+      const {page, data} = action.data
+      return {...state, data: data, total: page.total, current: page.current, visible: false }
+    },
+    updateSuccess(state, action) {
+      const { data} = action.data
+      return {...state, data: data, visible: false }
+    },
     pageSizeState(state, action) {
       return {...state, pageSize: action.data }
     },
-    loadingState(state, action) {console.log('loadingState',action)
+    loadingState(state, action) {
       return {...state, loading: action.data }
     },
     selectedRowKeysState(state, action) {
