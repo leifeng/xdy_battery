@@ -15,11 +15,15 @@ function BatteryTakeMG({dispatch, batteryTakeMG}) {
     key: 'transferId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '回收单号',
+    title: '退役单号',
     dataIndex: 'recycleId',
     key: 'recycleId',
   }, {
-    title: '创建时间',
+    title: '回收管理点编号',
+    dataIndex: 'recycleCompanyId',
+    key: 'recycleCompanyId',
+  }, {
+    title: '创单时间',
     dataIndex: 'createTime',
     key: 'createTime',
   }, {
@@ -27,13 +31,45 @@ function BatteryTakeMG({dispatch, batteryTakeMG}) {
     dataIndex: 'status',
     key: 'status',
   }, {
-    title: '电池处理企业',
+    title: '处理企业类型',
+    dataIndex: 'companyType',
+    key: 'companyType',
+  }, {
+    title: '处理企业编号',
     dataIndex: 'companyId',
     key: 'companyId',
   }, {
-    title: '动力电池处理移交地',
+    title: '移交地点',
     dataIndex: 'toAddress',
     key: 'toAddress',
+  }, {
+    title: '移交人',
+    dataIndex: 'transferMan',
+    key: 'transferMan',
+  }, {
+    title: '移交人电话',
+    dataIndex: 'transferPhone',
+    key: 'transferPhone',
+  }, {
+    title: '可移交时间',
+    dataIndex: 'toTime',
+    key: 'toTime',
+  }, {
+    title: '提货人',
+    dataIndex: 'tackMan',
+    key: 'tackMan',
+  }, {
+    title: '提货人电话',
+    dataIndex: 'tackPhone',
+    key: 'tackPhone',
+  }, {
+    title: '提货人身份证附件上传',
+    dataIndex: 'reportCard',
+    key: 'reportCard',
+  }, {
+    title: '收货移交单上传',
+    dataIndex: 'reportDan',
+    key: 'reportDan',
   }, {
     title: '移交企业确认时间',
     dataIndex: 'confirmTime',
@@ -43,27 +79,17 @@ function BatteryTakeMG({dispatch, batteryTakeMG}) {
     dataIndex: 'confirmMan',
     key: 'confirmMan',
   }, {
-    title: '移交人',
-    dataIndex: 'transferMan',
-    key: 'transferMan',
-  }, {
-    title: '动力电池移交处理企业时间',
-    dataIndex: 'toTime',
-    key: 'toTime',
-  }, {
-    title: '收货人身份证上传',
-    dataIndex: 'reportCard',
-    key: 'reportCard',
-  }, {
-    title: '收货移交单上传',
-    dataIndex: 'reportDan',
-    key: 'reportDan',
+    title: '备注',
+    dataIndex: 'remak',
+    key: 'remak',
   }];
 
   const searchFormProps = {
     handleSearch: null,
-    forms: [
-      { label: '用户名' }
+     forms: [
+      { label: '通知编号', field: 'transferId', type: 'Input' },
+      { label: '退役单号', field: 'recycleId', type: 'Input' },
+      { label: '回收管理点编号', field: 'recycleCompanyId', type: 'Input' },
     ]
   };
 

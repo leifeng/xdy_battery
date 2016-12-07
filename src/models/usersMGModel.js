@@ -21,8 +21,8 @@ export default {
       status: '可用',
       companyId: '电池再生处理企业',
       dueDate: '2016-11-4',
-      remark: '备注1'
-
+      remark: '备注1',
+aaa:[1]
     },
     {
       account: 'lisi',
@@ -32,7 +32,8 @@ export default {
       status: '不可用',
       companyId: '电池梯次利用企业',
       dueDate: '2016-11-4',
-      remark: '备注2'
+      remark: '备注2',
+      aaa:[1,0]
     }],
     record: null
   },

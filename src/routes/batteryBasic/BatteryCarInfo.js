@@ -35,7 +35,7 @@ function BatteryCarInfo({dispatch, batteryCarInfo}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '用户名', field: 'name', type: 'Input' },
     ]
   };
 

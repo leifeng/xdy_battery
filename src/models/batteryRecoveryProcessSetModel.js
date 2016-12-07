@@ -20,23 +20,24 @@ export default {
       process: '付款单',
       processNode: '11',
       nodeId: '22',
-      status: '可用'
+      status: '可用',
+      remark:'流程设定'
     }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batterySet/batteryRecoveryProcessSet') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batterySet/batteryRecoveryProcessSet') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

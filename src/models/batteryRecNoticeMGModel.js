@@ -35,7 +35,8 @@ export default {
       sureTime: '2016-11-14',
       sureMan: '李四',
       invalidTime: '2016-11-14',
-      createTime: '2016-11-14'
+      createTime: '2016-11-14',
+	  remark:'更换电池通知单管理'
     }],
     record: null
   },

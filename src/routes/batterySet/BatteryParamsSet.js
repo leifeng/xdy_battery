@@ -79,9 +79,6 @@ function BatteryParamsSet({dispatch, batteryParamsSet}) {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
-    render: (text, record) => {
-      return dic[text]
-    }
   }, {
     title: '备注',
     dataIndex: 'remark',

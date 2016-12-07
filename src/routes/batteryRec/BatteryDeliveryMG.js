@@ -10,31 +10,86 @@ function BatteryDeliveryMG({dispatch, batteryDeliveryMG}) {
   const dic = { 0: '女', 1: '男' }
 
   const columns = [{
-    title: '用户名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '通知编号',
+    dataIndex: 'transferId',
+    key: 'transferId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '退役单号',
+    dataIndex: 'recycleId',
+    key: 'recycleId',
   }, {
-    title: '性别',
-    dataIndex: 'sex',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    title: '回收管理点编号',
+    dataIndex: 'recycleCompanyId',
+    key: 'recycleCompanyId',
   }, {
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '创单时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
+  }, {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+  }, {
+    title: '处理企业类型',
+    dataIndex: 'companyType',
+    key: 'companyType',
+  }, {
+    title: '处理企业编号',
+    dataIndex: 'companyId',
+    key: 'companyId',
+  }, {
+    title: '移交地点',
+    dataIndex: 'toAddress',
+    key: 'toAddress',
+  }, {
+    title: '移交人',
+    dataIndex: 'transferMan',
+    key: 'transferMan',
+  }, {
+    title: '移交人电话',
+    dataIndex: 'transferPhone',
+    key: 'transferPhone',
+  }, {
+    title: '可移交时间',
+    dataIndex: 'toTime',
+    key: 'toTime',
+  }, {
+    title: '提货人',
+    dataIndex: 'tackMan',
+    key: 'tackMan',
+  }, {
+    title: '提货人电话',
+    dataIndex: 'tackPhone',
+    key: 'tackPhone',
+  }, {
+    title: '提货人身份证附件上传',
+    dataIndex: 'reportCard',
+    key: 'reportCard',
+  }, {
+    title: '收货移交单上传',
+    dataIndex: 'reportDan',
+    key: 'reportDan',
+  }, {
+    title: '移交企业确认时间',
+    dataIndex: 'confirmTime',
+    key: 'confirmTime',
+  }, {
+    title: '确认人',
+    dataIndex: 'confirmMan',
+    key: 'confirmMan',
+  }, {
+    title: '备注',
+    dataIndex: 'remak',
+    key: 'remak',
   }];
 
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '通知编号', field: 'transferId', type: 'Input' },
+      { label: '退役单号', field: 'recycleId', type: 'Input' },
+      { label: '回收管理点编号', field: 'recycleCompanyId', type: 'Input' },
     ]
   };
 

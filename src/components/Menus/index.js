@@ -46,14 +46,14 @@ export default class Menus extends Component {
     }
     return (
       <div className={styles.normal}>
-        <h2>电池溯源系统</h2>
+        <div className={styles.logo}></div>
         <Menu
           {...MenuProps}
           onClick={this.handleClick}
           onOpenChange={this.onOpenChange}
           style={{ width: 240 }}
           >
-          <SubMenu key="batteryRec" title={<span><Icon type="setting" /><span>电池回收管理</span></span>}>
+          <SubMenu key="batteryRec" title={<span><Icon type="star-o" /><span>电池回收管理</span></span>}>
             <Menu.Item key="/admin/batteryRec/batteryRecNoticeMG">更换电池通知单管理</Menu.Item>
             <Menu.Item key="/admin/batteryRec/batteryRetireApplyMG">电池退役申请表管理</Menu.Item>
             <Menu.Item key="/admin/batteryRec/stockStatisticsMG">库存统计表管理</Menu.Item>
@@ -68,13 +68,13 @@ export default class Menus extends Component {
             <Menu.Item key="/admin/report/batteryInventoryInfo">废旧电池库存信息表</Menu.Item>
             <Menu.Item key="/admin/report/batteryInfoTable">电池进销信息表</Menu.Item>
           </SubMenu>
-          <SubMenu key="batteryBasic" title={<span><Icon type="setting" /><span>电池基本信息管理</span></span>}>
+          <SubMenu key="batteryBasic" title={<span><Icon type="info-circle-o" /><span>电池基本信息管理</span></span>}>
             <Menu.Item key="/admin/batteryBasic/batteryBasicInfo">电池包基本信息</Menu.Item>
             <Menu.Item key="/admin/batteryBasic/batteryCarInfo">电池包车辆信息</Menu.Item>
             <Menu.Item key="/admin/batteryBasic/batteryUseInfo">电池包使用信息</Menu.Item>
             <Menu.Item key="/admin/batteryBasic/batteryProcessInfo">电池包处理信息</Menu.Item>
           </SubMenu>
-          <SubMenu key="batterySet" title={<span><Icon type="setting" /><span>电池设定信息管理</span></span>}>
+          <SubMenu key="batterySet" title={<span><Icon type="credit-card" /><span>电池设定信息管理</span></span>}>
             <Menu.Item key="/admin/batterySet/batteryParamsSet">电池参数设定</Menu.Item>
             <Menu.Item key="/admin/batterySet/batteryRetireSet">电池退役设定</Menu.Item>
             <Menu.Item key="/admin/batterySet/batteryRecoverySet">电池回收费用设定</Menu.Item>
@@ -82,7 +82,7 @@ export default class Menus extends Component {
             <Menu.Item key="/admin/batterySet/enterpriseMG">处理企业管理</Menu.Item>
             <Menu.Item key="/admin/batterySet/batteryRecoveryProcessSet">电池回收流程设定</Menu.Item>
           </SubMenu>
-          <SubMenu key="sys" title={<span><Icon type="setting" /><span>系统信息管理</span></span>}>
+          <SubMenu key="sys" title={<span><Icon type="file-text" /><span>系统信息管理</span></span>}>
             <Menu.Item key="/admin/sys/usersMG">用户管理</Menu.Item>
             <Menu.Item key="/admin/sys/rolesMG">角色管理</Menu.Item>
             <Menu.Item key="/admin/sys/authMG">权限管理</Menu.Item>
@@ -92,9 +92,6 @@ export default class Menus extends Component {
             <Menu.Item key="/admin/sys/sysLogs">系统日志管理</Menu.Item>
             <Menu.Item key="/admin/sys/serviceRunMG">服务运行管理</Menu.Item>
           </SubMenu>
-          <Menu.Item key="/admin/userRegMG">
-            <Icon type="user" />注册用户管理
-          </Menu.Item>
         </Menu>
       </div>
     );

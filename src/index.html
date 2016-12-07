@@ -7,14 +7,25 @@
   <meta name="renderer" content="webkit|ie-comp|ie-stand">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>电池溯源系统</title>
-  <link rel="stylesheet" href="/index.css" />
+  <script>
+        (function () {
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.indexOf('msie') > 0) {
+                var ie = ua.match(/msie ([\d.]+)/)[1];
+                if (ie - 0 <= 8) {
+                    location.href="/static/bowers.html";
+                }
+            }
+        })();
+    </script>
+  <link rel="stylesheet" href="/dist/index.css" />
 </head>
 
 <body>
 
   <div id="root"></div>
 
-  <script src="/index.js"></script>
+  <script src="/dist/index.js"></script>
 
 </body>
 

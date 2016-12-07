@@ -1,0 +1,82 @@
+ @color: #0fabf8;
+ @btnColor: #55afe1;
+ :global {
+   .ant-calendar-picker {
+     display: block;
+   }
+   .ant-menu-submenu {
+     border-bottom: 1px solid #2a3950;
+   }
+   .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+     font-size: 16px;
+   }
+   .ant-menu-submenu-open .ant-menu-submenu-title .anticon {
+     color: @color;
+   }
+   .ant-menu-submenu {
+     color: #fff!important;
+     background-color: #364860!important;
+   }
+   .ant-menu-dark, .ant-menu-dark .ant-menu-sub {
+     background-color: #202b3c!important;
+   }
+   .ant-menu-dark.ant-menu-inline .ant-menu-item-selected {
+     background-color: #202b3c!important;
+     &:before {
+       content: '';
+       width: 5px;
+       height: 100%;
+       float: left;
+       margin-left: -48px;
+       background-color: @color;
+     }
+   }
+   .ant-menu-submenu-inline > .ant-menu-submenu-title:after {
+     content: "\E606"!important;
+   }
+   .ant-menu-submenu-open.ant-menu-submenu-inline > .ant-menu-submenu-title:after {
+     color: @color;
+   }
+   .ant-table-row-expand-icon {
+     color:#fff;
+     background-color: @color!important;
+   }
+   .ant-table {
+     border-radius: 0!important;
+   }
+   .ant-table table {
+     border-radius: 0!important;
+   }
+   .ant-table-thead > tr > th {
+     background: #5a697e!important;
+     color: #fff;
+   }
+   .ant-pagination {
+     margin: 16px auto!important;
+     width: 520px;
+     float: none!important;
+   }
+   .ant-btn-primary {
+     color: #fff;
+     background-color: @btnColor!important;
+     border-color: @btnColor!important;
+   }
+   .ant-btn-primary-del.disabled, .ant-btn-primary-del[disabled] {
+     color: #999!important;
+     background-color: #f7f7f7!important;
+     border-color: #d9d9d9!important;
+   }
+   .ant-btn-primary-del {
+     color: #fff!important;
+     background-color: #5a697b!important;
+     border-color: #5a697b!important;
+   }
+   .ant-checkbox-checked .ant-checkbox-inner, .ant-checkbox-indeterminate .ant-checkbox-inner {
+     background-color: @btnColor;
+     border-color: @btnColor;
+   }
+   .ant-pagination-item-active {
+     background-color: @btnColor;
+     border-color: @btnColor;
+   }
+ }

@@ -16,8 +16,8 @@ function StockStatisticsMG({dispatch, stockStatisticsMG}) {
     render: text => <a href="#">{text}</a>,
   }, {
     title: '电池包编号',
-    dataIndex: 'batsId',
-    key: 'batsId',
+    dataIndex: 'batsCode',
+    key: 'batsCode',
   }, {
     title: '电池种类',
     dataIndex: 'batKind',
@@ -28,8 +28,8 @@ function StockStatisticsMG({dispatch, stockStatisticsMG}) {
     key: 'companyId',
   }, {
     title: '回收企业',
-    dataIndex: 'recycleCompany',
-    key: 'recycleCompany',
+    dataIndex: 'company',
+    key: 'company',
   }, {
     title: '状态',
     dataIndex: 'status',
@@ -42,12 +42,18 @@ function StockStatisticsMG({dispatch, stockStatisticsMG}) {
     title: '处理时间',
     dataIndex: 'dealTime',
     key: 'dealTime',
+  }, {
+    title: '备注',
+    dataIndex: 'reamk',
+    key: 'reamk',
   }];
 
   const searchFormProps = {
     handleSearch: null,
-    forms: [
-      { label: '用户名' }
+     forms: [
+      { label: '退役单号', field: 'recycleId', type: 'Input' },
+      { label: '电池包编号', field: 'batsCode', type: 'Input' },
+      { label: '回收企业', field: 'recycleCompany', type: 'Input' },
     ]
   };
 

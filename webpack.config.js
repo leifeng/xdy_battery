@@ -36,7 +36,7 @@ module.exports = function (webpackConfig, env) {
       loader.test = /\.css$/;
     }
   });
-  webpackConfig.output.publicPath='/';
+  webpackConfig.output.publicPath='/dist/';
 
   return webpackConfig;
 };

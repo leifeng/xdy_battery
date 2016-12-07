@@ -48,9 +48,9 @@ function BatteryRecoveryRecord({dispatch, batteryRecoveryRecord}) {
 
   }
   const columns = [{
-    title: '上传信息编号',
-    dataIndex: 'infoId',
-    key: 'infoId',
+    title: '上传信息名称',
+    dataIndex: 'infoName',
+    key: 'infoName',
     render: text => <a href="#">{text}</a>,
   }, {
     title: '上传内容',
@@ -71,8 +71,8 @@ function BatteryRecoveryRecord({dispatch, batteryRecoveryRecord}) {
   }];
   const searchFormProps = {
     handleSearch: null,
-    forms: [
-      { label: '用户名' }
+   forms: [
+      { label: '上传信息名称', field: 'infoName', type: 'Input' },
     ]
   };
 

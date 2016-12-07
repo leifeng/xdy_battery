@@ -21,10 +21,10 @@ function TableList({tableProps, pageProps, openModal, deleteForids, curd}) {
     onChange
   };
   return (
-    <div>
+    <div className={styles.tablelist}>
       <div className={styles.delall}>
         <Button type="primary" onClick={() => { openModal('add') } } style={{ display: curd.indexOf('c') !== -1 ? 'inline-block' : 'none' }}><Icon type="plus" />添加</Button>
-        <Button type="primary" onClick={deleteForids} disabled={!hasSelected} style={{ display: curd.indexOf('d') !== -1 ? 'inline-block' : 'none' }}><Icon type="delete" />批量删除</Button>
+        <Button type="primary-del" onClick={deleteForids} disabled={!hasSelected} style={{ display: curd.indexOf('d') !== -1 ? 'inline-block' : 'none' }}><Icon type="delete" />批量删除</Button>
       </div>
       <Table
         rowSelection={rowSelection}

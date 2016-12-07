@@ -33,18 +33,18 @@ export default {
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryRec/batteryPaymentMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryRec/batteryPaymentMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

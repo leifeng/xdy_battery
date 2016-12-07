@@ -15,13 +15,21 @@ function BatteryProcessInfo({dispatch, batteryProcessInfo}) {
     key: 'transferId',
     render: text => <a href="#">{text}</a>,
   }, {
+    title: '处理单号',
+    dataIndex: 'dealId',
+    key: 'dealId',
+  },{
     title: '电池包编号',
-    dataIndex: 'batsId',
-    key: 'batsId',
+    dataIndex: 'batsCode',
+    key: 'batsCode',
   }, {
     title: '模组编号',
-    dataIndex: 'batId',
-    key: 'batId',
+    dataIndex: 'moduleCode',
+    key: 'moduleCode',
+  }, {
+    title: '单体编号',
+    dataIndex: 'batCode',
+    key: 'batCode',
   }, {
     title: '到货日期',
     dataIndex: 'arriveTime',
@@ -39,31 +47,43 @@ function BatteryProcessInfo({dispatch, batteryProcessInfo}) {
     dataIndex: 'dealTime',
     key: 'dealTime',
   }, {
-    title: '产物',
-    dataIndex: 'materials',
-    key: 'materials',
+    title: '处理质量',
+    dataIndex: 'dealQuality',
+    key: 'dealQuality',
   }, {
-    title: '产物状态',
-    dataIndex: 'materialStatus',
-    key: 'materialStatus',
+    title: '地址',
+    dataIndex: 'address',
+    key: 'address',
   }, {
-    title: '产生处理时间',
-    dataIndex: 'createDealTime',
-    key: 'createDealTime',
+    title: '联系人',
+    dataIndex: 'linkMan',
+    key: 'linkMan',
   }, {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
+    title: '联系时间',
+    dataIndex: 'linkPhone',
+    key: 'linkPhone',
   }, {
-    title: '创建人',
-    dataIndex: 'creator',
-    key: 'creator',
+    title: '数据获取时间',
+    dataIndex: 'getTime',
+    key: 'getTime',
   }];
 
   const searchFormProps = {
     handleSearch: null,
-    forms: [
-      { label: '用户名' }
+       forms: [
+      { label: '移交编号', field: 'transferId', type: 'Input' },
+      {
+        label: '电池种类', field: 'batKind', type: 'Select', dic: [
+          { name: '三元锂', value: 1 },
+          { name: '磷酸铁锂', value: 0 }
+        ]
+      },
+      {
+        label: '处置状态', field: 'dealStatus', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
+        ]
+      },
     ]
   };
 

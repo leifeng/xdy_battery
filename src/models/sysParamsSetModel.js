@@ -25,18 +25,6 @@ export default {
       editTime:'2016 - 11 - 4',
       editor: 'test',
       remark: '系统参数设置'
-    },{
-      fieldCode: 'DEF',
-      fieldName: 'DEF',
-      paramValue: 'DEF',
-      paramName: 'DEF',
-      relativeId: 'DEF',
-      status: '可用',
-      createTime:'2016 - 11 - 4',
-      creator: 'test',
-      editTime:'2016 - 11 - 4',
-      editor: 'test',
-      remark: '系统参数设置'
     }],
     record: null
 

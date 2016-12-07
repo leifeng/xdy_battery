@@ -5,6 +5,7 @@ moment.tz.add('Asia/Shanghai|CST CDT|-80 -90|01010101010101010|-1c1I0 LX0 16p0 1
 moment.tz.setDefault('Asia/Shanghai');
 import './index.html';
 import './index.less';
+import './antd.less';
 import dva from 'dva';
 import { browserHistory } from 'dva/router';
 // 1. Initialize

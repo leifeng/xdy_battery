@@ -28,11 +28,15 @@ function BatteryProcessNoticeMG({dispatch, batteryProcessNoticeMG}) {
     key: 'transferId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '回收单号',
+    title: '退役单号',
     dataIndex: 'recycleId',
     key: 'recycleId',
   }, {
-    title: '创建时间',
+    title: '回收管理点编号',
+    dataIndex: 'recycleCompanyId',
+    key: 'recycleCompanyId',
+  }, {
+    title: '创单时间',
     dataIndex: 'createTime',
     key: 'createTime',
   }, {
@@ -40,13 +44,45 @@ function BatteryProcessNoticeMG({dispatch, batteryProcessNoticeMG}) {
     dataIndex: 'status',
     key: 'status',
   }, {
-    title: '电池处理企业',
+    title: '处理企业类型',
+    dataIndex: 'companyType',
+    key: 'companyType',
+  }, {
+    title: '处理企业编号',
     dataIndex: 'companyId',
     key: 'companyId',
   }, {
-    title: '动力电池处理移交地',
+    title: '移交地点',
     dataIndex: 'toAddress',
     key: 'toAddress',
+  }, {
+    title: '移交人',
+    dataIndex: 'transferMan',
+    key: 'transferMan',
+  }, {
+    title: '移交人电话',
+    dataIndex: 'transferPhone',
+    key: 'transferPhone',
+  }, {
+    title: '可移交时间',
+    dataIndex: 'toTime',
+    key: 'toTime',
+  }, {
+    title: '提货人',
+    dataIndex: 'tackMan',
+    key: 'tackMan',
+  }, {
+    title: '提货人电话',
+    dataIndex: 'tackPhone',
+    key: 'tackPhone',
+  }, {
+    title: '提货人身份证附件上传',
+    dataIndex: 'reportCard',
+    key: 'reportCard',
+  }, {
+    title: '收货移交单上传',
+    dataIndex: 'reportDan',
+    key: 'reportDan',
   }, {
     title: '移交企业确认时间',
     dataIndex: 'confirmTime',
@@ -56,21 +92,9 @@ function BatteryProcessNoticeMG({dispatch, batteryProcessNoticeMG}) {
     dataIndex: 'confirmMan',
     key: 'confirmMan',
   }, {
-    title: '移交人',
-    dataIndex: 'transferMan',
-    key: 'transferMan',
-  }, {
-    title: '动力电池移交处理企业时间',
-    dataIndex: 'toTime',
-    key: 'toTime',
-  }, {
-    title: '收货人身份证上传',
-    dataIndex: 'reportCard',
-    key: 'reportCard',
-  }, {
-    title: '收货移交单上传',
-    dataIndex: 'reportDan',
-    key: 'reportDan',
+    title: '备注',
+    dataIndex: 'remak',
+    key: 'remak',
   }, {
     title: '操作',
     key: 'action',
@@ -84,7 +108,10 @@ function BatteryProcessNoticeMG({dispatch, batteryProcessNoticeMG}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '通知编号', field: 'batsCode', type: 'Input' },
+      { label: '退役单号', field: 'transferId', type: 'Input' },
+
+      { label: '处理企业编号', field: 'companyId', type: 'Input' },
     ]
   };
 
@@ -135,15 +162,24 @@ function BatteryProcessNoticeMG({dispatch, batteryProcessNoticeMG}) {
       })
     },
     modalForms: [
-      { label: '用户名', field: 'name', type: 'Input' },
-      { label: '年龄', field: 'age', type: 'InputNumber' },
-      { label: '地址', field: 'address', type: 'Input' },
-      {
-        label: '性别', field: 'sex', type: 'Radio', dic: [
-          { name: '男', value: 1 },
-          { name: '女', value: 0 }
-        ]
-      }
+      { label: '通知编号', field: 'transferId', type: 'Input' },
+      { label: '退役单号', field: 'recycleId', type: 'Input' },
+      { label: '回收管理点编号', field: 'recycleCompanyId', type: 'Input' },
+      { label: '创单时间', field: 'createTime', type: 'Input' },
+      { label: '状态', field: 'status', type: 'Input' },
+      { label: '处理企业类型', field: 'companyType', type: 'Input' },
+      { label: '处理企业编号', field: 'companyId', type: 'Input' },
+      { label: '移交地点', field: 'toAddress', type: 'Input' },
+      { label: '移交人', field: 'transferMan', type: 'Input' },
+      { label: '移交人电话', field: 'transferPhone', type: 'Input' },
+      { label: '可移交时间', field: 'toTime', type: 'Input' },
+      { label: '提货人', field: 'tackMan', type: 'Input' },
+      { label: '提货人电话', field: 'tackPhone', type: 'Input' },
+      { label: '提货人身份证附件上传', field: 'reportCard', type: 'Input' },
+      { label: '收货移交单上传', field: 'reportDan', type: 'Input' },
+      { label: '移交企业确认时间', field: 'confirmTime', type: 'Input' },
+      { label: '确认人', field: 'confirmMan', type: 'Input' },
+      { label: '备注', field: 'remak', type: 'Input' }
     ]
   }
   const NewModalcus = () =>

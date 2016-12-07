@@ -11,68 +11,80 @@ function BatteryBasicInfo({dispatch, batteryBasicInfo}) {
 
   const columns = [{
     title: '电池包编号',
-    dataIndex: 'batsId',
-    key: 'batsId',
+    dataIndex: 'batsCode',
+    key: 'batsCode',
   }, {
-    title: '电池种类',
-    dataIndex: 'batKind',
-    key: 'batKind',
+    title: '系统编号',
+    dataIndex: 'sysCode',
+    key: 'sysCode',
   }, {
-    title: '模组个数',
-    dataIndex: 'batNums',
-    key: 'batNums',
+    title: '包规格代码',
+    dataIndex: 'batsSpecCode',
+    key: 'batsSpecCode',
   }, {
-    title: '模组编号',
-    dataIndex: 'batId',
-    key: 'batId',
+    title: '所含类型',
+    dataIndex: 'batType',
+    key: 'batType',
   }, {
-    title: '模组序号',
+    title: '所含类型数量',
     dataIndex: 'batNum',
     key: 'batNum',
   }, {
-    title: '来源',
-    dataIndex: 'source',
-    key: 'source',
+    title: '电池包种类',
+    dataIndex: 'batKind',
+    key: 'batKind',
   }, {
-    title: '材料类型',
-    dataIndex: 'materialType',
-    key: 'materialType',
+    title: '电池包型号',
+    dataIndex: 'batsModel',
+    key: 'batsModel',
   }, {
-    title: '生产日期',
-    dataIndex: 'productTime',
-    key: 'productTime',
+    title: '物料编码',
+    dataIndex: 'materielId',
+    key: 'materielId',
   }, {
-    title: '生产地点',
-    dataIndex: 'productAddress',
-    key: 'productAddress',
+    title: '电池包供应商编码',
+    dataIndex: 'supplierId',
+    key: 'supplierId',
   }, {
-    title: 'Vin',
-    dataIndex: 'vin',
-    key: 'vin',
+    title: '电池包供应商名称',
+    dataIndex: 'supplier',
+    key: 'supplier',
   }, {
-    title: 'Bms编号',
-    dataIndex: 'bmsId',
-    key: 'bmsId',
+    title: '供应商电话',
+    dataIndex: 'supplierPhone',
+    key: 'supplierPhone',
   }, {
-    title: '车型',
+    title: '总成型号',
+    dataIndex: 'totalModel',
+    key: 'totalModel',
+  }, {
+    title: '质量',
+    dataIndex: 'quality',
+    key: 'quality',
+  }, {
+    title: '额定容量',
+    dataIndex: 'capacity',
+    key: 'capacity',
+  }, {
+    title: '标称电压',
+    dataIndex: 'voltage',
+    key: 'voltage',
+  }, {
+    title: '主要配套车型',
     dataIndex: 'carType',
     key: 'carType',
   }, {
-    title: '车牌号',
-    dataIndex: 'carPlate',
-    key: 'carPlate',
+    title: '循环次数',
+    dataIndex: 'cycleNum',
+    key: 'cycleNum',
   }, {
-    title: '组装日期',
-    dataIndex: 'assemblyTime',
-    key: 'assemblyTime',
+    title: '生产日期',
+    dataIndex: 'produceTime',
+    key: 'produceTime',
   }, {
-    title: '组装地点',
-    dataIndex: 'assemblyAddress',
-    key: 'assemblyAddress',
-  }, {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
+    title: '生产地址',
+    dataIndex: 'produceAddress',
+    key: 'produceAddress',
   }];
 
   const searchFormProps = {
@@ -85,17 +97,11 @@ function BatteryBasicInfo({dispatch, batteryBasicInfo}) {
       })
     },
     forms: [
-      { label: '电池包编号', field: 'batsId', type: 'Input' },
+      { label: '电池包编号', field: 'batsCode', type: 'Input' },
       {
         label: '电池种类', field: 'batKind', type: 'Select', dic: [
           { name: '三元锂', value: 1 },
           { name: '磷酸铁锂', value: 0 }
-        ]
-      },
-      {
-        label: '状态', field: 'status', type: 'Select', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
         ]
       },
       { label: '生产日期', field: 'productTime', type: 'DatePicker' },

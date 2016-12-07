@@ -31,23 +31,22 @@ export default {
       confirmTime: '2016-11-7',
       confirmMan: 'ABC',
       remak: '退役电池交货单管理'
-
     }],
     record: null
   },
   subscriptions: {
-    setup({dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/admin/batteryRec/batteryDeliveryMG') {
-          dispatch({
-            type: 'query',
-            args: {
-              current: 1
-            }
-          })
-        }
-      })
-    },
+    // setup({dispatch, history }) {
+    //   history.listen(location => {
+    //     if (location.pathname === '/admin/batteryRec/batteryDeliveryMG') {
+    //       dispatch({
+    //         type: 'query',
+    //         args: {
+    //           current: 1
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
   },
 
   effects: {

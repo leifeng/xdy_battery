@@ -37,60 +37,36 @@ function BatteryRecoverySet({dispatch, batteryRecoverySet}) {
     }
   }
   const columns = [{
-    title: '月结单号',
-    dataIndex: 'statementsId',
-    key: 'statementsId',
+    title: '企业种类',
+    dataIndex: 'companyType',
+    key: 'companyType',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '回收单号',
-    dataIndex: 'recyclesId',
-    key: 'recyclesId',
+    title: '企业编号',
+    dataIndex: 'companyId',
+    key: 'companyId',
   }, {
-    title: '电池代付费用',
-    dataIndex: 'recycleFee',
-    key: 'recycleFee',
+    title: '电池种类',
+    dataIndex: 'batKind',
+    key: 'batKind',
   }, {
-    title: '电池回收佣金',
-    dataIndex: 'transportUnit',
-    key: 'transportUnit',
-  },  {
+    title: '费用名称',
+    dataIndex: 'feeName',
+    key: 'feeName',
+  }, {
+    title: '费用值',
+    dataIndex: 'feeValue',
+    key: 'feeValue',
+  }, {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
-  },  {
-    title: '单据生成时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-  },  {
-    title: '单据确认时间',
-    dataIndex: 'confirmTime',
-    key: 'confirmTime',
-  },  {
-    title: '单据确认人',
-    dataIndex: 'confirmMan',
-    key: 'confirmMan',
-  },  {
-    title: '财务确认时间',
-    dataIndex: 'financialConfirmTime',
-    key: 'financialConfirmTime',
-  },  {
-    title: '财务确认人',
-    dataIndex: 'financialConfirmMan',
-    key: 'financialConfirmMan',
-  },  {
-    title: '支付确认时间',
-    dataIndex: 'payConfirmTime',
-    key: 'payConfirmTime',
-  },  {
-    title: '支付确认人',
-    dataIndex: 'payConfirmMan',
-    key: 'payConfirmMan',
   }, {
     title: '操作',
     key: 'action',
     render: (text, record) => (
       <span>
-        <a  onClick={() => openModal('edit',record)}>编辑</a>
+        <a onClick={() => openModal('edit', record)}>编辑</a>
         <span className="ant-divider" />
         <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
           <a>删除</a>
@@ -101,7 +77,17 @@ function BatteryRecoverySet({dispatch, batteryRecoverySet}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '企业种类', field: 'companyType', type: 'Input' },
+      {
+        label: '企业编号', field: 'companyId', type: 'Input'
+      },
+      {
+        label: '状态', field: 'status', type: 'Select', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
+        ]
+      },
+      
     ]
   };
 
@@ -161,15 +147,24 @@ function BatteryRecoverySet({dispatch, batteryRecoverySet}) {
       })
     },
     modalForms: [
-      { label: '用户名', field: 'name', type: 'Input' },
-      { label: '年龄', field: 'age', type: 'InputNumber' },
-      { label: '地址', field: 'address', type: 'Input' },
+      { label: '企业种类', field: 'name', type: 'Input' },
+      { label: '企业编号', field: 'age', type: 'InputNumber' },
+      { label: '电池种类', field: 'address', type: 'Input' },
+	  { label: '费用名称', field: 'name', type: 'Input' },
+      { label: '费用值', field: 'age', type: 'InputNumber' },
       {
-        label: '性别', field: 'sex', type: 'Radio', dic: [
-          { name: '男', value: 1 },
-          { name: '女', value: 0 }
+        label: '状态', field: 'sex', type: 'Radio', dic: [
+          { name: '不可用', value: 0 },
+          { name: '可用', value: 1 }
         ]
       }
+
+
+
+
+
+
+      
     ]
   }
   const NewModalcus = () =>

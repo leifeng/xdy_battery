@@ -7,50 +7,90 @@ import TableList from '../../components/TableList';
 
 function BatteryUseInfo({dispatch, batteryUseInfo}) {
   console.log('batteryUseInfo')
-   const {loading, data, pageSize, total, current} = batteryUseInfo;
+  const {loading, data, pageSize, total, current} = batteryUseInfo;
   const dic = { 0: '女', 1: '男' }
 
   const columns = [{
-    title: '电池包编号',
-    dataIndex: 'batsId',
-    key: 'batsId',
+    title: '维护类型',
+    dataIndex: 'useType',
+    key: 'useType',
     render: text => <a href="#">{text}</a>,
   }, {
+    title: 'VIN号',
+    dataIndex: 'vin',
+    key: 'vin',
+  }, {
+    title: '车牌号',
+    dataIndex: 'carPlate',
+    key: 'carPlate',
+  }, {
+    title: '车主姓名',
+    dataIndex: 'master',
+    key: 'master',
+  }, {
+    title: '车主电话',
+    dataIndex: 'masterPhone',
+    key: 'masterPhone',
+  }, {
+    title: 'bms编号',
+    dataIndex: 'bmsCode',
+    key: 'bmsCode',
+  }, {
+    title: '电池包编号',
+    dataIndex: 'batsCode',
+    key: 'batsCode',
+  }, {
     title: '模组编号',
-    dataIndex: 'batId',
-    key: 'batId',
+    dataIndex: 'moduleCode',
+    key: 'moduleCode',
   }, {
-    title: '执行情况',
-    dataIndex: 'execStatus',
-    key: 'execStatus',
+    title: '单体电池编号',
+    dataIndex: 'batCode',
+    key: 'batCode',
   }, {
-    title: '更换电池编号',
-    dataIndex: 'replaceBatsId',
-    key: 'replaceBatsId',
+    title: '保养、维修时间',
+    dataIndex: 'repairTime',
+    key: 'repairTime',
   }, {
-    title: '更换电池模组编号',
-    dataIndex: 'replaceBatId',
-    key: 'replaceBatId',
+    title: '保养、维修时里程',
+    dataIndex: 'repairMile',
+    key: 'repairMile',
   }, {
-    title: '执行内容',
-    dataIndex: 'execContent',
-    key: 'execContent',
+    title: '保养、维修描述',
+    dataIndex: 'repairDesc',
+    key: 'repairDesc',
   }, {
-    title: '执行厂商',
-    dataIndex: 'execCompany',
-    key: 'execCompany',
+    title: '故障起因',
+    dataIndex: 'faultCause',
+    key: 'faultCause',
   }, {
-    title: '执行时间',
-    dataIndex: 'execTime',
-    key: 'execTime',
+    title: '故障模式',
+    dataIndex: 'faultModel',
+    key: 'faultModel',
   }, {
-    title: '执行地点',
-    dataIndex: 'execAddress',
-    key: 'execAddress',
+    title: '保养、维修企业编码',
+    dataIndex: 'companyId',
+    key: 'companyId',
   }, {
-    title: '执行人',
-    dataIndex: 'execMan',
-    key: 'execMan',
+    title: '保养、维修企业',
+    dataIndex: 'repairCompany',
+    key: 'repairCompany',
+  }, {
+    title: '保养、维修企业电话',
+    dataIndex: 'repairPhone',
+    key: 'repairPhone',
+  }, {
+    title: '保养、维修企业地址',
+    dataIndex: 'repairAddress',
+    key: 'repairAddress',
+  }, {
+    title: '保养、维修人',
+    dataIndex: 'repairMan',
+    key: 'repairMan',
+  }, {
+    title: '电池系统编号',
+    dataIndex: 'sysCode',
+    key: 'sysCode',
   }, {
     title: '备注',
     dataIndex: 'remark',
@@ -60,7 +100,11 @@ function BatteryUseInfo({dispatch, batteryUseInfo}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+	 { label: 'VIN号', field: 'vin', type: 'Input' },
+      { label: '电池包编号', field: 'batsCode', type: 'Input' },
+      {
+        label: '维护类型', field: 'useType', type: 'Input'
+      }
     ]
   };
 

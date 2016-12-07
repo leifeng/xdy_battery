@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon, Popover, Button } from 'antd';
 import styles from './index.less';
 
-function TopBar({visible, visibleChangeFN, toUrl}) {
+function TopBar({visible, visibleChangeFN, toUrl, children}) {
   const content = (
     <div className={styles.pop}>
       <a onClick={() => { toUrl('/admin/password') } }>修改密码</a>
@@ -19,6 +19,9 @@ function TopBar({visible, visibleChangeFN, toUrl}) {
   }
   return (
     <div className={styles.normal}>
+      <div className={styles.breadcrumb}>
+        {children}
+      </div>
       <Popover {...PopoverProps}>
         <Button type="primary">
           <Icon type="user" />管理员

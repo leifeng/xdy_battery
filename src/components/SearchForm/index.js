@@ -3,7 +3,7 @@ import styles from './index.less'
 import _ from 'lodash';
 import Forms from '../Forms';
 import { Form, Row, Col, Input, Button, Icon } from 'antd';
-const FormItem = Form.Item;
+
 function SearchForm({children, handleSearch, forms, form}) {
   const { resetFields, validateFields } = form;
   const formItemLayout = {
@@ -23,8 +23,9 @@ function SearchForm({children, handleSearch, forms, form}) {
       const dateTypeField = _.filter(forms, { type: 'DatePicker' });
       _.map(dateTypeField, (item, index) => {
         const name = item['field']
-        values[name] = fieldsValue[name].format('YYYY-MM-DD')
+        values[name] = fieldsValue[name] ? fieldsValue[name].format(item.setting.format) : '';
       })
+      console.log(values)
       handleSearch(values);
     })
   }
@@ -38,12 +39,7 @@ function SearchForm({children, handleSearch, forms, form}) {
         <Row gutter={40}>
           {forms.map((item, i) => {
             return <Col span={8} key={i}>
-              <FormItem
-                {...formItemLayout}
-                label={item.label}
-                >
-                <Forms {...item} form={form} />
-              </FormItem>
+              <Forms {...item} form={form} formItemLayout={formItemLayout} key={i} />
             </Col>
           })}
         </Row>

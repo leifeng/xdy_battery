@@ -1,40 +1,56 @@
 import React, { Component } from 'react';
 import moment from 'moment'
-import { Input, Checkbox, Cascader, InputNumber, Select, Radio, DatePicker } from 'antd';
+import _ from 'lodash';
+import { Input, Checkbox, Cascader, InputNumber, Select, Radio, DatePicker, Form } from 'antd';
+const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 
 class Forms extends Component {
   constructor(props) {
-    super();
+    super(props);
+    this.disabledDate = this.disabledDate.bind(this);
+    this.renderForm = this.renderForm.bind(this);
   }
   render() {
-    const { field, value, type, form} = this.props;
+    const { field, value, type, rules, form, setting, label, formItemLayout} = this.props;
     const { getFieldDecorator } = form;
+    //初始化值
     let defaultvalue = value;
     if (value && type === 'DatePicker') {
-      defaultvalue = moment(value, 'YYYY-MM-DD');
+      defaultvalue = moment(value, setting.format);
     }
-    const options = { initialValue: defaultvalue }
+    const options = {
+      initialValue: defaultvalue,
+      rules: rules
+    }
     return (
-      <div>
+      <FormItem
+        {...formItemLayout}
+        label={label}
+        >
         {getFieldDecorator(field, options)(
           this.renderForm()
         )}
-      </div>
+      </FormItem>
     )
   }
 
+
   renderForm() {
-    const { value, dic, type} = this.props;
+    const {  dic, type, setting} = this.props;
     switch (type) {
       case 'Input':
         return <Input />
       case 'TextArea':
         return <Input type="textarea" />
       case 'Checkbox':
-        return <CheckboxGroup options={dic} />
+        let _dic = [];
+        _.forEach(dic, function (item, key) {
+          _dic.push({ label: item.name, value: item.value })
+        });
+        return <CheckboxGroup options={_dic} />
       case 'Cascader':
         return <Cascader />
       case 'InputNumber':
@@ -52,13 +68,26 @@ class Forms extends Component {
           })}
         </RadioGroup>
       case 'DatePicker':
-        return <DatePicker />
+        return <DatePicker
+          showTime={setting||setting.showTime}
+          format={setting||setting.format}
+          disabledDate={this.disabledDate}
+          />
       default:
         return <Input />
     }
   }
+  //限制时间范围
+  disabledDate(current) {
+    return current && current.valueOf() > Date.now();
+  }
+
 }
 Forms.defaultProps = {
-  value: null
+  value: null,
+  setting:{
+    showTime:false,
+    format:'YYYY-MM-DD'
+  }
 }
 export default Forms;

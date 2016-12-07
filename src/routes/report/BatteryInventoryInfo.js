@@ -48,44 +48,43 @@ function BatteryInventoryInfo({dispatch, batteryInventoryInfo}) {
 
   }
   const columns = [{
-    title: '电池包编号',
-    dataIndex: 'batsId',
-    key: 'batsId',
+    title: '退役单号',
+    dataIndex: 'recycleId',
+    key: 'recycleId',
     render: text => <a href="#">{text}</a>,
   }, {
-    title: '电池模组',
-    dataIndex: 'batId',
-    key: 'batId',
+    title: '电池包编号',
+    dataIndex: 'batsCode',
+    key: 'batsCode',
   }, {
-    title: '车辆vin',
-    dataIndex: 'vin',
-    key: 'vin',
+    title: '电池种类',
+    dataIndex: 'batKind',
+    key: 'batKind',
+  }, {
+    title: '回收管理点编号',
+    dataIndex: 'companyId',
+    key: 'companyId',
   }, {
     title: '回收企业',
-    dataIndex: 'recycleCompany',
-    key: 'recycleCompany',
+    dataIndex: 'company',
+    key: 'company',
   }, {
-    title: '安装时间',
-    dataIndex: 'setTime',
-    key: 'setTime',
-  }, {
-    title: '退役时间',
-    dataIndex: 'retireTime',
-    key: 'retireTime',
-  }, 
-  , {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
   }, {
-    title: '质量审核人',
-    dataIndex: 'checkMan',
-    key: 'checkMan',
+    title: '入库时间',
+    dataIndex: 'inTime',
+    key: 'inTime',
   }, {
-    title: '质量审核时间',
-    dataIndex: 'checkTime',
-    key: 'checkTime',
-  },{
+    title: '结束时间',
+    dataIndex: 'dealTime',
+    key: 'dealTime',
+  }, {
+    title: '备注',
+    dataIndex: 'reamk',
+    key: 'reamk',
+  }, {
     title: '操作',
     key: 'action',
     render: (text, record) => {
@@ -102,7 +101,9 @@ function BatteryInventoryInfo({dispatch, batteryInventoryInfo}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+      { label: '退役单号', field: 'recycleId', type: 'Input' },
+      { label: '电池包编号', field: 'batsCode', type: 'Input' },
+      { label: '回收企业', field: 'company', type: 'Input' },
     ]
   };
 
@@ -162,18 +163,15 @@ function BatteryInventoryInfo({dispatch, batteryInventoryInfo}) {
       })
     },
     modalForms: [
-      { label: '账号', field: 'account', type: 'Input' },
-      { label: '名称', field: 'name', type: 'Input' },
-      { label: '昵称', field: 'nickName', type: 'Input' },
-      { label: '用户类型', field: 'userType', type: 'Input' },
-      {
-        label: '状态', field: 'status', type: 'Radio', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ]
-      },
-      { label: '到期日期', field: 'dueDate', type: 'DatePicker' },
-      { label: '结束日期', field: 'endDate', type: 'DatePicker' },
+      { label: '退役单号', field: 'recycleId', type: 'Input' },
+      { label: '电池包编号', field: 'batsCode', type: 'Input' },
+      { label: '电池种类', field: 'batKind', type: 'Input' },
+      { label: '回收管理点编号', field: 'companyId', type: 'Input' },
+      { label: '回收企业', field: 'company', type: 'Input' },
+      { label: '状态', field: 'status', type: 'Input' },
+      { label: '入库时间', field: 'inTime', type: 'Input' },
+      { label: '结束时间', field: 'dealTime', type: 'Input' },
+      { label: '备注', field: 'reamk', type: 'Input' },
     ]
   }
   const NewModalcus = () =>

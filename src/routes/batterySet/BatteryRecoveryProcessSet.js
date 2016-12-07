@@ -37,57 +37,30 @@ function BatteryRecoveryProcessSet({dispatch, batteryRecoveryProcessSet}) {
     }
   }
   const columns = [{
-    title: '编号',
-    dataIndex: 'id',
-    key: 'id',
-    render: text => <a href="#">{text}</a>,
-  }, {
     title: '流程编号',
-    dataIndex: 'Process_code',
-    key: 'age',
+    dataIndex: 'processCode',
+    key: 'processCode',
   }, {
     title: '流程类型',
-    dataIndex: 'process_type',
-    key: 'sex',
-    render: (text, record) => {
-      return dic[text]
-    }
+    dataIndex: 'processType',
+    key: 'processType',
   }, {
     title: '流程名称',
-    dataIndex: 'Process',
-    key: 'address',
+    dataIndex: 'process',
+    key: 'process',
   }, {
     title: '流程节点名称',
-    dataIndex: 'Process_node',
-    key: 'address',
+    dataIndex: 'processNode',
+    key: 'processNode',
   }, {
     title: '流程节点序号',
-    dataIndex: 'Node_id',
-    key: 'address',
+    dataIndex: 'nodeId',
+    key: 'nodeId',
   }, {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
-    render: (text, record) => {
-      return dic[text]
-    }
-  }, {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-  }, {
-    title: '创建人',
-    dataIndex: 'creator',
-    key: 'creator',
-  }, {
-    title: '修改时间',
-    dataIndex: 'editTime',
-    key: 'editTime',
-  }, {
-    title: '修改人',
-    dataIndex: 'editor',
-    key: 'editor',
-  }, {
+  },{
     title: '备注',
     dataIndex: 'remark',
     key: 'remark',
@@ -107,7 +80,8 @@ function BatteryRecoveryProcessSet({dispatch, batteryRecoveryProcessSet}) {
   const searchFormProps = {
     handleSearch: null,
     forms: [
-      { label: '用户名' }
+     { label: '流程编号', field: 'processCode', type: 'Input' },
+      { label: '流程名称', field: 'process', type: 'Input' }
     ]
   };
 
@@ -167,15 +141,19 @@ function BatteryRecoveryProcessSet({dispatch, batteryRecoveryProcessSet}) {
       })
     },
     modalForms: [
-      { label: '用户名', field: 'name', type: 'Input' },
-      { label: '年龄', field: 'age', type: 'InputNumber' },
-      { label: '地址', field: 'address', type: 'Input' },
-      {
-        label: '性别', field: 'sex', type: 'Radio', dic: [
-          { name: '男', value: 1 },
-          { name: '女', value: 0 }
+      { label: '流程编号', field: 'processCode', type: 'Input' },
+      { label: '流程类型', field: 'processType', type: 'InputNumber' },
+      { label: '流程名称', field: 'process', type: 'Input' },
+       { label: '流程节点名称', field: 'processNode', type: 'Input' },
+      { label: '流程节点序号', field: 'nodeId', type: 'InputNumber' },
+       {
+        label: '状态', field: 'status', type: 'Radio', dic: [
+          { name: '可用', value: 1 },
+          { name: '不可用', value: 0 }
         ]
-      }
+      },
+      { label: '备注', field: 'remark', type: 'Input' }
+     
     ]
   }
   const NewModalcus = () =>

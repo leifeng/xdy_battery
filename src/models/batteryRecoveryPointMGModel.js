@@ -18,7 +18,7 @@ export default {
       city: '北京市',
       company: '智信中心',
       nickName: '智信',
-      Company_type: '知豆公司',
+      companyType: '知豆公司',
       address: '北京市五道口',
       longitude: 168.000,
       latitude: 36.000,

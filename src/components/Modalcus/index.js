@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styles from './index.less';
 import _ from 'lodash';
 import { Modal, Form, Input } from 'antd';
-const FormItem = Form.Item;
 import Forms from '../Forms';
 
 class Modalcus extends Component {
@@ -10,10 +9,11 @@ class Modalcus extends Component {
     super();
     this.onOk = this.onOk.bind(this);
   }
+
   render() {
     console.log('Modalcus')
     const {title, visible, onOk, onCancel, modalForms, form, record} = this.props;
-    const { getFieldDecorator, resetFields } = form;
+    const { getFieldDecorator } = form;
 
     const formItemLayout = {
       labelCol: { span: 5 },
@@ -25,25 +25,15 @@ class Modalcus extends Component {
         onOk={this.onOk}
         onCancel={onCancel}
         >
-        <Form
-          horizontal
-          >
+        <Form horizontal>
           {modalForms.map((item, i) => {
             return (
-              <FormItem
-                {...formItemLayout}
-                label={item.label}
-                key={i}
-                >
-                <Forms {...item} value={record && record[item.field]} form={form} />
-              </FormItem>)
+              <Forms {...item} form={form} formItemLayout={formItemLayout} key={i} value={record && record[item.field]} />
+            )
           })}
         </Form>
       </Modal>
     )
-  }
-  onSubmit(e) {
-    e.preventDefault();
   }
   onOk() {
     const {modalForms} = this.props;
@@ -52,11 +42,13 @@ class Modalcus extends Component {
         return;
       }
       let values = Object.assign({}, fieldsValue)
-      const dateTypeField = _.filter(modalForms, { type: 'DatePicker' })
+      //moment格式转换
+      const dateTypeField = _.filter(modalForms, { type: 'DatePicker' });
       _.map(dateTypeField, (item, index) => {
-        const name = item['field']
-        values[name] = fieldsValue[name].format('YYYY-MM-DD')
+        const name = item['field'];
+        values[name] = fieldsValue[name] ? fieldsValue[name].format(item.setting.format) : '';
       })
+      console.log(values)
       this.props.onOk(values);
     });
   }

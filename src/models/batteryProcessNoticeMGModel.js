@@ -19,6 +19,7 @@ export default {
       recycleCompanyId: '37854',
       createTime: '2016-11-7',
       status: '知豆确认，提醒',
+	  companyType:'知豆公司',
       companyId: 65213,
       toAddress: '北京五道口',
       transferMan: '李四',

@@ -17,7 +17,7 @@ export default {
       infoName: '信息上报',
       infoContent: 'ABCD',
       uploadTime: '2016-10-01',
-      uploadStatus: 'fffff',
+      uploadStatus: '成功',
       uploadNum: '333'
     }
     ],
