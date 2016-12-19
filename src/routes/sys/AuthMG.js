@@ -7,9 +7,8 @@ import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 
 function AuthMG({dispatch, authMG}) {
-  console.log('authMG')
-  const {selectedRowKeys, loading, data, pageSize, total, current, visible, modalType, record} = authMG;
-  const dic = { 0: '女', 1: '男' }
+  console.log('权限管理')
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = authMG;
 
   function onDeleteItem(id) {
     dispatch({
@@ -17,6 +16,7 @@ function AuthMG({dispatch, authMG}) {
       id
     })
   }
+
   function openModal(type, record) {
     if (record) {
       dispatch({
@@ -37,23 +37,27 @@ function AuthMG({dispatch, authMG}) {
         })
       } else {
         dispatch({
-          type: 'authMG/visibleState',
-          data: {
-            modalType: type,
-            visible: true
-          }
+          type: 'authMG/openModalState',
+          data: type
         })
       }
+
     }
+
   }
+
   const columns = [{
     title: '权限名称',
-    dataIndex: 'name',
-    key: 'name'
+    dataIndex: 'rightName',
+    key: 'rightName'
   }, {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
+    title: '权限类型',
+    dataIndex: 'rightType',
+    key: 'rightType'
+  }, {
+    title: '对应菜单或功能操作ID',
+    dataIndex: 'operateId',
+    key: 'operateId'
   }, {
     title: '备注',
     dataIndex: 'remark',
@@ -72,15 +76,33 @@ function AuthMG({dispatch, authMG}) {
     ),
   }];
   const searchFormProps = {
-    handleSearch: null,
+    handleChange(query) {
+      dispatch({
+        type: 'authMG/searchQueryChangeState',
+        data: {
+          name: query.name,
+          value: query.value
+        }
+      })
+    },
+    handleSearch(searchForm) {
+      dispatch({
+        type: 'authMG/query',
+        args: {
+          pageNo: 1
+        }
+      })
+    },
+    handleResetQuery() {
+      dispatch({
+        type: 'authMG/searchQueryState',
+        data: null
+      })
+    },
     forms: [
-      { label: '权限名称', field: 'name', type: 'Input' },
-      {
-        label: '状态', field: 'status', type: 'Select', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ]
-      }
+      { label: '权限名称', field: 'rightName', type: 'Input' },
+      { label: '权限类型', field: 'rightType', type: 'Input' },
+      { label: '对应菜单或功能操作ID', field: 'operateId', type: 'Input' }
     ]
   };
 
@@ -88,6 +110,7 @@ function AuthMG({dispatch, authMG}) {
     curd: 'curd',
     openModal,
     tableProps: {
+      rowKey: 'id',
       data,
       columns,
       selectedRowKeys,
@@ -102,60 +125,56 @@ function AuthMG({dispatch, authMG}) {
       },
     },
     pageProps: {
-      current,
+      pageNo,
       pageSize,
       total,
-      onShowSizeChange(current, pageSize) {
-        dispatch({
-          type: 'authMG/pageSizeState',
-          data: pageSize
-        })
-      },
       onChange(current) {
         dispatch({
           type: 'authMG/query',
           args: {
-            current
+            pageNo: current
           }
         })
       },
     }
   };
   const modalcusProps = {
+    alertState,
+    modalLoading,
+    modalType,
     visible,
     record,
     title: modalType === 'add' ? '新增数据' : '编辑数据',
-    onOk() {
-      dispatch({
-        type: 'authMG/visibleState',
-        data: false
-      })
+    onSave(data) {
+      if (modalType === "add") {
+        dispatch({
+          type: 'authMG/create',
+          args: data
+        })
+      } else {
+        dispatch({
+          type: 'authMG/update',
+          args: data
+        })
+      }
     },
     onCancel() {
       dispatch({
-        type: 'authMG/visibleState',
-        data: false
+        type: 'authMG/closeModalState',
       })
     },
     modalForms: [
-      { label: '权限名称', field: 'name', type: 'Input' },
-      {
-        label: '状态', field: 'status', type: 'Select', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ]
-      },
+      { label: '权限名称', field: 'rightName', type: 'Input' },
+      { label: '权限类型', field: 'rightType', type: 'Input' },
+      { label: '对应菜单或功能操作ID', field: 'operateId', type: 'Input' },
       { label: '备注', field: 'remark', type: 'TextArea' }
     ]
   }
-  const NewModalcus = () =>
-    <Modalcus {...modalcusProps} />;
-
   return (
     <div>
       <SearchForm {...searchFormProps} />
       <TableList {...tableListProps} />
-      <NewModalcus />
+      <Modalcus {...modalcusProps} />;
     </div>
   );
 }

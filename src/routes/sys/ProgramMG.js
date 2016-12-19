@@ -1,30 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
-import styles from './RolesMG.less';
+import styles from './ProgramMG.less';
 import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
-import { checkRoleName } from '../../services/rolesMG';
-function a() {
 
-}
+function ProgramMG({dispatch, programMG}) {
+  console.log('程序管理')
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = programMG;
 
-
-function RolesMG({dispatch, rolesMG}) {
-  console.log('角色管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = rolesMG;
-  let t = -1;
   function onDeleteItem(id) {
     dispatch({
-      type: 'rolesMG/remove',
+      type: 'programMG/remove',
       id
     })
   }
   function openModal(type, record) {
     if (record) {
       dispatch({
-        type: 'rolesMG/recordState',
+        type: 'programMG/recordState',
         data: {
           modalType: type,
           record
@@ -33,7 +28,7 @@ function RolesMG({dispatch, rolesMG}) {
     } else {
       if (type === 'add') {
         dispatch({
-          type: 'rolesMG/recordState',
+          type: 'programMG/recordState',
           data: {
             modalType: type,
             record: null
@@ -41,16 +36,34 @@ function RolesMG({dispatch, rolesMG}) {
         })
       } else {
         dispatch({
-          type: 'rolesMG/openModalState',
+          type: 'programMG/openModalState',
           data: type
         })
       }
+
     }
+
   }
   const columns = [{
-    title: '角色名称',
-    dataIndex: 'roleName',
-    key: 'roleName',
+    title: '程序名称',
+    dataIndex: 'program',
+    key: 'program',
+  }, {
+    title: '路径',
+    dataIndex: 'path',
+    key: 'path',
+  }, {
+    title: '节点类型',
+    dataIndex: 'nodeType',
+    key: 'nodeType',
+  }, {
+    title: '序列',
+    dataIndex: 'sequence',
+    key: 'sequence',
+  }, {
+    title: '父id',
+    dataIndex: 'parentId',
+    key: 'parentId',
   }, {
     title: '状态',
     dataIndex: 'status',
@@ -69,15 +82,13 @@ function RolesMG({dispatch, rolesMG}) {
         <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
           <a>删除</a>
         </Popconfirm>
-        <span className="ant-divider" />
-        <a onClick={() => 1}>分配程序权限</a>
       </span>
     ),
   }];
   const searchFormProps = {
     handleChange(query) {
       dispatch({
-        type: 'rolesMG/searchQueryChangeState',
+        type: 'programMG/searchQueryChangeState',
         data: {
           name: query.name,
           value: query.value
@@ -86,20 +97,21 @@ function RolesMG({dispatch, rolesMG}) {
     },
     handleSearch(searchForm) {
       dispatch({
-        type: 'rolesMG/query',
+        type: 'programMG/query',
         args: {
           pageNo: 1
         }
-      });
+      })
     },
     handleResetQuery() {
       dispatch({
-        type: 'rolesMG/searchQueryState',
+        type: 'programMG/searchQueryState',
         data: null
       })
     },
     forms: [
-      { label: '角色名称', field: 'roleName', type: 'Input' },
+      { label: '程序名称', field: 'program', type: 'Input' },
+      { label: '路径', field: 'path', type: 'Input' },
       {
         label: '状态', field: 'status', type: 'Select', dic: [
           { name: '可用', value: 1 },
@@ -107,6 +119,7 @@ function RolesMG({dispatch, rolesMG}) {
         ]
       }
     ]
+
   };
 
   const tableListProps = {
@@ -121,7 +134,7 @@ function RolesMG({dispatch, rolesMG}) {
       rowSelection: {
         onChange(selectedRowKeys, selectedRows) {
           dispatch({
-            type: 'rolesMG/selectedRowKeysState',
+            type: 'programMG/selectedRowKeysState',
             data: selectedRowKeys
           })
         }
@@ -133,7 +146,7 @@ function RolesMG({dispatch, rolesMG}) {
       total,
       onChange(current) {
         dispatch({
-          type: 'rolesMG/query',
+          type: 'programMG/query',
           args: {
             pageNo: current
           }
@@ -149,44 +162,30 @@ function RolesMG({dispatch, rolesMG}) {
     record,
     title: modalType === 'add' ? '新增数据' : '编辑数据',
     onSave(data) {
-      if (modalType === 'add') {
+      if (modalType === "add") {
         dispatch({
-          type: 'rolesMG/create',
+          type: 'programMG/create',
           args: data
         })
       } else {
         dispatch({
-          type: 'rolesMG/update',
+          type: 'programMG/update',
           args: data
         })
       }
     },
     onCancel() {
       dispatch({
-        type: 'rolesMG/closeModalState'
+        type: 'programMG/closeModalState',
+        data: false
       })
     },
     modalForms: [
-      {
-        label: '角色名称', field: 'roleName', unique: true, type: 'Input', rules: [
-          { required: true, message: '请输入角色名称' },
-          { required: true, message: '角色名称长度为1~200', min: 1, max: 3 },
-          {
-            validator: (rule, value, callback) => {
-              clearTimeout(t)
-              t = setTimeout(() => {
-                checkRoleName(value, (data) => {
-                  if (data === true) {
-                    callback()
-                  } else {
-                    callback([new Error('此角色名称已存在')]);
-                  }
-                })
-              }, 1000)
-            }
-          }
-        ]
-      },
+      { label: '程序名称', field: 'program', type: 'Input' },
+      { label: '路径', field: 'path', type: 'Input' },
+      { label: '节点类型', field: 'nodeType', type: 'Input' },
+      { label: '序列', field: 'sequence', type: 'Input' },
+      { label: '父id', field: 'parentId', type: 'Input' },
       {
         label: '状态', field: 'status', type: 'Radio', dic: [
           { name: '可用', value: 1 },
@@ -195,22 +194,24 @@ function RolesMG({dispatch, rolesMG}) {
         rules: [{ type: "number", required: true, message: '请选择状态' }]
       },
       { label: '备注', field: 'remark', type: 'TextArea' }
+
     ]
   }
+
 
   return (
     <div>
       <SearchForm {...searchFormProps} />
       <TableList {...tableListProps} />
-      <Modalcus {...modalcusProps} />
-    </div>
+      <Modalcus {...modalcusProps} />;
+        </div>
   );
 }
 
-RolesMG.propTypes = {
+ProgramMG.propTypes = {
 };
 
-function mapStateToProps({rolesMG}) {
-  return { rolesMG }
+function mapStateToProps({programMG}) {
+  return { programMG }
 }
-export default connect(mapStateToProps)(RolesMG);
+export default connect(mapStateToProps)(ProgramMG);

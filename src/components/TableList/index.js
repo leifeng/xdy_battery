@@ -1,16 +1,16 @@
 import React from 'react';
-import { Table, Button, Icon } from 'antd'
+import { Table, Button, Icon, Popconfirm } from 'antd'
 import styles from './index.less'
 
 function TableList({tableProps, pageProps, openModal, deleteForids, curd}) {
   console.log('TableList')
   const {rowSelection = null, columns, data, rowKey, selectedRowKeys = [], loading, expandedRowRender } = tableProps;
-  const {onShowSizeChange, onChange, pageSize, current, total} = pageProps;
+  const {onShowSizeChange = null, onChange, pageSize, pageNo, total} = pageProps;
 
 
   const hasSelected = selectedRowKeys.length > 0;
   const pagination = {
-    current,
+    current: pageNo,
     pageSize,
     total,
     size: 'big',
@@ -24,7 +24,9 @@ function TableList({tableProps, pageProps, openModal, deleteForids, curd}) {
     <div className={styles.tablelist}>
       <div className={styles.delall}>
         <Button type="primary" onClick={() => { openModal('add') } } style={{ display: curd.indexOf('c') !== -1 ? 'inline-block' : 'none' }}><Icon type="plus" />添加</Button>
-        <Button type="primary-del" onClick={deleteForids} disabled={!hasSelected} style={{ display: curd.indexOf('d') !== -1 ? 'inline-block' : 'none' }}><Icon type="delete" />批量删除</Button>
+        <Popconfirm title="确定要删除所选数据吗？" onConfirm={deleteForids}>
+          <Button type="primary-del" disabled={!hasSelected} style={{ display: curd.indexOf('d') !== -1 ? 'inline-block' : 'none' }}><Icon type="delete" />批量删除</Button>
+        </Popconfirm>
       </div>
       <Table
         rowSelection={rowSelection}

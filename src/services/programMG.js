@@ -3,7 +3,7 @@ import url from './api';
 import { stringify } from 'qs'
 
 export async function query(params) {
-  return request(url + '/rightsInfo/getPage?'+stringify(params), {
+  return request(url + '/pubProgramInfo/getPage?' + stringify(params), {
     method: 'get'
   });
 }
@@ -14,7 +14,7 @@ export async function created(params) {
     method: 'POST',
     body: JSON.stringify(params),
   }
-  return requestCode(url + '/rightsInfo', options)
+  return requestCode(url + '/pubProgramInfo', options)
 }
 
 export async function remove(id) {
@@ -22,7 +22,7 @@ export async function remove(id) {
     credentials: 'include',
     method: 'DELETE',
   }
-  return fetch(url + '/rightsInfo/' + id, options)
+  return fetch(url + '/pubProgramInfo/' + id, options)
     .then(res => {
       if (res.status === 200) {
         return 'success'
@@ -38,7 +38,7 @@ export async function update(params) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),
   }
-  return fetch(url + '/rightsInfo/' + params.id, options)
+  return fetch(url + '/pubProgramInfo/' + params.id, options)
     .then(res => {
       if (res.status === 200) {
         return 'success'
@@ -48,6 +48,6 @@ export async function update(params) {
 }
 
 export function checkAcount(account, cb) {
-  fetch(url + '/rightsInfo/checkAcount?account=' + account)
+  fetch(url + '/pubProgramInfo/checkAcount?account=' + account)
     .then(res => res.json()).then(data => { cb(data) })
 }

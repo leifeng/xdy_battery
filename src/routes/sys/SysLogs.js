@@ -5,9 +5,8 @@ import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 function SysLogs({dispatch, sysLogs}) {
-  console.log('sysLogs')
-  const {loading, data, pageSize, total, current} = sysLogs;
-  const dic = { 0: '女', 1: '男' }
+  console.log('系统日志')
+  const {loading, data, pageSize, total, pageNo} = sysLogs;
 
   const columns = [{
     title: '应用程序',
@@ -28,7 +27,29 @@ function SysLogs({dispatch, sysLogs}) {
   }];
 
   const searchFormProps = {
-    handleSearch: null,
+    handleChange(query) {
+      dispatch({
+        type: 'sysLogs/searchQueryChangeState',
+        data: {
+          name: query.name,
+          value: query.value
+        }
+      })
+    },
+    handleSearch(searchForm) {
+      dispatch({
+        type: 'sysLogs/query',
+        args: {
+          pageNo: 1
+        }
+      })
+    },
+    handleResetQuery() {
+      dispatch({
+        type: 'sysLogs/searchQueryState',
+        data: null
+      })
+    },
     forms: [
       { label: '应用程序', field: 'application', type: 'Input' },
       {
@@ -43,27 +64,20 @@ function SysLogs({dispatch, sysLogs}) {
   const tableListProps = {
     curd: 'r',
     tableProps: {
+      rowKey: 'id',
       data,
       columns,
       loading
     },
     pageProps: {
-      current,
+      pageNo,
       pageSize,
       total,
-      onShowSizeChange(current, pageSize) {
-        dispatch({
-          type: 'sysLogs/query',
-          args: {
-            pageSize
-          }
-        })
-      },
       onChange(current) {
         dispatch({
           type: 'sysLogs/query',
           args: {
-            current
+            pageNo: current
           }
         })
       },

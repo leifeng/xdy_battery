@@ -33,6 +33,7 @@ export default class Menus extends Component {
       batterySet: ['batterySet'],
       batteryRec: ['batteryRec'],
       report: ['report'],
+      battery: ['battery'],
     };
     return map[key] || [];
   }
@@ -46,51 +47,59 @@ export default class Menus extends Component {
     }
     return (
       <div className={styles.normal}>
-        <div className={styles.logo}></div>
+        <div className={styles.logo}>电池溯源系统</div>
         <Menu
           {...MenuProps}
           onClick={this.handleClick}
           onOpenChange={this.onOpenChange}
-          style={{ width: 240 }}
+          style={{ width: 220 }}
           >
           <SubMenu key="batteryRec" title={<span><Icon type="star-o" /><span>电池回收管理</span></span>}>
-            <Menu.Item key="/admin/batteryRec/batteryRecNoticeMG">更换电池通知单管理</Menu.Item>
-            <Menu.Item key="/admin/batteryRec/batteryRetireApplyMG">电池退役申请表管理</Menu.Item>
-            <Menu.Item key="/admin/batteryRec/stockStatisticsMG">库存统计表管理</Menu.Item>
-            <Menu.Item key="/admin/batteryRec/batteryProcessNoticeMG">退役电池处理通知单管理</Menu.Item>
-            <Menu.Item key="/admin/batteryRec/batteryPaymentMG">退役电池付款单管理</Menu.Item>
-            <Menu.Item key="/admin/batteryRec/batteryTakeMG">退役电池提货单管理</Menu.Item>
-            <Menu.Item key="/admin/batteryRec/batteryDeliveryMG">退役电池交货单管理</Menu.Item>
-            <Menu.Item key="/admin/batteryRec/batteryRecAccountsMG">回收电池月度结算单管理</Menu.Item>
+            <Menu.Item key="/admin/batteryRec/batteryRecNoticeMG">电池更换通知单管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batteryRec/batteryRetireApplyMG">电池退役申请单管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batteryRec/stockStatisticsMG">电池库存信息管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batteryRec/batteryProcessNoticeMG">电池处理通知单管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batteryRec/batteryPaymentMG">电池处理支付单管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batteryRec/batteryDeliveryMG">电池移交通知单管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batteryRec/batteryRecAccountsMG">电池回收月结单管理</Menu.Item>
           </SubMenu>
-          <SubMenu key="report" title={<span><Icon type="line-chart" /><span>报表</span></span>}>
-            <Menu.Item key="/admin/report/batteryRecoveryRecord">上报工信部电池回收记录表</Menu.Item>
-            <Menu.Item key="/admin/report/batteryInventoryInfo">废旧电池库存信息表</Menu.Item>
-            <Menu.Item key="/admin/report/batteryInfoTable">电池进销信息表</Menu.Item>
+          <SubMenu key="report" title={<span><Icon type="line-chart" /><span>电池报表管理</span></span>}>
+            <Menu.Item key="/admin/report/batteryRecoveryRecord1">电池回收月统计报表管理</Menu.Item>
+            <Menu.Item key="/admin/report/batteryRecoveryRecord2">电池再生处理月统计报表管理</Menu.Item>
+            <Menu.Item key="/admin/report/batteryRecoveryRecord3">电池梯次利用月统计报表管理</Menu.Item>
+            <Menu.Item key="/admin/report/batteryRecoveryRecord4">电池信息上报报表管理</Menu.Item>
+            <Menu.Item key="/admin/report/batteryRecoveryRecord5">单据处理月统计报表管理</Menu.Item>
           </SubMenu>
-          <SubMenu key="batteryBasic" title={<span><Icon type="info-circle-o" /><span>电池基本信息管理</span></span>}>
-            <Menu.Item key="/admin/batteryBasic/batteryBasicInfo">电池包基本信息</Menu.Item>
-            <Menu.Item key="/admin/batteryBasic/batteryCarInfo">电池包车辆信息</Menu.Item>
-            <Menu.Item key="/admin/batteryBasic/batteryUseInfo">电池包使用信息</Menu.Item>
-            <Menu.Item key="/admin/batteryBasic/batteryProcessInfo">电池包处理信息</Menu.Item>
-          </SubMenu>
-          <SubMenu key="batterySet" title={<span><Icon type="credit-card" /><span>电池设定信息管理</span></span>}>
+          <SubMenu key="batterySet" title={<span><Icon type="credit-card" /><span>电池参数管理</span></span>}>
             <Menu.Item key="/admin/batterySet/batteryParamsSet">电池参数设定</Menu.Item>
-            <Menu.Item key="/admin/batterySet/batteryRetireSet">电池退役设定</Menu.Item>
-            <Menu.Item key="/admin/batterySet/batteryRecoverySet">电池回收费用设定</Menu.Item>
-            <Menu.Item key="/admin/batterySet/batteryRecoveryPointMG">回收管理点管理</Menu.Item>
-            <Menu.Item key="/admin/batterySet/enterpriseMG">处理企业管理</Menu.Item>
-            <Menu.Item key="/admin/batterySet/batteryRecoveryProcessSet">电池回收流程设定</Menu.Item>
+            <Menu.Item key="/admin/batterySet/batteryRetireSet">电池退役标准管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batterySet/batteryRecoverySet">电池费用设定管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/batterySet/batteryRecoveryProcessSet">电池回收流程设定管理</Menu.Item>
           </SubMenu>
-          <SubMenu key="sys" title={<span><Icon type="file-text" /><span>系统信息管理</span></span>}>
-            <Menu.Item key="/admin/sys/usersMG">用户管理</Menu.Item>
-            <Menu.Item key="/admin/sys/rolesMG">角色管理</Menu.Item>
-            <Menu.Item key="/admin/sys/authMG">权限管理</Menu.Item>
-            <Menu.Item key="/admin/sys/usersAuthMG">用户角色管理</Menu.Item>
-            <Menu.Item key="/admin/sys/rolesAuthMG">角色权限管理</Menu.Item>
-            <Menu.Item key="/admin/sys/sysParamsSet">系统参数设定</Menu.Item>
-            <Menu.Item key="/admin/sys/sysLogs">系统日志管理</Menu.Item>
-            <Menu.Item key="/admin/sys/serviceRunMG">服务运行管理</Menu.Item>
+          <SubMenu key="sys" title={<span><Icon type="file-text" /><span>系统管理</span></span>}>
+            <Menu.Item key="/admin/sys/usersMG">用户管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/sys/rolesMG">角色管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/sys/authMG">权限管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/sys/programMG">程序管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/sys/sysParamsSet">参数管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/sys/sysLogs">日志管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/sys/serviceRunMG">服务及接口运行管理(完成)</Menu.Item>
+          </SubMenu>
+          <SubMenu key="battery" title={<span><Icon type="appstore-o" /><span>电池管理</span></span>}>
+            <Menu.Item key="/admin/battery/batterySingleMG">电池单体管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batModuleInfo">电池模组管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batPackInfo">电池包管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batSysInfo">电池系统管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batStockInfo">电池采购存储管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batteryCarInfo">电池车辆管理</Menu.Item>
+            <Menu.Item key="/admin/battery/batUseInfo">电池保养、维修管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batterySingleMG7">电池更换管理</Menu.Item>
+            <Menu.Item key="/admin/battery/batterySingleMG8">电池索赔管理</Menu.Item>
+            <Menu.Item key="/admin/battery/batReproduceDeal">电池再生处理管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batEchelonUse">电池梯次利用管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batteryRecoveryPointMG">回收管理点管理</Menu.Item>
+            <Menu.Item key="/admin/battery/enterpriseMG">再生处理企业管理(完成)</Menu.Item>
+            <Menu.Item key="/admin/battery/batterySingleMG12">梯次利用企业管理</Menu.Item>
           </SubMenu>
         </Menu>
       </div>

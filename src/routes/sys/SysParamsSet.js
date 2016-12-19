@@ -7,16 +7,15 @@ import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 
 function SysParamsSet({dispatch, sysParamsSet}) {
-    console.log('SysParamsSet')
-    const {selectedRowKeys, loading, data, pageSize, total, current, visible, modalType, record} = sysParamsSet;
-    const dic = { 0: '女', 1: '男' }
-
+    console.log('系统参数')
+    const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = sysParamsSet;
     function onDeleteItem(id) {
         dispatch({
             type: 'sysParamsSet/remove',
             id
         })
     }
+
     function openModal(type, record) {
         if (record) {
             dispatch({
@@ -37,14 +36,13 @@ function SysParamsSet({dispatch, sysParamsSet}) {
                 })
             } else {
                 dispatch({
-                    type: 'sysParamsSet/visibleState',
-                    data: {
-                        modalType: type,
-                        visible: true
-                    }
+                    type: 'sysParamsSet/openModalState',
+                    data: type
                 })
             }
+
         }
+
     }
 
     const columns = [{
@@ -88,8 +86,31 @@ function SysParamsSet({dispatch, sysParamsSet}) {
             </span>
         ),
     }];
+
     const searchFormProps = {
-        handleSearch: null,
+        handleChange(query) {
+            dispatch({
+                type: 'sysParamsSet/searchQueryChangeState',
+                data: {
+                    name: query.name,
+                    value: query.value
+                }
+            })
+        },
+        handleSearch(searchForm) {
+            dispatch({
+                type: 'sysParamsSet/query',
+                args: {
+                    pageNo: 1
+                }
+            })
+        },
+        handleResetQuery() {
+            dispatch({
+                type: 'sysParamsSet/searchQueryState',
+                data: null
+            })
+        },
         forms: [
             { label: '字段编号', field: 'fieldCode', type: 'Input' },
             { label: '字段名称', field: 'fieldName', type: 'Input' },
@@ -107,6 +128,7 @@ function SysParamsSet({dispatch, sysParamsSet}) {
         curd: 'curd',
         openModal,
         tableProps: {
+            rowKey: 'id',
             data,
             columns,
             selectedRowKeys,
@@ -121,41 +143,42 @@ function SysParamsSet({dispatch, sysParamsSet}) {
             },
         },
         pageProps: {
-            current,
+            pageNo,
             pageSize,
             total,
-            onShowSizeChange(current, pageSize) {
-                dispatch({
-                    type: 'sysParamsSet/query',
-                    args: {
-                        pageSize
-                    }
-                })
-            },
             onChange(current) {
                 dispatch({
                     type: 'sysParamsSet/query',
                     args: {
-                        current
+                        pageNo: current
                     }
                 })
             },
         }
     };
     const modalcusProps = {
+        alertState,
+        modalLoading,
+        modalType,
         visible,
         record,
         title: modalType === 'add' ? '新增数据' : '编辑数据',
-        onOk() {
-            dispatch({
-                type: 'sysParamsSet/visibleState',
-                data: false
-            })
+        onSave(data) {
+            if (modalType === "add") {
+                dispatch({
+                    type: 'sysParamsSet/create',
+                    args: data
+                })
+            } else {
+                dispatch({
+                    type: 'sysParamsSet/update',
+                    args: data
+                })
+            }
         },
         onCancel() {
             dispatch({
-                type: 'sysParamsSet/visibleState',
-                data: false
+                type: 'sysParamsSet/closeModalState',
             })
         },
         modalForms: [
@@ -165,22 +188,21 @@ function SysParamsSet({dispatch, sysParamsSet}) {
             { label: '参数名称', field: 'paramName', type: 'Input' },
             { label: '对应编号', field: 'relativeId', type: 'Input' },
             {
-                label: '状态', field: 'status', type: 'Select', dic: [
+                label: '状态', field: 'status', type: 'Radio', dic: [
                     { name: '可用', value: 1 },
                     { name: '不可用', value: 0 }
-                ]
+                ],
+                rules: [{ type: "number", required: true, message: '请选择状态' }]
             },
             { label: '备注', field: 'remark', type: 'TextArea' },
         ]
     }
-    const NewModalcus = () =>
-        <Modalcus {...modalcusProps} />;
 
     return (
         <div>
             <SearchForm {...searchFormProps} />
             <TableList {...tableListProps} />
-            <NewModalcus />
+            <Modalcus {...modalcusProps} />
         </div>
     );
 }

@@ -2,9 +2,9 @@ import React, { PropsType } from 'react';
 import styles from './index.less'
 import _ from 'lodash';
 import Forms from '../Forms';
-import { Form, Row, Col, Input, Button, Icon } from 'antd';
+import { Form, Row, Col, Button } from 'antd';
 
-function SearchForm({children, handleSearch, forms, form}) {
+function SearchForm({children, handleSearch, handleResetQuery, forms, form}) {
   const { resetFields, validateFields } = form;
   const formItemLayout = {
     labelCol: { span: 6 },
@@ -12,6 +12,7 @@ function SearchForm({children, handleSearch, forms, form}) {
   };
   function handleReset() {
     resetFields();
+    handleResetQuery();
   }
   function onSubmit(e) {
     e.preventDefault();
@@ -56,4 +57,8 @@ function SearchForm({children, handleSearch, forms, form}) {
 SearchForm.PropsType = {
 
 }
-export default Form.create()(SearchForm);
+export default Form.create({
+  onFieldsChange(props, changedFields) {
+    props.handleChange(changedFields[Object.keys(changedFields)[0]])
+  },
+})(SearchForm);

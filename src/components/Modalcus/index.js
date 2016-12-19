@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import _ from 'lodash';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Spin, Alert } from 'antd';
 import Forms from '../Forms';
 
 class Modalcus extends Component {
   constructor() {
     super();
     this.onOk = this.onOk.bind(this);
+    this.onClose = this.onClose.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.visible === false) {
+      nextProps.form.resetFields();
+    }
   }
 
   render() {
     console.log('Modalcus')
-    const {title, visible, onOk, onCancel, modalForms, form, record} = this.props;
+    const {title, visible, onSave, onCancel, modalForms, form, record, modalLoading, alertState, modalType} = this.props;
     const { getFieldDecorator } = form;
 
     const formItemLayout = {
@@ -23,20 +30,23 @@ class Modalcus extends Component {
       <Modal title={title}
         visible={visible}
         onOk={this.onOk}
-        onCancel={onCancel}
+        onCancel={this.onClose}
         >
-        <Form horizontal>
-          {modalForms.map((item, i) => {
-            return (
-              <Forms {...item} form={form} formItemLayout={formItemLayout} key={i} value={record && record[item.field]} />
-            )
-          })}
-        </Form>
+        <Spin spinning={modalLoading}>
+          <Form horizontal>
+            {modalForms.map((item, i) => {
+              return (
+                <Forms {...item} modalType={modalType} form={form} formItemLayout={formItemLayout} key={i} value={record && record[item.field]} />
+              )
+            })}
+          </Form>
+          <div style={{ display: alertState ? 'block' : 'none' }}><Alert message="操作失败！" type="error" showIcon /></div>
+        </Spin>
       </Modal>
     )
   }
   onOk() {
-    const {modalForms} = this.props;
+    const {modalForms, onSave, form, modalType} = this.props;
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
@@ -49,11 +59,20 @@ class Modalcus extends Component {
         values[name] = fieldsValue[name] ? fieldsValue[name].format(item.setting.format) : '';
       })
       console.log(values)
-      this.props.onOk(values);
+      onSave(values);
+      // if (modalType !== 'add') {
+      //   form.resetFields();
+      // }
+
     });
+  }
+  onClose() {
+    const {form, onCancel} = this.props;
+    // form.resetFields();
+    onCancel()
   }
 }
 Modalcus.defaultProps = {
-  record: null
+  record: null,
 }
 export default Form.create()(Modalcus);

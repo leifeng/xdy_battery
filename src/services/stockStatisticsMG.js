@@ -1,25 +1,18 @@
-import request from '../utils/request';
-import qs from 'qs';
+import request, { requestCode } from '../utils/request';
+import url from './api';
+import { stringify } from 'qs'
+
 export async function query(params) {
-  return request(`/api/users?${qs.stringify(params)}`);
-}
-export async function create(params) {
-  return request('/api/users', {
-    method: 'post',
-    body: qs.stringify(params),
+  return request(url + '/recycleStockInfo/getPage?' + stringify(params), {
+    method: 'get'
   });
 }
 
-export async function remove(params) {
-  return request('/api/users', {
-    method: 'delete',
-    body: qs.stringify(params),
-  });
-}
 
-export async function update(params) {
-  return request('/api/users', {
-    method: 'put',
-    body: qs.stringify(params),
-  });
+export async function created(params) {
+  const options = {
+    method: 'POST',
+    body: JSON.stringify(params),
+  }
+  return requestCode(url + '/recycleStockInfo', options)
 }

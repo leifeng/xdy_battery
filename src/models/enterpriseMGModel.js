@@ -1,5 +1,4 @@
-import { query, create, update, remove } from '../services/enterpriseMG'
-import { parse } from 'qs'
+import { query, created, update, remove } from '../services/enterpriseMG'
 
 export default {
 
@@ -9,96 +8,91 @@ export default {
     selectedRowKeys: [],
     loading: false,
     visible: false,
-    current: 1,
+    pageNo: 1,
     pageSize: 10,
     total: 0,
     modalType: '',
-    data: [{
-      // company: 'QWE',
-      // nickName: 'QWE',
-      // address: 'QWE',
-      // longitude: 150.000,
-      // latitude: 30.000,
-      // linkMan: 'QWE',
-      // linkMobile: 18519234578,
-      // status: 1,
-      // createTime: '2016 - 11 - 4',
-      // creator: 'test',
-      // editTime: '2016 - 11 - 4',
-      // editor: 'test',
-      // remark: 'dssdfdsf'
-      province: '北京',
-      city: '北京市',
-      company: '智信中心',
-      nickName: '智信',
-      Company_type: '知豆公司',
-      address: '北京市五道口',
-      longitude: 168.000,
-      latitude: 36.000,
-      linkMan: '李四',
-      linkPhone: 13500000555,
-      dealMan: '张三',
-      dealPhone: 15023561478,
-      maxValue: 100,
-      status: 0
-    }],
-    record: null
+    data: [],
+    record: null,
+    alertState: false,
+    searchQuery: null,
+    modalLoading: false,
+
   },
   subscriptions: {
-    // setup({dispatch, history }) {
-    //   history.listen(location => {
-    //     if (location.pathname === '/admin/batterySet/enterpriseMG') {
-    //       dispatch({
-    //         type: 'query',
-    //         args: {
-    //           current: 1
-    //         }
-    //       })
-    //     }
-    //   })
-    // },
+    setup({dispatch, history }) {
+      history.listen(location => {
+        if (location.pathname === '/admin/battery/enterpriseMG') {
+          dispatch({
+            type: 'query',
+            args: {
+              pageSize: 10,
+              pageNo: 1,
+              isPaging: true
+            }
+          })
+        }
+      })
+    },
   },
 
   effects: {
     *query({args}, {select, call, put}) {
       yield put({ type: 'loadingState', data: true });
-      const pageSize = yield select(state => state.enterpriseMG.pageSize)
-      const current = yield select(state => state.enterpriseMG.current)
-      const params = { current, pageSize,...args }
-      const {data} = yield call(query, parse(params));
-      if (data.success) {
+      const searchQuery = yield select(state => state.enterpriseMG.searchQuery)
+      const {data} = yield call(query, Object.assign({}, args, searchQuery, { isPaging: true, pageSize: 10 }));
+      if (data) {
         yield put({
           type: 'querySuccess',
           data
         })
       }
     },
-    *create() { },
+    *create({args}, {call, put}) {
+      yield put({ type: 'modalLoadingState', data: true });
+      const data = yield call(created, args);
+      if (data === 'success') {
+        yield put({ type: 'createSuccess' })
+        yield put({ type: 'query' })
+      } else {
+        yield put({ type: 'modalErrorState' });
+
+      }
+    },
     *remove({id}, {call, put}) {
       yield put({ type: 'loadingState', data: true });
-      const {data} = yield call(remove, { id })
-      if (data && data.success) {
+      const data = yield call(remove, id)
+      if (data === 'success') {
         yield put({
-          type: 'deleteSuccess',
-          id
+          type: 'query',
+          args: {
+            pageSize: 10,
+            pageNo: 1,
+            isPaging: true
+          }
         })
       }
     },
-    *update() { },
+    *update({args}, {select, call, put}) {
+      yield put({ type: 'modalLoadingState', data: true });
+      const record = yield select(state => state.enterpriseMG.record)
+      const data = yield call(update, Object.assign(args, { id: record.id }));
+      if (data === 'success') {
+        yield put({ type: 'createSuccess' })
+        yield put({ type: 'query' })
+      } else {
+        yield put({ type: 'modalErrorState' });
+      }
+    },
   },
 
   reducers: {
     querySuccess(state, action) {
-      const {page, data} = action.data
-      return {...state, data: data, total: page.total, current: page.current, loading: false }
+      const {totalCount, pageNo, list} = action.data
+      return {...state, data: list, total: totalCount, pageNo: pageNo, loading: false }
     },
-    deleteSuccess(state, action) {
-      const id = action.id;
-      const newList = state.data.filter(item => item.id !== id);
-      return {...state, data: newList, loading: false }
-    },
-    pageSizeState(state, action) {
-      return {...state, pageSize: action.data }
+    createSuccess(state, action) {
+      return {...state, visible: false, modalLoading: false }
     },
     loadingState(state, action) {
       return {...state, loading: action.data }
@@ -106,14 +100,34 @@ export default {
     selectedRowKeysState(state, action) {
       return {...state, selectedRowKeys: action.data }
     },
-    visibleState(state, action) {
-      const { visible, modalType } = action.data;
-      return {...state, visible, modalType }
+    openModalState(state, action) {
+      return {...state, visible: true, modalType: action.data }
+    },
+    closeModalState(state, action) {
+      return {...state, alertState: false, visible: false }
     },
     recordState(state, action) {
       const { record, modalType } = action.data;
       return {...state, record, modalType, visible: true }
+    },
+    modalLoadingState(state, action) {
+      return {...state, modalLoading: action.data }
+    },
+    modalErrorState(state, action) {
+      return {...state, alertState: true, modalLoading: false }
+    },
+    searchQueryState(state, action) {
+      return {...state, searchQuery: action.data }
+    },
+    searchQueryChangeState(state, action) {
+      const {name, value} = action.data;
+      const {searchQuery} = state;
+      const newState = {};
+      newState[name] = value;
+      const newsearchQuery = Object.assign({}, searchQuery, newState)
+      return {...state, searchQuery: newsearchQuery }
     }
-  },
+  }
+
 
 }

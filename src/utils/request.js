@@ -1,6 +1,9 @@
 import fetch from 'dva/fetch';
 
 function parseJSON(response) {
+  if (response.status === 204) {
+    return []
+  }
   return response.json();
 }
 
@@ -22,10 +25,34 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
-  const _opts={credentials:'include',headers:{'Content-Type': 'application/json'},...options}
-  return fetch(url, options)
+  const defaultOpt = {
+    mode: 'cors',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' }
+  }
+  const opts = Object.assign({}, defaultOpt, options)
+  return fetch(url, opts)
     .then(checkStatus)
     .then(parseJSON)
     .then((data) => ({ data }))
     .catch((err) => ({ err }));
+}
+
+
+export function requestCode(url, options) {
+  const defaultOpt = {
+    mode: 'cors',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }
+  const opts = Object.assign({}, defaultOpt, options);
+  return fetch(url, opts)
+    .then(res => {
+      if (res.status === 200) {
+        return 'success'
+      }
+      return res.status
+    })
 }

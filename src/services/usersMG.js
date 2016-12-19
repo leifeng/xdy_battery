@@ -1,25 +1,43 @@
-import request from '../utils/request';
-import qs from 'qs';
+import request, { requestCode } from '../utils/request';
+import url from './api';
+import { stringify } from 'qs'
+
 export async function query(params) {
-  return request(`/api/userInfo/getPage?${qs.stringify(params)}`);
-}
-export async function create(params) {
-  return request('/api/users', {
-    method: 'post',
-    body: qs.stringify(params),
+  return request(url + '/userInfo/getPage?' + stringify(params), {
+    method: 'get'
   });
 }
 
-export async function remove(params) {
-  return request('/api/users', {
-    method: 'delete',
-    body: qs.stringify(params),
-  });
+
+export async function created(params) {
+  return requestCode(url + '/userInfo', {
+    method: 'POST',
+    body: JSON.stringify(params),
+  })
+}
+
+export async function remove(id) {
+  return requestCode(url + '/userInfo', {
+    method: 'DELETE',
+  })
+}
+
+export async function removeIds(ids) {
+  return requestCode(url + '/userInfo/batchDelete', {
+    method: 'POST',
+    body: JSON.stringify(ids)
+  })
 }
 
 export async function update(params) {
-  return request('/api/users', {
-    method: 'put',
-    body: qs.stringify(params),
-  });
+  return requestCode(url + '/userInfo' + params.id, {
+    method: 'PUT',
+    body: JSON.stringify(params),
+  })
+
+}
+
+export function checkAcount(account, cb) {
+  fetch(url + '/userInfo/checkAcount?account=' + account)
+    .then(res => res.json()).then(data => { cb(data) })
 }

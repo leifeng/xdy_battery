@@ -4,7 +4,7 @@
     "index": "./src/index.js"
   },
   "dependencies": {
-    "antd": "^2.5.0",
+    "antd": "^2.5.2",
     "dva": "^1.1.0",
     "lodash": "^4.16.6",
     "moment": "^2.15.2",
@@ -32,7 +32,7 @@
     "request": "^2.79.0"
   },
   "scripts": {
-    "start": "dora --plugins \"browser-history?index=/src/index.html,proxy?watchDirs=./mock,webpack,webpack-hmr\"",
+    "start": "dora -p 80 --plugins \"browser-history?index=/src/index.html?watchDirs=./mock,webpack,webpack-hmr\"",
     "build": "atool-build",
     "test": "atool-test-mocha ./src/**/*-test.js"
   }

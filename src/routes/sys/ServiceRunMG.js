@@ -7,10 +7,8 @@ import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 
 function ServiceRunMG({dispatch, serviceRunMG}) {
-  console.log('ServiceRunMG')
-  const {selectedRowKeys, loading, data, pageSize, total, current, visible, modalType, record} = serviceRunMG;
-  console.log(visible)
-  const dic = { 0: '女', 1: '男' }
+  console.log('服务运行')
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = serviceRunMG;
 
   function onDeleteItem(id) {
     dispatch({
@@ -18,6 +16,7 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
       id
     })
   }
+
   function openModal(type, record) {
     if (record) {
       dispatch({
@@ -38,16 +37,14 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
         })
       } else {
         dispatch({
-          type: 'serviceRunMG/visibleState',
-          data: {
-            modalType: type,
-            visible: true
-          }
+          type: 'serviceRunMG/openModalState',
+          data: type
         })
       }
-    }
-  }
 
+    }
+
+  }
   const columns = [{
     title: '服务名称',
     dataIndex: 'service',
@@ -57,7 +54,7 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
     dataIndex: 'status',
     key: 'status',
   }, {
-    title: '当前时间',
+    title: '运行时间',
     dataIndex: 'runTime',
     key: 'runTime',
   }, {
@@ -86,7 +83,29 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
     ),
   }];
   const searchFormProps = {
-    handleSearch: null,
+    handleChange(query) {
+      dispatch({
+        type: 'usersMG/searchQueryChangeState',
+        data: {
+          name: query.name,
+          value: query.value
+        }
+      })
+    },
+    handleSearch(searchForm) {
+      dispatch({
+        type: 'usersMG/query',
+        args: {
+          pageNo: 1
+        }
+      })
+    },
+    handleResetQuery() {
+      dispatch({
+        type: 'usersMG/searchQueryState',
+        data: null
+      })
+    },
     forms: [
       { label: '服务名称', field: 'service', type: 'Input' },
       {
@@ -102,6 +121,7 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
     curd: 'curd',
     openModal,
     tableProps: {
+      rowKey: 'id',
       data,
       columns,
       selectedRowKeys,
@@ -116,65 +136,66 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
       },
     },
     pageProps: {
-      current,
+      pageNo,
       pageSize,
       total,
-      onShowSizeChange(current, pageSize) {
-        dispatch({
-          type: 'serviceRunMG/query',
-          args: {
-            pageSize
-          }
-        })
-      },
       onChange(current) {
         dispatch({
           type: 'serviceRunMG/query',
           args: {
-            current
+            pageNo: current
           }
         })
       },
     }
   };
   const modalcusProps = {
+    alertState,
+    modalLoading,
+    modalType,
     visible,
     record,
     title: modalType === 'add' ? '新增数据' : '编辑数据',
-    onOk() {
-      dispatch({
-        type: 'serviceRunMG/visibleState',
-        data: false
-      })
+    onSave(data) {
+      if (modalType === "add") {
+        dispatch({
+          type: 'serviceRunMG/create',
+          args: data
+        })
+      } else {
+        dispatch({
+          type: 'serviceRunMG/update',
+          args: data
+        })
+      }
     },
     onCancel() {
       dispatch({
-        type: 'serviceRunMG/visibleState',
-        data: false
+        type: 'serviceRunMG/closeModalState'
       })
     },
     modalForms: [
       { label: '服务名称', field: 'service', type: 'Input' },
-      { label: '当前时间', field: 'runTime', type: 'Input' },
+      { label: '运行时间', field: 'runTime', type: 'Input' },
       { label: '异常原因', field: 'runReason', type: 'Input' },
       { label: '解决方案', field: 'dealWay', type: 'Input' },
       {
-        label: '运行状态', field: 'status', type: 'Select', dic: [
+        label: '状态', field: 'status', type: 'Radio', dic: [
           { name: '可用', value: 1 },
           { name: '不可用', value: 0 }
-        ]
+        ],
+        rules: [{ type: "number", required: true, message: '请选择状态' }]
       },
       { label: '备注', field: 'remark', type: 'TextArea' },
     ]
   }
-  const NewModalcus = () =>
-    <Modalcus {...modalcusProps} />;
+
 
   return (
     <div>
       <SearchForm {...searchFormProps} />
       <TableList {...tableListProps} />
-      <NewModalcus />
+      <Modalcus {...modalcusProps} />
     </div>
   );
 }

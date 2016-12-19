@@ -14,16 +14,24 @@ class Forms extends Component {
     this.renderForm = this.renderForm.bind(this);
   }
   render() {
-    const { field, value, type, rules, form, setting, label, formItemLayout} = this.props;
+    const { field, value, type, rules, form, setting, label, formItemLayout, modalType, unique} = this.props;
     const { getFieldDecorator } = form;
-    //初始化值
+    //初始化值-start
     let defaultvalue = value;
     if (value && type === 'DatePicker') {
       defaultvalue = moment(value, setting.format);
     }
+    //初始化值-end
+
+    //验证-start
+    let defaultRules = rules;
+    if (modalType !== 'add' && unique) {
+      defaultRules = []
+    }
+    //验证-end
     const options = {
       initialValue: defaultvalue,
-      rules: rules
+      rules: defaultRules
     }
     return (
       <FormItem
@@ -39,10 +47,10 @@ class Forms extends Component {
 
 
   renderForm() {
-    const {  dic, type, setting} = this.props;
+    const {  dic, formType, type, setting, unique, modalType,inputProps} = this.props;
     switch (type) {
       case 'Input':
-        return <Input />
+        return <Input type={formType} disabled={modalType !== 'add' && unique} {...inputProps} />
       case 'TextArea':
         return <Input type="textarea" />
       case 'Checkbox':
@@ -60,7 +68,7 @@ class Forms extends Component {
           {dic.map((item, i) => {
             return <Option value={item.value.toString()} key={i}>{item.name}</Option>
           })}
-        </Select >
+        </Select>
       case 'Radio':
         return <RadioGroup>
           {dic.map((item, i) => {
@@ -69,12 +77,12 @@ class Forms extends Component {
         </RadioGroup>
       case 'DatePicker':
         return <DatePicker
-          showTime={setting||setting.showTime}
-          format={setting||setting.format}
+          showTime={setting && setting.showTime}
+          format={setting && setting.format}
           disabledDate={this.disabledDate}
           />
       default:
-        return <Input />
+        return <Input type={formType} {...inputProps}/>
     }
   }
   //限制时间范围
@@ -85,9 +93,12 @@ class Forms extends Component {
 }
 Forms.defaultProps = {
   value: null,
-  setting:{
-    showTime:false,
-    format:'YYYY-MM-DD'
+  unique: false,
+  formType: 'text',
+  inputProps:null,
+  setting: {
+    showTime: false,
+    format: 'YYYY-MM-DD'
   }
 }
 export default Forms;
