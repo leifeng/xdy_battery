@@ -5,20 +5,35 @@ import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
-import Roles from '../../components/Roles'
-import { checkAcount } from '../../services/usersMG'
+import Roles from '../../components/Roles';
+import EditPwd from '../../components/EditPwd';
+import { checkAcount } from '../../services/usersMG';
+import { getList, getName } from '../../utils/dicFilter';
 
-function UsersMG({dispatch, usersMG}) {
+
+function UsersMG({dispatch, usersMG, dictionary, companylist}) {
   console.log('用户管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, modalRolesVisible, roles, rolesbyUser} = usersMG;
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, modalRolesVisible, roles, rolesbyUser, editPwdVisible, editPwdLoading, linkField} = usersMG;
+  const {allData} = dictionary;
+  const {companyAllData} = companylist;
   let t = -1;
+  //字典处理
+  const StatusDic = getList(allData, 'Status');
+  const User_TypeDic = getList(allData, 'User_Type');
+  const filterCompanyDic = companyAllData.filter((item, index) => {
+    if (record) {
+      return item.filter == record.userType
+    }
+    return item.filter == linkField
+  }) || []
+  //删除一个
   function onDeleteItem(id) {
     dispatch({
       type: 'usersMG/remove',
       id
     })
   }
-
+  //新建、编辑
   function openModal(type, record) {
     if (record) {
       dispatch({
@@ -47,10 +62,22 @@ function UsersMG({dispatch, usersMG}) {
     }
 
   }
+  //分配角色
   function openRoles(id) {
     dispatch({
       type: 'usersMG/queryRoleByUserid',
       id
+    })
+  }
+  //编辑密码
+  function OpenEditPwd(id) {
+    dispatch({
+      type: 'usersMG/userIdState',
+      data: id
+    })
+    dispatch({
+      type: 'usersMG/editPwdVisibleState',
+      data: true
     })
   }
   const columns = [{
@@ -69,18 +96,27 @@ function UsersMG({dispatch, usersMG}) {
     title: '用户类型',
     dataIndex: 'userType',
     key: 'userType',
+    render: (text, record) => {
+      return getName(User_TypeDic, text)
+    }
   }, {
-    title: '所属企业编码',
+    title: '所属企业',
     dataIndex: 'companyId',
     key: 'companyId',
-  }, {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
+    render: (text, record) => {
+      return getName(companyAllData, text)
+    }
   }, {
     title: '到期日期',
     dataIndex: 'dueTime',
     key: 'dueTime',
+  }, {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text, record) => {
+      return getName(StatusDic, text)
+    }
   }, {
     title: '操作',
     key: 'action',
@@ -91,6 +127,8 @@ function UsersMG({dispatch, usersMG}) {
         <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
           <a>删除</a>
         </Popconfirm>
+        <span className="ant-divider" />
+        <a onClick={() => OpenEditPwd(record.id)}>修改密码</a>
         <span className="ant-divider" />
         <a onClick={() => openRoles(record.id)}>分配角色</a>
       </span>
@@ -126,23 +164,13 @@ function UsersMG({dispatch, usersMG}) {
       { label: '账号', field: 'account', type: 'Input' },
       { label: '昵称', field: 'nickName', type: 'Input' },
       {
-        label: '用户类型', field: 'userType', type: 'Select', dic: [
-          { name: '知豆公司', value: 1 },
-          { name: '回收管理点', value: 2 },
-          { name: '再生处理企业', value: 3 },
-          { name: '梯次利用企业', value: 4 },
-          { name: '电池供应商商', value: 5 },
-        ]
+        label: '用户类型', field: 'userType', type: 'Select', dic: User_TypeDic
       },
       {
-        label: '状态', field: 'status', type: 'Select', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ],
+        label: '状态', field: 'status', type: 'Select', dic: StatusDic,
       },
     ]
   };
-
   const tableListProps = {
     curd: 'curd',
     openModal,
@@ -157,9 +185,6 @@ function UsersMG({dispatch, usersMG}) {
       columns,
       selectedRowKeys,
       loading,
-      expandedRowRender: (record) => {
-        return <p>备注：{record.remark}</p>
-      },
       rowSelection: {
         onChange(selectedRowKeys, selectedRows) {
           dispatch({
@@ -182,7 +207,7 @@ function UsersMG({dispatch, usersMG}) {
         })
       },
     }
-  };
+  }
   const modalcusProps = {
     alertState,
     modalLoading,
@@ -210,8 +235,10 @@ function UsersMG({dispatch, usersMG}) {
     },
     modalForms: [
       {
-        label: '账号', field: 'account', type: 'Input', unique: true, rules: [
+        label: '账号', field: 'account', type: 'Input', unique: true,
+        rules: [
           { required: true, message: '请输入账号' },
+          { required: true, message: '账号名称长度为1~10', min: 1, max: 10 },
           {
             validator: (rule, value, callback) => {
               clearTimeout(t)
@@ -228,37 +255,33 @@ function UsersMG({dispatch, usersMG}) {
           }]
       },
       {
-        label: '密码', field: 'password', type: 'Input', formType: "password", rules: [
-          { required: true, message: '请输入密码' },
-        ]
+        label: '密码', field: 'password', type: 'Input', unique: true, formType: "password",
+        rules: [{ required: true, message: '请输入密码' },]
       },
-      { label: '名称', field: 'realname', type: 'Input' },
+      { label: '名称', field: 'realName', type: 'Input' },
       { label: '昵称', field: 'nickName', type: 'Input' },
       {
-        label: '用户类型', field: 'userType', type: 'Select', dic: [
-          { name: '知豆用户', value: 1 },
-          { name: '企业用户', value: 0 }
-        ],
-        rules: [{ required: true, message: '请选择用户类型' }]
+        label: '用户类型', field: 'userType', type: 'Select', dic: User_TypeDic,
+        linkField: 'companyId',
+        rules: [{ required: true, message: '请选择用户类型' }],
+        onChange: (value) => {
+          dispatch({
+            type: 'usersMG/linkFieldState',
+            data: value
+          })
+        }
       },
       {
-        label: '所属企业编码', field: 'companyId', type: 'Select', dic: [
-          { name: '知豆用户', value: 1 },
-          { name: '企业用户', value: 0 }
-        ],
+        label: '所属企业编码', field: 'companyId', type: 'Select', dic: filterCompanyDic,
         rules: [{ required: true, message: '请选择所属企业编码' }]
       },
       {
-        label: '状态', field: 'status', type: 'Radio', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ],
-        rules: [{ type: "number", required: true, message: '请选择状态' }]
+        label: '状态', field: 'status', type: 'Radio', dic: StatusDic,
+        rules: [{ type: "string", required: true, message: '请选择状态' }]
       },
-
       {
         label: '到期日期', field: 'dueTime', type: 'DatePicker',
-        setting: { showTime: true, format: 'YYYY-MM-DD HH:mm:ss' },
+        setting: { showTime: true, format: 'YYYY-MM-DD HH:mm:ss', disabledDate: null },
         rules: [{ type: "object", required: true, message: '请选择到期日期' }]
       },
       { label: '备注', field: 'remark', type: 'TextArea' }
@@ -286,12 +309,31 @@ function UsersMG({dispatch, usersMG}) {
       })
     }
   }
+  const editPwdProps = {
+    editPwdLoading,
+    editPwdVisible,
+    onSavePwd(data) {
+      dispatch({
+        type: 'usersMG/updatePwd',
+        args: data
+      })
+    },
+    onClosePwd() {
+      dispatch({
+        type: 'usersMG/editPwdVisibleState',
+        data: false
+      })
+    },
+
+  }
+
   return (
     <div>
       <SearchForm {...searchFormProps} />
       <TableList {...tableListProps} />
       <Modalcus {...modalcusProps} />
       <Roles {...rolesProps} />
+      <EditPwd {...editPwdProps} />
     </div>
   );
 }
@@ -299,7 +341,7 @@ function UsersMG({dispatch, usersMG}) {
 UsersMG.propTypes = {
 };
 
-function mapStateToProps({usersMG}) {
-  return { usersMG }
+function mapStateToProps({usersMG, dictionary, companylist}) {
+  return { usersMG, dictionary, companylist }
 }
 export default connect(mapStateToProps)(UsersMG);

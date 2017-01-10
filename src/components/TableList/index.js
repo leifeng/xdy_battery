@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Table, Button, Icon, Popconfirm } from 'antd'
 import styles from './index.less'
 
 function TableList({tableProps, pageProps, openModal, deleteForids, curd}) {
   console.log('TableList')
-  const {rowSelection = null, columns, data, rowKey, selectedRowKeys = [], loading, expandedRowRender } = tableProps;
+  const {rowSelection = null, columns, data, rowKey, selectedRowKeys = [], loading, expandedRowRender} = tableProps;
   const {onShowSizeChange = null, onChange, pageSize, pageNo, total} = pageProps;
 
 
   const hasSelected = selectedRowKeys.length > 0;
   const pagination = {
     current: pageNo,
-    pageSize,
+    pageSize: pageSize || 6,
     total,
     size: 'big',
     showQuickJumper: true,
@@ -20,6 +20,7 @@ function TableList({tableProps, pageProps, openModal, deleteForids, curd}) {
     onShowSizeChange,
     onChange
   };
+
   return (
     <div className={styles.tablelist}>
       <div className={styles.delall}>
@@ -43,7 +44,6 @@ function TableList({tableProps, pageProps, openModal, deleteForids, curd}) {
 }
 TableList.defaultProps = {
   curd: 'curd',
-  rowKey: 'id',
   tableProps: null,
   pageProps: null,
   openModal: () => { },

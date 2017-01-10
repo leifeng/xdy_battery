@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import styles from './login.less'
-import imgsrc from '../assets/beijing.png'
 function Login({dispatch, login}) {
   const {errMsg} = login;
+
+
   function onSubmit(e) {
     e.preventDefault();
     dispatch({
@@ -16,17 +17,21 @@ function Login({dispatch, login}) {
   }
 
   return (
-    <div className={styles.login}>
-      <div className={styles.position}>
-        <div className={styles.bg}></div>
+    <div className={styles.normal}>
+      <div className={styles.dian}></div>
+      <div className={styles.logo}></div>
+      <div className='login'>
         <form className={styles.form} onSubmit={onSubmit}>
-          <h2>用户登录</h2>
+          <h2>知豆动力电池溯源系统</h2>
+          <h3>用户登录</h3>
           <input placeholder="用户名" type="text" name="userName" />
           <input placeholder="密码" type="password" name="password" />
           <div className={styles.remember}><label><input type="checkbox" />记住密码</label></div>
           <button type="submit" className={styles.btn}>登录</button>
           <div className={styles.errMsg}>{errMsg}</div>
         </form>
+        <div className={styles.hua}></div>
+
       </div>
     </div>
   )

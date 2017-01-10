@@ -1,26 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
-import styles from './AuthMG.less';
+import styles from './dictionary.less';
 import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 
-function AuthMG({dispatch, authMG}) {
-  console.log('权限管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = authMG;
-
+function Dictionary({dispatch, dictionary}) {
+  console.log('字典管理')
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = dictionary;
+  let t = -1;
   function onDeleteItem(id) {
     dispatch({
-      type: 'authMG/remove',
+      type: 'dictionary/remove',
       id
     })
   }
-
   function openModal(type, record) {
     if (record) {
       dispatch({
-        type: 'authMG/recordState',
+        type: 'dictionary/recordState',
         data: {
           modalType: type,
           record
@@ -29,7 +28,7 @@ function AuthMG({dispatch, authMG}) {
     } else {
       if (type === 'add') {
         dispatch({
-          type: 'authMG/recordState',
+          type: 'dictionary/recordState',
           data: {
             modalType: type,
             record: null
@@ -37,7 +36,7 @@ function AuthMG({dispatch, authMG}) {
         })
       } else {
         dispatch({
-          type: 'authMG/openModalState',
+          type: 'dictionary/openModalState',
           data: type
         })
       }
@@ -47,38 +46,31 @@ function AuthMG({dispatch, authMG}) {
   }
 
   const columns = [{
-    title: '权限名称',
-    dataIndex: 'rightName',
-    key: 'rightName'
+    title: '字典编码',
+    dataIndex: 'code',
+    key: 'code',
   }, {
-    title: '权限类型',
-    dataIndex: 'rightType',
-    key: 'rightType'
+    title: '描述',
+    dataIndex: 'dicDesc',
+    key: 'dicDesc',
   }, {
-    title: '对应菜单或功能操作ID',
-    dataIndex: 'operateId',
-    key: 'operateId'
+    title: '顺序号',
+    dataIndex: 'dicIndex',
+    key: 'dicIndex',
   }, {
-    title: '备注',
-    dataIndex: 'remark',
-    key: 'remark',
+    title: '字典名称',
+    dataIndex: 'name',
+    key: 'name',
   }, {
-    title: '操作',
-    key: 'action',
-    render: (text, record) => (
-      <span>
-        <a onClick={() => openModal('edit', record)}>编辑</a>
-        <span className="ant-divider" />
-        <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
-          <a>删除</a>
-        </Popconfirm>
-      </span>
-    ),
+    title: '字典值',
+    dataIndex: 'value',
+    key: 'value',
   }];
+
   const searchFormProps = {
     handleChange(query) {
       dispatch({
-        type: 'authMG/searchQueryChangeState',
+        type: 'dictionary/searchQueryChangeState',
         data: {
           name: query.name,
           value: query.value
@@ -87,7 +79,7 @@ function AuthMG({dispatch, authMG}) {
     },
     handleSearch(searchForm) {
       dispatch({
-        type: 'authMG/query',
+        type: 'dictionary/query',
         args: {
           pageNo: 1
         }
@@ -95,23 +87,22 @@ function AuthMG({dispatch, authMG}) {
     },
     handleResetQuery() {
       dispatch({
-        type: 'authMG/searchQueryState',
+        type: 'dictionary/searchQueryState',
         data: null
       })
     },
     forms: [
-      { label: '权限名称', field: 'rightName', type: 'Input' },
-      { label: '权限类型', field: 'rightType', type: 'Input' },
-      { label: '对应菜单或功能操作ID', field: 'operateId', type: 'Input' }
+      { label: '字典编码', field: 'code', type: 'Input' },
+      { label: '字典名称', field: 'name', type: 'Input' },
     ]
   };
 
   const tableListProps = {
-    curd: 'curd',
+    curd: 'r',
     openModal,
     deleteForids() {
       dispatch({
-        type: 'authMG/removeIds'
+        type: 'dictionary/removeIds'
       })
     },
     tableProps: {
@@ -123,7 +114,7 @@ function AuthMG({dispatch, authMG}) {
       rowSelection: {
         onChange(selectedRowKeys, selectedRows) {
           dispatch({
-            type: 'authMG/selectedRowKeysState',
+            type: 'dictionary/selectedRowKeysState',
             data: selectedRowKeys
           })
         }
@@ -135,7 +126,7 @@ function AuthMG({dispatch, authMG}) {
       total,
       onChange(current) {
         dispatch({
-          type: 'authMG/query',
+          type: 'dictionary/query',
           args: {
             pageNo: current
           }
@@ -153,41 +144,46 @@ function AuthMG({dispatch, authMG}) {
     onSave(data) {
       if (modalType === "add") {
         dispatch({
-          type: 'authMG/create',
+          type: 'dictionary/create',
           args: data
         })
       } else {
         dispatch({
-          type: 'authMG/update',
+          type: 'dictionary/update',
           args: data
         })
       }
     },
     onCancel() {
       dispatch({
-        type: 'authMG/closeModalState',
+        type: 'dictionary/closeModalState'
       })
     },
     modalForms: [
-      { label: '权限名称', field: 'rightName', type: 'Input' },
-      { label: '权限类型', field: 'rightType', type: 'Input' },
-      { label: '对应菜单或功能操作ID', field: 'operateId', type: 'Input' },
-      { label: '备注', field: 'remark', type: 'TextArea' }
+      { label: '类别id', field: 'parentId', type: 'Input' },
+      { label: '字典编码', field: 'code', type: 'Input' },
+      { label: '字典名称', field: 'name', type: 'Input' },
+      { label: '字典值', field: 'value', type: 'Input' },
+      { label: '顺序号', field: 'dicIndex', type: 'InputNumber' },
+      { label: '描述', field: 'dicDesc', type: 'TextArea' },
+      { label: '备注', field: 'remark', type: 'TextArea' },
     ]
+
   }
+
   return (
     <div>
       <SearchForm {...searchFormProps} />
       <TableList {...tableListProps} />
-      <Modalcus {...modalcusProps} />;
+      <Modalcus {...modalcusProps} />
     </div>
   );
 }
 
-AuthMG.propTypes = {
+Dictionary.propTypes = {
 };
 
-function mapStateToProps({authMG}) {
-  return { authMG }
+function mapStateToProps({dictionary}) {
+  return { dictionary }
 }
-export default connect(mapStateToProps)(AuthMG);
+export default connect(mapStateToProps)(Dictionary);

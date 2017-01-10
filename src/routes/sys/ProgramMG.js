@@ -5,11 +5,15 @@ import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
+import { getList, getName } from '../../utils/dicFilter';
 
-function ProgramMG({dispatch, programMG}) {
+
+function ProgramMG({dispatch, programMG, dictionary}) {
   console.log('程序管理')
   const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = programMG;
-
+  const {allData} = dictionary;
+  const StatusDic = getList(allData, 'Status');
+  const Node_TypeDic = getList(allData, 'Node_Type');
   function onDeleteItem(id) {
     dispatch({
       type: 'programMG/remove',
@@ -56,6 +60,9 @@ function ProgramMG({dispatch, programMG}) {
     title: '节点类型',
     dataIndex: 'nodeType',
     key: 'nodeType',
+    render: (text, record) => {
+      return getName(Node_TypeDic, text)
+    }
   }, {
     title: '序列',
     dataIndex: 'sequence',
@@ -68,6 +75,9 @@ function ProgramMG({dispatch, programMG}) {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
+    render: (text, record) => {
+      return getName(StatusDic, text)
+    }
   }, {
     title: '备注',
     dataIndex: 'remark',
@@ -113,10 +123,7 @@ function ProgramMG({dispatch, programMG}) {
       { label: '程序名称', field: 'program', type: 'Input' },
       { label: '路径', field: 'path', type: 'Input' },
       {
-        label: '状态', field: 'status', type: 'Select', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ]
+        label: '状态', field: 'status', type: 'Select', dic: StatusDic
       }
     ]
 
@@ -125,6 +132,11 @@ function ProgramMG({dispatch, programMG}) {
   const tableListProps = {
     curd: 'curd',
     openModal,
+    deleteForids() {
+      dispatch({
+        type: 'programMG/removeIds'
+      })
+    },
     tableProps: {
       rowKey: 'id',
       data,
@@ -181,17 +193,20 @@ function ProgramMG({dispatch, programMG}) {
       })
     },
     modalForms: [
-      { label: '程序名称', field: 'program', type: 'Input' },
+      {
+        label: '程序名称', field: 'program', type: 'Input',
+        rules: [{ required: true, message: '请输入程序名称' }]
+      },
       { label: '路径', field: 'path', type: 'Input' },
-      { label: '节点类型', field: 'nodeType', type: 'Input' },
+      {
+        label: '节点类型', field: 'nodeType', type: 'Select', dic: Node_TypeDic,
+        rules: [{ required: true, message: '请选择节点类型' }]
+      },
       { label: '序列', field: 'sequence', type: 'Input' },
       { label: '父id', field: 'parentId', type: 'Input' },
       {
-        label: '状态', field: 'status', type: 'Radio', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ],
-        rules: [{ type: "number", required: true, message: '请选择状态' }]
+        label: '状态', field: 'status', type: 'Radio', dic: StatusDic,
+        rules: [{ type: "string", required: true, message: '请选择状态' }]
       },
       { label: '备注', field: 'remark', type: 'TextArea' }
 
@@ -211,7 +226,7 @@ function ProgramMG({dispatch, programMG}) {
 ProgramMG.propTypes = {
 };
 
-function mapStateToProps({programMG}) {
-  return { programMG }
+function mapStateToProps({programMG, dictionary}) {
+  return { programMG, dictionary }
 }
 export default connect(mapStateToProps)(ProgramMG);

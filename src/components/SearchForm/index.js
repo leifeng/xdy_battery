@@ -1,10 +1,11 @@
-import React, { PropsType } from 'react';
+import React, { PropsType,Component } from 'react';
 import styles from './index.less'
 import _ from 'lodash';
 import Forms from '../Forms';
 import { Form, Row, Col, Button } from 'antd';
 
 function SearchForm({children, handleSearch, handleResetQuery, forms, form}) {
+  console.log('SearchForm')
   const { resetFields, validateFields } = form;
   const formItemLayout = {
     labelCol: { span: 6 },

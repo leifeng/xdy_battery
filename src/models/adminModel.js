@@ -5,13 +5,16 @@ export default {
 
   state: {
     visible: false,
-    url: '',
-    openKeys: []
+    url: '/admin/sys/usersMG',
+    openKeys: ['sys']
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
-      const pathname=location.pathname;
+      const pathname = location.pathname;
+      dispatch({
+        type: 'dictionary/queryAll'
+      })
       dispatch({
         type: 'urlState',
         data: {
@@ -23,18 +26,16 @@ export default {
   },
 
   effects: {
-    *logout({ call, put}) {
 
-    }
   },
 
   reducers: {
     visibleChange(state, action) {
-      return {...state, visible: action.payload }
+      return { ...state, visible: action.payload }
     },
     urlState(state, action) {
       const {url, openKeys} = action.data
-      return {...state, url, openKeys }
+      return { ...state, url, openKeys }
     }
   },
 

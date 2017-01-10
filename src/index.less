@@ -7,8 +7,10 @@
     height: 100%;
     width: 100%;
   }
-
-  .clear{
+  input[type=hidden] {
+    display: none
+  }
+  .clear {
     clear: both;
     zoom: 1;
   }
@@ -16,5 +18,25 @@
     content: '';
     display: block;
     clear: both;
+  }
+  .hidden {
+    display: none!important;
+  }
+  .login {
+    max-width: 1200px;
+    margin: 10px auto 0 auto;
+    height: 600px;
+    width: 100%;
+    overflow: hidden;
+  }
+  @media screen and (max-width: 1020px) {
+    .login {
+      width: 1020px;
+    }
+  }
+  @media screen and (min-width: 1021px) {
+    .login {
+      width: 100%;
+    }
   }
 }

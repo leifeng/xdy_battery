@@ -8,25 +8,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>电池溯源系统</title>
   <script>
-        (function () {
-            var ua = navigator.userAgent.toLowerCase();
-            if (ua.indexOf('msie') > 0) {
-                var ie = ua.match(/msie ([\d.]+)/)[1];
-                if (ie - 0 <= 8) {
-                    location.href="/static/bowers.html";
-                }
-            }
-        })();
-    </script>
-  <link rel="stylesheet" href="/dist/index.css" />
+    (function () {
+      var ua = navigator.userAgent.toLowerCase();
+      if (ua.indexOf('msie') > 0) {
+        var ie = ua.match(/msie ([\d.]+)/)[1];
+        if (ie - 0 <= 9) {
+          location.href = "/static/bowers.html";
+        }
+      }
+    })();
+  </script>
+<link rel="stylesheet" href="/dist/index.css" />
 </head>
 
 <body>
 
   <div id="root"></div>
-
+  <script src="http://webapi.amap.com/maps?v=1.3&key=5cb2bcc48c4d1696540efb5ce8149aa1"></script>
   <script src="/dist/index.js"></script>
-
 </body>
 
 </html>

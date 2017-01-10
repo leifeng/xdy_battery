@@ -1,4 +1,4 @@
-import { query, created, update, remove, removeIds } from '../services/usersMG'
+import { query, created, update, remove, removeIds, resetPwd } from '../services/usersMG'
 import { queryByUserId, query as roleQuery, setBindRole } from '../services/rolesMG'
 
 export default {
@@ -6,6 +6,8 @@ export default {
   namespace: 'usersMG',
 
   state: {
+    editPwdLoading: false,
+    editPwdVisible: false,
     modalRolesVisible: false,
     selectedRowKeys: [],
     loading: false,
@@ -20,7 +22,9 @@ export default {
     alertState: false,
     searchQuery: null,
     rolesbyUser: [],
-    roles: []
+    roles: [],
+    userId: '',
+    linkField: null
   },
   subscriptions: {
     setup({dispatch, history }) {
@@ -37,6 +41,9 @@ export default {
           dispatch({
             type: 'queryAllRoles'
           });
+          dispatch({
+            type: 'companylist/queryAll'
+          })
         }
       })
     },
@@ -91,6 +98,15 @@ export default {
         yield put({ type: 'modalErrorState' });
       }
     },
+    *updatePwd({args}, {select, call, put}) {
+      yield put({ type: 'editPwdLoadingState', data: true })
+      const userId = yield select(state => state.usersMG.userId)
+      const data = yield call(resetPwd, { userId: userId, password: args });
+      if (data === 'success') {
+        yield put({ type: 'editPwdLoadingState', data: false })
+        yield put({ type: 'editPwdVisibleState', data: false })
+      }
+    },
     *removeIds({}, {select, call, put}) {
       const ids = yield select(state => state.usersMG.selectedRowKeys);
       const data = yield call(removeIds, ids);
@@ -106,12 +122,13 @@ export default {
       }
     },
     *queryAllRoles({}, {call, put}) {
-      const {data} = yield call(roleQuery, { isPaging: false })
+      const {data} = yield call(roleQuery, { isPaging: false, status: 1 })
       if (data && data.list) {
         yield put({ type: 'rolesState', data: data.list })
       }
     },
     *queryRoleByUserid({id}, {call, put}) {
+      yield put({ type: 'userIdState', data: id })
       const {data} = yield call(queryByUserId, id);
       if (data) {
         yield put({ type: 'rolesbyUserState', data })
@@ -119,8 +136,9 @@ export default {
       }
     },
     *updateRoleByUser({}, {call, select, put}) {
-      const rolesbyUser = yield select(state => state.usersMG.rolesbyUser)
-      const data = yield call(setBindRole, rolesbyUser);
+      const userId = yield select(state => state.usersMG.userId);
+      const roleIds = yield select(state => state.usersMG.rolesbyUser)
+      const data = yield call(setBindRole, { userId, roleIds });
       if (data === 'success') {
         yield put({ type: 'modalRolesState', data: false });
       }
@@ -133,7 +151,7 @@ export default {
       return { ...state, data: list, total: totalCount, pageNo: pageNo, loading: false }
     },
     createSuccess(state, action) {
-      return { ...state, visible: false, modalLoading: false }
+      return { ...state, visible: false, modalLoading: false, editPwdVisible: false }
     },
     loadingState(state, action) {
       return { ...state, loading: action.data }
@@ -179,6 +197,18 @@ export default {
     },
     rolesbyUserState(state, action) {
       return { ...state, rolesbyUser: action.data }
+    },
+    userIdState(state, action) {
+      return { ...state, userId: action.data }
+    },
+    editPwdVisibleState(state, action) {
+      return { ...state, editPwdVisible: action.data }
+    },
+    editPwdLoadingState(state, action) {
+      return { ...state, editPwdLoading: action.data }
+    },
+    linkFieldState(state, action) {
+      return { ...state, linkField: action.data }
     }
   }
 

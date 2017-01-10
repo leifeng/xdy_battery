@@ -6,15 +6,15 @@ import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 import { checkRoleName } from '../../services/rolesMG';
-function a() {
+import { getList, getName } from '../../utils/dicFilter';
 
-}
-
-
-function RolesMG({dispatch, rolesMG}) {
+function RolesMG({dispatch, rolesMG, dictionary}) {
   console.log('角色管理')
   const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = rolesMG;
+  const {allData} = dictionary
   let t = -1;
+  const StatusDic = getList(allData, 'Status');
+
   function onDeleteItem(id) {
     dispatch({
       type: 'rolesMG/remove',
@@ -55,6 +55,9 @@ function RolesMG({dispatch, rolesMG}) {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
+    render: (text, record) => {
+      return getName(StatusDic, text)
+    }
   }, {
     title: '备注',
     dataIndex: 'remark',
@@ -101,10 +104,7 @@ function RolesMG({dispatch, rolesMG}) {
     forms: [
       { label: '角色名称', field: 'roleName', type: 'Input' },
       {
-        label: '状态', field: 'status', type: 'Select', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ]
+        label: '状态', field: 'status', type: 'Select', dic: StatusDic
       }
     ]
   };
@@ -112,6 +112,11 @@ function RolesMG({dispatch, rolesMG}) {
   const tableListProps = {
     curd: 'curd',
     openModal,
+    deleteForids() {
+      dispatch({
+        type: 'rolesMG/removeIds'
+      })
+    },
     tableProps: {
       rowKey: 'id',
       data,
@@ -168,11 +173,14 @@ function RolesMG({dispatch, rolesMG}) {
     },
     modalForms: [
       {
-        label: '角色名称', field: 'roleName', unique: true, type: 'Input', rules: [
+        label: '角色名称', field: 'roleName',  type: 'Input', rules: [
           { required: true, message: '请输入角色名称' },
-          { required: true, message: '角色名称长度为1~200', min: 1, max: 3 },
+          { required: true, message: '角色名称长度为1~200', min: 1, max: 200 },
           {
             validator: (rule, value, callback) => {
+              if(modalType!=='add'){
+                callback()
+              }
               clearTimeout(t)
               t = setTimeout(() => {
                 checkRoleName(value, (data) => {
@@ -188,11 +196,8 @@ function RolesMG({dispatch, rolesMG}) {
         ]
       },
       {
-        label: '状态', field: 'status', type: 'Radio', dic: [
-          { name: '可用', value: 1 },
-          { name: '不可用', value: 0 }
-        ],
-        rules: [{ type: "number", required: true, message: '请选择状态' }]
+        label: '状态', field: 'status', type: 'Radio', dic: StatusDic,
+        rules: [{ type: "string", required: true, message: '请选择状态' }]
       },
       { label: '备注', field: 'remark', type: 'TextArea' }
     ]
@@ -210,7 +215,7 @@ function RolesMG({dispatch, rolesMG}) {
 RolesMG.propTypes = {
 };
 
-function mapStateToProps({rolesMG}) {
-  return { rolesMG }
+function mapStateToProps({rolesMG, dictionary}) {
+  return { rolesMG, dictionary }
 }
 export default connect(mapStateToProps)(RolesMG);

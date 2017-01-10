@@ -1,8 +1,9 @@
 import React from 'react';
 import { Icon, Popover, Button } from 'antd';
 import styles from './index.less';
-
+import Cookies from 'js-cookie';
 function TopBar({visible, visibleChangeFN, toUrl, children}) {
+  const userName = Cookies.get('userName')
   const content = (
     <div className={styles.pop}>
       <a onClick={() => { toUrl('/admin/password') } }>修改密码</a>
@@ -24,8 +25,8 @@ function TopBar({visible, visibleChangeFN, toUrl, children}) {
       </div>
       <Popover {...PopoverProps}>
         <Button type="primary">
-          <Icon type="user" />管理员
-          </Button>
+          <Icon type="user" />{userName}
+        </Button>
       </Popover>
     </div>
   )
