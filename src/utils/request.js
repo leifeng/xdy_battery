@@ -27,7 +27,7 @@ function checkStatus(response) {
 export default function request(url, options) {
   const defaultOpt = {
     mode: 'cors',
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' }
   }
   const opts = Object.assign({}, defaultOpt, options)
@@ -42,7 +42,7 @@ export default function request(url, options) {
 export function requestCode(url, options) {
   const defaultOpt = {
     mode: 'cors',
-    credentials: 'same-origin',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },

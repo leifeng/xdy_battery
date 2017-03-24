@@ -22,11 +22,11 @@ function Login({dispatch, login}) {
       <div className={styles.logo}></div>
       <div className='login'>
         <form className={styles.form} onSubmit={onSubmit}>
-          <h2>知豆动力电池溯源系统</h2>
+          <h2></h2>
           <h3>用户登录</h3>
-          <input placeholder="用户名" type="text" name="userName" />
-          <input placeholder="密码" type="password" name="password" />
-          <div className={styles.remember}><label><input type="checkbox" />记住密码</label></div>
+          <input placeholder="请输入用户名" type="text" name="userName" />
+          <input placeholder="请输入密码" type="password" name="password" />
+          <div className={styles.remember}><input type="checkbox" id="remember"/><label htmlFor="remember">记住密码</label></div>
           <button type="submit" className={styles.btn}>登录</button>
           <div className={styles.errMsg}>{errMsg}</div>
         </form>

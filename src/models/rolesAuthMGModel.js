@@ -10,7 +10,7 @@ export default {
     loading: false,
     visible: false,
     current: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0,
     modalType: '',
     data: [{

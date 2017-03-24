@@ -6,9 +6,10 @@ import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 
-function AuthMG({dispatch, authMG}) {
+function AuthMG({dispatch, authMG, menus}) {
   console.log('权限管理')
   const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = authMG;
+  const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
 
   function onDeleteItem(id) {
     dispatch({
@@ -67,11 +68,8 @@ function AuthMG({dispatch, authMG}) {
     key: 'action',
     render: (text, record) => (
       <span>
-        <a onClick={() => openModal('edit', record)}>编辑</a>
-        <span className="ant-divider" />
-        <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
-          <a>删除</a>
-        </Popconfirm>
+        {menuLeaf.indexOf('update') !== -1 ? <span><a onClick={() => openModal('edit', record)}>编辑</a><span className="ant-divider" /></span> : null}
+        {menuLeaf.indexOf('delete') !== -1 ? <span><Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}><a>删除</a></Popconfirm><span className="ant-divider" /></span> : null}
       </span>
     ),
   }];
@@ -114,6 +112,7 @@ function AuthMG({dispatch, authMG}) {
         type: 'authMG/removeIds'
       })
     },
+    auth: menuLeaf,
     tableProps: {
       rowKey: 'id',
       data,
@@ -187,7 +186,7 @@ function AuthMG({dispatch, authMG}) {
 AuthMG.propTypes = {
 };
 
-function mapStateToProps({authMG}) {
-  return { authMG }
+function mapStateToProps({authMG, menus}) {
+  return { authMG, menus }
 }
 export default connect(mapStateToProps)(AuthMG);

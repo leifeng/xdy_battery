@@ -9,7 +9,7 @@ export default {
     loading: false,
     visible: false,
     pageNo: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0,
     modalType: '',
     data: [],
@@ -24,9 +24,13 @@ export default {
       history.listen(location => {
         if (location.pathname === '/admin/battery/enterpriseMG') {
           dispatch({
+            type: 'searchQueryState',
+            data: null
+          })
+          dispatch({
             type: 'query',
             args: {
-              pageSize: 10,
+              pageSize: 6,
               pageNo: 1,
               isPaging: true
             }
@@ -40,12 +44,13 @@ export default {
     *query({args}, {select, call, put}) {
       yield put({ type: 'loadingState', data: true });
       const searchQuery = yield select(state => state.enterpriseMG.searchQuery)
-      const {data} = yield call(query, Object.assign({}, args, searchQuery, { isPaging: true, pageSize: 10 }));
+      const {data} = yield call(query, Object.assign({}, args, searchQuery, { isPaging: true, pageSize: 6 }));
       if (data) {
         yield put({
           type: 'querySuccess',
           data
         })
+         yield put({ type: 'selectedRowKeysState', data: [] })
       }
     },
     *create({args}, {call, put}) {
@@ -66,7 +71,7 @@ export default {
         yield put({
           type: 'query',
           args: {
-            pageSize: 10,
+            pageSize: 6,
             pageNo: 1,
             isPaging: true
           }
@@ -80,11 +85,13 @@ export default {
         yield put({
           type: 'query',
           args: {
-            pageSize: 10,
+            pageSize: 6,
             pageNo: 1,
             isPaging: true
           }
         })
+        yield put({ type: 'selectedRowKeysState', data: [] })
+
       }
     },
     *update({args}, {select, call, put}) {
@@ -106,7 +113,7 @@ export default {
       return { ...state, data: list, total: totalCount, pageNo: pageNo, loading: false }
     },
     createSuccess(state, action) {
-      return { ...state, visible: false, modalLoading: false }
+      return { ...state, visible: false, modalLoading: false, alertState: false }
     },
     loadingState(state, action) {
       return { ...state, loading: action.data }

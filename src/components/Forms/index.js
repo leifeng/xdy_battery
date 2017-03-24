@@ -3,7 +3,8 @@ import moment from 'moment'
 import _ from 'lodash';
 import { getName } from '../../utils/dicFilter';
 import UpFile from '../UpFile'
-import { Input, Checkbox, Cascader, InputNumber, Select, Radio, DatePicker, Form } from 'antd';
+import CustomImage from '../CustomImage'
+import { Input, Checkbox, Cascader, InputNumber, Select, Radio, DatePicker, Form, TreeSelect, AutoComplete } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
@@ -15,22 +16,35 @@ class Forms extends Component {
     this.disabledDate = this.disabledDate.bind(this);
     this.renderForm = this.renderForm.bind(this);
     this.onSelectChange = this.onSelectChange.bind(this);
+    this.onRadioGroupChange = this.onRadioGroupChange.bind(this);
   }
 
   render() {
     //console.log('Forms')
-    const { field, value, type, rules, form, setting, label, formItemLayout, modalType, unique, dic, help, formType} = this.props;
+    const { field, valueField, value, type, rules, form, setting, label, formItemLayout, modalType, unique, dic, help, formType } = this.props;
     const { getFieldDecorator } = form;
 
+    // console.log(type)
     //初始化值-start
-    let defaultvalue = ((value || value == 0) && value.toString()) || '';
-    if (type === 'DatePicker') {
-      defaultvalue = value ? moment(value, setting.format) : null;
-    } else {
-      if (type === 'Select' && modalType !== 'edit') {
-        defaultvalue = '';
-      }
+    let defaultvalue = ((value == 0 || value) && value + '') || '';
+    if (valueField) {
+      defaultvalue = form.getFieldValue(valueField)
     }
+    switch (type) {
+      case 'DatePicker':
+        defaultvalue = value ? moment(value, setting.format) : null;
+        break;
+      case 'TreeSelect':
+        defaultvalue = [(value == 0 || value) && value.toString()]
+        break;
+      case 'Select':
+        if (modalType == 'add') defaultvalue = ''
+        break;
+      case 'InputNumber':
+        defaultvalue = ((value == 0 || value) && value + '') || 0;
+        break
+    }
+
     //初始化值-end
     // console.log(type, field, defaultvalue)
 
@@ -58,11 +72,19 @@ class Forms extends Component {
       FormItemProps['className'] = 'hidden';
     }
 
-    if (field !== '') {
+    if (field !== '' && type !== 'Image') {
       return (
         <FormItem {...FormItemProps} >
           {getFieldDecorator(field, options)(
             this.renderForm()
+          )}
+        </FormItem>
+      )
+    } else if (type === 'Image') {
+      return (
+        <FormItem {...FormItemProps}>
+          {getFieldDecorator(field, options)(
+            <CustomImage url={value} />
           )}
         </FormItem>
       )
@@ -77,7 +99,7 @@ class Forms extends Component {
   }
 
   renderForm() {
-    const {dic, formType, type, setting, unique, modalType, inputProps} = this.props;
+    const { dic, formType, type, setting, unique, modalType, inputProps, form } = this.props;
     switch (type) {
       case 'Input':
         return <Input type={formType} disabled={modalType !== 'add' && unique} {...inputProps} />
@@ -92,7 +114,13 @@ class Forms extends Component {
       case 'Cascader':
         return <Cascader />
       case 'InputNumber':
-        return <InputNumber />
+        let disabled = false;
+        const { disabledFn } = this.props;
+        if (disabledFn) {
+          const { linkField } = this.props;
+          disabled = disabledFn(form.getFieldValue(linkField))
+        }
+        return <InputNumber min={setting && setting.min || 0} max={setting && setting.max||Infinity} disabled={disabled} />
       case 'Select':
         return <Select onChange={this.onSelectChange} disabled={modalType !== 'add' && unique}>
           <Option value="">请选择</Option>
@@ -101,7 +129,7 @@ class Forms extends Component {
           })}
         </Select>
       case 'Radio':
-        return <RadioGroup disabled={modalType !== 'add' && unique}>
+        return <RadioGroup disabled={modalType !== 'add' && unique} onChange={this.onRadioGroupChange} >
           {dic.map((item, i) => {
             return <Radio value={(item.value).toString()} key={i}>{item.name}</Radio>
           })}
@@ -111,12 +139,36 @@ class Forms extends Component {
           disabled={modalType !== 'add' && unique}
           showTime={setting && setting.showTime}
           format={setting && setting.format}
-          disabledDate={setting && setting.disabledDate == null ? setting.disabledDate : this.disabledDate}
-          />
+          disabledDate={setting && setting.disabledDate !== null ? setting.disabledDate : this.disabledDate}
+        />
       case 'UpFile':
-        const {linkField, form, requireField} = this.props;
+        const { linkField, requireField } = this.props;
         const batsCode = form.getFieldValue(requireField);
         return <UpFile form={form} linkField={linkField} disabled={batsCode == '' ? true : false} batsCode={batsCode} />
+      case 'TreeSelect':
+        dic.unshift({
+          label: '根目录',
+          value: '0',
+          key: '0',
+        })
+        return <TreeSelect
+          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+          treeData={dic}
+          placeholder="请选择"
+          treeDefaultExpandAll
+        />
+      case 'AutoComplete':
+        const { AutoCompleteChange, AutoCompleteSelect } = this.props;
+        return <AutoComplete dataSource={dic} onChange={AutoCompleteChange} onSelect={AutoCompleteSelect} allowClear={true} optionLabelProp="value" />
+      case 'disabled':
+        return <Input disabled />
+      case 'disabledSelect':
+        return <Select disabled>
+          <Option value="">请选择</Option>
+          {dic.map((item, i) => {
+            return <Option value={(item.value).toString()} key={i}>{item.name}</Option>
+          })}
+        </Select>
       default:
         return <Input type={formType} {...inputProps} />
     }
@@ -127,12 +179,17 @@ class Forms extends Component {
     return current && current.valueOf() > Date.now();
   }
   onSelectChange(value) {
-    const {onChange, form, linkField} = this.props;
+    const { onChange, form, linkField } = this.props;
     if (!onChange) return
     const newState = {};
     newState[linkField] = ''
     form.setFieldsValue(newState)
     onChange(value);
+  }
+  onRadioGroupChange(e) {
+    const { onChange } = this.props;
+    if (!onChange) return
+    onChange(e.target.value)
   }
 }
 Forms.defaultProps = {

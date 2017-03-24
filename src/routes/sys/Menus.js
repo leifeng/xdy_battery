@@ -1,23 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
-import styles from './SysParamsSet.less';
+import styles from './Menus.less';
 import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 import { getList, getName } from '../../utils/dicFilter';
 
-function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
-  console.log('系统参数')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = sysParamsSet;
+function Menus({dispatch, menus, dictionary}) {
+  console.log('菜单管理')
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, menuTree, addTree, menuLevelDisabled} = menus;
   const {allData} = dictionary;
   const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
-
   const StatusDic = getList(allData, 'Status');
-
+  const Menu_TypeDic = getList(allData, 'Menu_Type')
   function onDeleteItem(id) {
     dispatch({
-      type: 'sysParamsSet/remove',
+      type: 'menus/remove',
       id
     })
   }
@@ -25,7 +24,7 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
   function openModal(type, record) {
     if (record) {
       dispatch({
-        type: 'sysParamsSet/recordState',
+        type: 'menus/recordState',
         data: {
           modalType: type,
           record
@@ -34,7 +33,7 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
     } else {
       if (type === 'add') {
         dispatch({
-          type: 'sysParamsSet/recordState',
+          type: 'menus/recordState',
           data: {
             modalType: type,
             record: null
@@ -42,7 +41,7 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
         })
       } else {
         dispatch({
-          type: 'sysParamsSet/openModalState',
+          type: 'menus/openModalState',
           data: type
         })
       }
@@ -52,51 +51,45 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
   }
 
   const columns = [{
-    title: '字段编号',
-    dataIndex: 'fieldCode',
-    key: 'fieldCode',
+    title: '菜单名称',
+    dataIndex: 'menuName',
+    key: 'menuName'
   }, {
-    title: '字段名称',
-    dataIndex: 'fieldName',
-    key: 'fieldName',
+    title: '菜单URL',
+    dataIndex: 'menuUrl',
+    key: 'menuUrl'
   }, {
-    title: '参数值',
-    dataIndex: 'paramValue',
-    key: 'paramValue',
+    title: '父菜单',
+    dataIndex: 'parentName',
+    key: 'parentName',
+    render: (text, record) => {
+      return record.parentId == 0 ? '根目录' : record.parentName
+    }
   }, {
-    title: '参数名称',
-    dataIndex: 'paramName',
-    key: 'paramName',
-  }, {
-    title: '对应编号',
-    dataIndex: 'relativeId',
-    key: 'relativeId',
-  }, {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
+    title: '状态 ',
+    dataIndex: 'isUse',
+    key: 'isUse',
     render: (text, record) => {
       return getName(StatusDic, text)
     }
   }, {
-    title: '备注',
-    dataIndex: 'remark',
-    key: 'remark',
+    title: '层级 ',
+    dataIndex: 'menuLevel',
+    key: 'menuLevel',
   }, {
     title: '操作',
     key: 'action',
-    render: (text, record) => (
-      <span>
+    render: (text, record) => {
+      return <span>
         {menuLeaf.indexOf('update') !== -1 ? <span><a onClick={() => openModal('edit', record)}>编辑</a><span className="ant-divider" /></span> : null}
         {menuLeaf.indexOf('delete') !== -1 ? <span><Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}><a>删除</a></Popconfirm><span className="ant-divider" /></span> : null}
       </span>
-    ),
+    }
   }];
-
   const searchFormProps = {
     handleChange(query) {
       dispatch({
-        type: 'sysParamsSet/searchQueryChangeState',
+        type: 'menus/searchQueryChangeState',
         data: {
           name: query.name,
           value: query.value
@@ -105,7 +98,7 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
     },
     handleSearch(searchForm) {
       dispatch({
-        type: 'sysParamsSet/query',
+        type: 'menus/query',
         args: {
           pageNo: 1
         }
@@ -113,43 +106,39 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
     },
     handleResetQuery() {
       dispatch({
-        type: 'sysParamsSet/searchQueryState',
+        type: 'menus/searchQueryState',
         data: null
       })
     },
     forms: [
-      { label: '字段编号', field: 'fieldCode', type: 'Input' },
-      { label: '字段名称', field: 'fieldName', type: 'Input' },
-      {
-        label: '状态', field: 'status', type: 'Select', dic: StatusDic
-      },
-
+      { label: '菜单名称', field: 'menuName', type: 'Input' },
     ]
   };
 
   const tableListProps = {
-    curd: 'curd',
+    curd: 'r',
     openModal,
+    auth: menuLeaf,
     deleteForids() {
       dispatch({
-        type: 'sysParamsSet/removeIds'
+        type: 'menus/removeIds'
       })
     },
-    auth: menuLeaf,
     tableProps: {
       rowKey: 'id',
       data,
       columns,
-      selectedRowKeys,
       loading,
+      selectedRowKeys,
       rowSelection: {
         onChange(selectedRowKeys, selectedRows) {
           dispatch({
-            type: 'sysParamsSet/selectedRowKeysState',
+            type: 'menus/selectedRowKeysState',
             data: selectedRowKeys
           })
         }
       },
+
     },
     pageProps: {
       pageNo,
@@ -157,7 +146,7 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
       total,
       onChange(current) {
         dispatch({
-          type: 'sysParamsSet/query',
+          type: 'menus/query',
           args: {
             pageNo: current
           }
@@ -175,54 +164,61 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
     onSave(data) {
       if (modalType === "add") {
         dispatch({
-          type: 'sysParamsSet/create',
+          type: 'menus/create',
           args: data
         })
       } else {
         dispatch({
-          type: 'sysParamsSet/update',
+          type: 'menus/update',
           args: data
         })
       }
     },
     onCancel() {
       dispatch({
-        type: 'sysParamsSet/closeModalState',
+        type: 'menus/closeModalState',
       })
     },
     modalForms: [
       {
-        label: '字段编号', field: 'fieldCode', type: 'Input',
-        rules: [{ required: true, message: '字段编号长度为1~30', min: 1, max: 30 }]
+        label: '菜单名称', field: 'menuName', type: 'Input',
+        rules: [{ required: true, message: '请输入菜单名称' },
+        { required: true, message: '菜单名称长度1~15', min: 1, max: 15 }]
       },
-      { label: '字段名称', field: 'fieldName', type: 'Input' },
-      { label: '参数值', field: 'paramValue', type: 'Input' },
-      { label: '参数名称', field: 'paramName', type: 'Input' },
+      { label: '菜单URL', field: 'menuUrl', type: 'Input', },
+      { label: '父菜单ID', field: 'parentId', type: 'TreeSelect', dic: addTree },
+      { label: '图标', field: 'menuCol1', type: 'Input' },
       {
-        label: '对应编号', field: 'relativeId', type: 'Input',
-        rules: [{ required: true, message: '对应编号长度为1~10', min: 1, max: 10 }]
+        label: '类型', field: 'menuCol2', type: 'Radio', dic: Menu_TypeDic,
+        rules: [{ type: "string", required: true, message: '请选择类型' }],
+        onChange: (value) => {
+          dispatch({
+            type: 'menus/menuLevelDisabledState',
+            data: value == 1 ? true : false
+          })
+        }
       },
+      { label: '层级', field: 'menuLevel', type: 'InputNumber', linkField: "menuCol2", disabledFn: (v) => v == 1 ? true : false },
       {
-        label: '状态', field: 'status', type: 'Radio', dic: StatusDic,
+        label: '状态', field: 'isUse', type: 'Radio', dic: StatusDic,
         rules: [{ type: "string", required: true, message: '请选择状态' }]
       },
-      { label: '备注', field: 'remark', type: 'TextArea' },
+      { label: '备注', field: 'remark', type: 'Input' },
     ]
   }
-
   return (
     <div>
       <SearchForm {...searchFormProps} />
       <TableList {...tableListProps} />
-      <Modalcus {...modalcusProps} />
+      <Modalcus {...modalcusProps} />;
     </div>
   );
 }
 
-SysParamsSet.propTypes = {
+Menus.propTypes = {
 };
 
-function mapStateToProps({sysParamsSet, dictionary, menus}) {
-  return { sysParamsSet, dictionary, menus }
+function mapStateToProps({menus, dictionary}) {
+  return { menus, dictionary }
 }
-export default connect(mapStateToProps)(SysParamsSet);
+export default connect(mapStateToProps)(Menus);

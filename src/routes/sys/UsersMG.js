@@ -11,11 +11,12 @@ import { checkAcount } from '../../services/usersMG';
 import { getList, getName } from '../../utils/dicFilter';
 
 
-function UsersMG({dispatch, usersMG, dictionary, companylist}) {
+function UsersMG({dispatch, usersMG, dictionary, companylist, menus}) {
   console.log('用户管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, modalRolesVisible, roles, rolesbyUser, editPwdVisible, editPwdLoading, linkField} = usersMG;
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, modalRolesVisible, roles, rolesbyUser, editPwdVisible, editPwdLoading, linkField, userName} = usersMG;
   const {allData} = dictionary;
   const {companyAllData} = companylist;
+  const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
   let t = -1;
   //字典处理
   const StatusDic = getList(allData, 'Status');
@@ -24,7 +25,7 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
     if (record) {
       return item.filter == record.userType
     }
-    return item.filter == linkField
+    return item.filter == linkField && linkField !== ''
   }) || []
   //删除一个
   function onDeleteItem(id) {
@@ -63,10 +64,14 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
 
   }
   //分配角色
-  function openRoles(id) {
+  function openRoles(id, name) {
     dispatch({
       type: 'usersMG/queryRoleByUserid',
       id
+    })
+    dispatch({
+      type: 'usersMG/userNameState',
+      data: name
     })
   }
   //编辑密码
@@ -107,10 +112,6 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
       return getName(companyAllData, text)
     }
   }, {
-    title: '到期日期',
-    dataIndex: 'dueTime',
-    key: 'dueTime',
-  }, {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
@@ -122,18 +123,12 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
     key: 'action',
     render: (text, record) => {
       return <span>
-        <a onClick={() => openModal('edit', record)}>编辑</a>
-        <span className="ant-divider" />
-        <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
-          <a>删除</a>
-        </Popconfirm>
-        <span className="ant-divider" />
-        <a onClick={() => OpenEditPwd(record.id)}>修改密码</a>
-        <span className="ant-divider" />
-        <a onClick={() => openRoles(record.id)}>分配角色</a>
+        {menuLeaf.indexOf('update') !== -1 ? <span><a onClick={() => openModal('edit', record)}>编辑</a><span className="ant-divider" /></span> : null}
+        {menuLeaf.indexOf('delete') !== -1 ? <span><Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}><a>删除</a></Popconfirm><span className="ant-divider" /></span> : null}
+        {menuLeaf.indexOf('upPwd') !== -1 ? <span><a onClick={() => OpenEditPwd(record.id)} >修改密码</a><span className="ant-divider" /></span> : null}
+        {menuLeaf.indexOf('distribution') !== -1 ? <span><a onClick={() => openRoles(record.id, record.account)}>分配角色</a><span className="ant-divider" /></span> : null}
       </span>
     }
-
   }];
 
   const searchFormProps = {
@@ -179,6 +174,7 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
         type: 'usersMG/removeIds'
       })
     },
+    auth: menuLeaf,
     tableProps: {
       rowKey: 'id',
       data,
@@ -266,28 +262,31 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
         rules: [{ required: true, message: '请选择用户类型' }],
         onChange: (value) => {
           dispatch({
-            type: 'usersMG/linkFieldState',
-            data: value
+            type: 'usersMG/recordState2',
+            data: { ...record, userType: value }
           })
         }
       },
       {
-        label: '所属企业编码', field: 'companyId', type: 'Select', dic: filterCompanyDic,
-        rules: [{ required: true, message: '请选择所属企业编码' }]
+        label: '所属企业', field: 'companyId', type: 'Select', dic: filterCompanyDic,
+        rules: [{ required: true, message: '请选择所属企业' }]
       },
       {
         label: '状态', field: 'status', type: 'Radio', dic: StatusDic,
         rules: [{ type: "string", required: true, message: '请选择状态' }]
       },
-      {
-        label: '到期日期', field: 'dueTime', type: 'DatePicker',
-        setting: { showTime: true, format: 'YYYY-MM-DD HH:mm:ss', disabledDate: null },
-        rules: [{ type: "object", required: true, message: '请选择到期日期' }]
-      },
+      // {
+      //   label: '到期日期', field: 'dueTime', type: 'DatePicker',
+      //   setting: { showTime: true, format: 'YYYY-MM-DD HH:mm:ss', disabledDate: (current)=>{
+      //         return current && current.valueOf() < Date.now();
+      //   } },
+      //   rules: [{ type: "object", required: true, message: '请选择到期日期' }]
+      // },
       { label: '备注', field: 'remark', type: 'TextArea' }
     ]
   }
   const rolesProps = {
+    userName,
     modalRolesVisible,
     roles,
     rolesbyUser,
@@ -302,10 +301,10 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
         type: 'usersMG/updateRoleByUser'
       })
     },
-    onChange(checkedValues) {
+    onChange(e) {
       dispatch({
         type: 'usersMG/rolesbyUserState',
-        data: checkedValues
+        data: e.target.value
       })
     }
   }
@@ -341,7 +340,7 @@ function UsersMG({dispatch, usersMG, dictionary, companylist}) {
 UsersMG.propTypes = {
 };
 
-function mapStateToProps({usersMG, dictionary, companylist}) {
-  return { usersMG, dictionary, companylist }
+function mapStateToProps({usersMG, dictionary, companylist, menus}) {
+  return { usersMG, dictionary, companylist, menus }
 }
 export default connect(mapStateToProps)(UsersMG);

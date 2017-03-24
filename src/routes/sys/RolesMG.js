@@ -5,13 +5,16 @@ import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
+import AuthModal from '../../components/AuthModal';
 import { checkRoleName } from '../../services/rolesMG';
 import { getList, getName } from '../../utils/dicFilter';
 
-function RolesMG({dispatch, rolesMG, dictionary}) {
+function RolesMG({dispatch, rolesMG, dictionary, menus}) {
   console.log('角色管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = rolesMG;
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, authModalVisible, checkedKeys,roleName} = rolesMG;
   const {allData} = dictionary
+  const {dataTree} = menus
+  const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
   let t = -1;
   const StatusDic = getList(allData, 'Status');
 
@@ -47,6 +50,15 @@ function RolesMG({dispatch, rolesMG, dictionary}) {
       }
     }
   }
+  function authSelect(roleid, roleName) {
+    dispatch({
+      type: 'rolesMG/queryAuthbyRoleId',
+      args: {
+        roleid,
+        roleName
+      }
+    })
+  }
   const columns = [{
     title: '角色名称',
     dataIndex: 'roleName',
@@ -67,13 +79,9 @@ function RolesMG({dispatch, rolesMG, dictionary}) {
     key: 'action',
     render: (text, record) => (
       <span>
-        <a onClick={() => openModal('edit', record)}>编辑</a>
-        <span className="ant-divider" />
-        <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
-          <a>删除</a>
-        </Popconfirm>
-        <span className="ant-divider" />
-        <a onClick={() => 1}>分配程序权限</a>
+        {menuLeaf.indexOf('update') !== -1 ? <span><a onClick={() => openModal('edit', record)}>编辑</a><span className="ant-divider" /></span> : null}
+        {menuLeaf.indexOf('delete') !== -1 ? <span><Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}><a>删除</a></Popconfirm><span className="ant-divider" /></span> : null}
+        {menuLeaf.indexOf('distribution') !== -1 ? <span><a onClick={() => authSelect(record.id, record.remark)} >分配程序权限</a><span className="ant-divider" /></span> : null}
       </span>
     ),
   }];
@@ -117,6 +125,7 @@ function RolesMG({dispatch, rolesMG, dictionary}) {
         type: 'rolesMG/removeIds'
       })
     },
+    auth: menuLeaf,
     tableProps: {
       rowKey: 'id',
       data,
@@ -173,12 +182,12 @@ function RolesMG({dispatch, rolesMG, dictionary}) {
     },
     modalForms: [
       {
-        label: '角色名称', field: 'roleName',  type: 'Input', rules: [
+        label: '角色名称', field: 'roleName', type: 'Input', rules: [
           { required: true, message: '请输入角色名称' },
-          { required: true, message: '角色名称长度为1~200', min: 1, max: 200 },
+          { required: true, message: '角色名称长度为1~20', min: 1, max: 20 },
           {
             validator: (rule, value, callback) => {
-              if(modalType!=='add'){
+              if (modalType !== 'add') {
                 callback()
               }
               clearTimeout(t)
@@ -199,15 +208,45 @@ function RolesMG({dispatch, rolesMG, dictionary}) {
         label: '状态', field: 'status', type: 'Radio', dic: StatusDic,
         rules: [{ type: "string", required: true, message: '请选择状态' }]
       },
-      { label: '备注', field: 'remark', type: 'TextArea' }
+      {
+        label: '备注', field: 'remark', type: 'TextArea',
+        rules: [{ required: true, message: '请输入中文名称' }]
+      }
     ]
   }
 
+  const AuthModalProps = {
+    roleName,
+    visible: authModalVisible,
+    data: dataTree,
+    checkedKeys,
+    onChangekeys(keys, allKeys) {
+      dispatch({
+        type: 'rolesMG/checkedKeysState',
+        data: keys
+      })
+      dispatch({
+        type: 'rolesMG/checkedAllKeysState',
+        data: allKeys
+      })
+    },
+    onCancel() {
+      dispatch({
+        type: 'rolesMG/authModalHideState'
+      })
+    },
+    onOk() {
+      dispatch({
+        type: 'rolesMG/setBindRight'
+      })
+    }
+  }
   return (
     <div>
       <SearchForm {...searchFormProps} />
       <TableList {...tableListProps} />
       <Modalcus {...modalcusProps} />
+      <AuthModal {...AuthModalProps} />
     </div>
   );
 }
@@ -215,7 +254,7 @@ function RolesMG({dispatch, rolesMG, dictionary}) {
 RolesMG.propTypes = {
 };
 
-function mapStateToProps({rolesMG, dictionary}) {
-  return { rolesMG, dictionary }
+function mapStateToProps({rolesMG, dictionary, menus}) {
+  return { rolesMG, dictionary, menus }
 }
 export default connect(mapStateToProps)(RolesMG);

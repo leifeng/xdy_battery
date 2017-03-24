@@ -4,37 +4,68 @@ class AMAP extends Component {
   constructor() {
     super();
     this.setPoint = this.setPoint.bind(this);
+    this.geocoder_CallBack = this.geocoder_CallBack.bind(this);
   }
   render() {
-    return <div id="amap" className={styles.map}></div>
+    return (
+      <div className={styles.normal}>
+        <div className={styles.search}><input type="text" id="tip" /></div>
+        <div id="amap" className={styles.map}></div>
+      </div>
+    )
   }
   componentWillReceiveProps(nextProps) {
-    const {form, lngField, latField, modalType} = nextProps;
+    const { form, lngField, latField, modalType } = nextProps;
     const lng = form.getFieldValue(lngField);
     const lat = form.getFieldValue(latField);
     this.setPoint(lng, lat)
   }
 
   componentDidMount() {
-    const {form, lngField, latField, modalType} = this.props;
+    const { form, lngField, latField, modalType } = this.props;
     const map = this.map = new AMap.Map('amap', {
       resizeEnable: true,
       zoom: 8
     });
+    const geocoder = new AMap.Geocoder();
+
     const marker = this.marker = new AMap.Marker({});
     const lng = form.getFieldValue(lngField);
     const lat = form.getFieldValue(latField);
 
     this.setPoint(lng, lat)
-    map.on('click', function (e) {
+    map.on('click', (e) => {
       const newData = {};
       newData[latField] = e.lnglat.getLat();
       newData[lngField] = e.lnglat.getLng()
       form.setFieldsValue(newData)
       marker.setPosition([e.lnglat.getLng(), e.lnglat.getLat()])
       marker.setMap(map);
+
+      geocoder.getAddress([e.lnglat.getLng(), e.lnglat.getLat()], (status, result) => {
+        if (status === 'complete' && result.info === 'OK') {
+          this.geocoder_CallBack(result);
+        }
+      });
     });
+    var auto = new AMap.Autocomplete({input:'tip'});
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });
+    AMap.event.addListener(auto, "select", (e)=>{
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);
+    });
+
   }
+  geocoder_CallBack(data) {
+    const { form, addressField } = this.props;
+    const address = data.regeocode.formattedAddress;
+    const newData = {};
+    newData[addressField] = address;
+    form.setFieldsValue(newData)
+  }
+
   setPoint(lng, lat) {
 
     if (lng == '' || lat == '') {
@@ -50,7 +81,6 @@ class AMAP extends Component {
   componentWillUnmount() {
     this.map.destroy()
   }
-
 }
 AMAP.defaultProps = {
   lng: '',

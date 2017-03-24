@@ -14,26 +14,31 @@ export default {
     visible: false,
     modalLoading: false,
     pageNo: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0,
     modalType: '',
     data: [],
     record: null,
     alertState: false,
     searchQuery: null,
-    rolesbyUser: [],
+    rolesbyUser: null,
     roles: [],
     userId: '',
-    linkField: null
+    linkField: null,
+    userName: ''
   },
   subscriptions: {
     setup({dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/admin/sys/usersMG') {
           dispatch({
+            type: 'searchQueryState',
+            data: null
+          })
+          dispatch({
             type: 'query',
             args: {
-              pageSize: 10,
+              pageSize: 6,
               pageNo: 1,
               isPaging: true
             }
@@ -53,12 +58,14 @@ export default {
     *query({args}, {select, call, put}) {
       yield put({ type: 'loadingState', data: true });
       const searchQuery = yield select(state => state.usersMG.searchQuery)
-      const {data} = yield call(query, Object.assign({}, args, searchQuery, { isPaging: true, pageSize: 10 }));
+      const {data} = yield call(query, Object.assign({}, args, searchQuery, { isPaging: true, pageSize: 6 }));
       if (data) {
         yield put({
           type: 'querySuccess',
           data
         })
+        yield put({ type: 'selectedRowKeysState', data: [] })
+
       }
     },
     *create({args}, {call, put}) {
@@ -79,7 +86,7 @@ export default {
         yield put({
           type: 'query',
           args: {
-            pageSize: 10,
+            pageSize: 6,
             pageNo: 1,
             isPaging: true
           }
@@ -114,11 +121,12 @@ export default {
         yield put({
           type: 'query',
           args: {
-            pageSize: 10,
+            pageSize: 6,
             pageNo: 1,
             isPaging: true
           }
         })
+        yield put({ type: 'selectedRowKeysState', data: [] })
       }
     },
     *queryAllRoles({}, {call, put}) {
@@ -130,10 +138,9 @@ export default {
     *queryRoleByUserid({id}, {call, put}) {
       yield put({ type: 'userIdState', data: id })
       const {data} = yield call(queryByUserId, id);
-      if (data) {
-        yield put({ type: 'rolesbyUserState', data })
-        yield put({ type: 'modalRolesState', data: true });
-      }
+      yield put({ type: 'rolesbyUserState', data })
+      yield put({ type: 'modalRolesState', data: true });
+
     },
     *updateRoleByUser({}, {call, select, put}) {
       const userId = yield select(state => state.usersMG.userId);
@@ -151,7 +158,7 @@ export default {
       return { ...state, data: list, total: totalCount, pageNo: pageNo, loading: false }
     },
     createSuccess(state, action) {
-      return { ...state, visible: false, modalLoading: false, editPwdVisible: false }
+      return { ...state, visible: false, modalLoading: false, editPwdVisible: false, alertState: false }
     },
     loadingState(state, action) {
       return { ...state, loading: action.data }
@@ -168,6 +175,9 @@ export default {
     recordState(state, action) {
       const { record, modalType } = action.data;
       return { ...state, record, modalType, visible: true }
+    },
+    recordState2(state, action) {
+      return { ...state, record: action.data }
     },
     modalLoadingState(state, action) {
       return { ...state, modalLoading: action.data }
@@ -209,6 +219,9 @@ export default {
     },
     linkFieldState(state, action) {
       return { ...state, linkField: action.data }
+    },
+    userNameState(state, action) {
+      return { ...state, userName: action.data }
     }
   }
 

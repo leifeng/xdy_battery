@@ -16,11 +16,15 @@ export default class Menus extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.onOpenChange = this.onOpenChange.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      current: location.pathname
+    })
+  }
 
   componentWillMount() {
     this.setState({
       current: location.pathname,
-      openKeys: [Cookies.get('dir')]
     })
   }
   handleClick(e) {
@@ -31,9 +35,12 @@ export default class Menus extends Component {
     });
   }
   onOpenChange(openKeys) {
-    const latestOpenKey = openKeys.find(key => !(this.state.openKeys.indexOf(key) > -1));
+
+    console.log(openKeys)
+    const latestOpenKey = openKeys.length === 2 ? openKeys[1] : openKeys[0]
+    const {onOpenkeyChange} = this.props;
     Cookies.set('dir', latestOpenKey)
-    this.setState({ openKeys: this.getKeyPath(latestOpenKey) });
+    onOpenkeyChange(latestOpenKey)
   }
   getKeyPath(key) {
     const map = {
@@ -43,6 +50,7 @@ export default class Menus extends Component {
       batteryRec: ['batteryRec'],
       report: ['report'],
       battery: ['battery'],
+      admin: ['admin']
     };
     return map[key] || [];
   }
@@ -51,27 +59,28 @@ export default class Menus extends Component {
       theme: 'dark',
       mode: 'inline',
       selectedKeys: [this.state.current],
-      openKeys: this.state.openKeys
+      openKeys: this.props.openKeys
     }
     return (
       <div className={styles.normal}>
-        <div className={styles.logo}></div>
+        <div className={styles.logo}>动力电池溯源系统</div>
         <Menu
           {...MenuProps}
           onClick={this.handleClick}
           onOpenChange={this.onOpenChange}
           style={{ width: 240 }}
-          >  
-          <SubMenu key="sys" title={<span><Icon type="file-text" /><span>系统管理</span></span>}>
-            <Menu.Item key="/admin/sys/usersMG">用户管理(完成)</Menu.Item>
-            <Menu.Item key="/admin/sys/rolesMG">角色管理(完成)</Menu.Item>
-            <Menu.Item key="/admin/sys/authMG">权限管理(完成)</Menu.Item>
-            <Menu.Item key="/admin/sys/programMG">程序管理(完成)</Menu.Item>
-            <Menu.Item key="/admin/sys/sysParamsSet">参数管理(完成)</Menu.Item>
-            <Menu.Item key="/admin/sys/dictionary">字典管理(完成)</Menu.Item>
-            <Menu.Item key="/admin/sys/sysLogs">日志管理(完成)</Menu.Item>
+        >
+          <SubMenu key='admin' title={<span><Icon type='home' /><span>首页</span></span>}>
+            <Menu.Item key='/admin/index'>首页</Menu.Item>
           </SubMenu>
-   
+
+          {this.props.data.map((item, index) => {
+            return <SubMenu key={item.menuUrl} title={<span><Icon type={item.menuCol1} /><span>{item.label}</span></span>}>
+              {item.children && item.children.map((m, i) => {
+                return <Menu.Item key={m.menuUrl}>{m.label}</Menu.Item>
+              })}
+            </SubMenu>
+          })}
         </Menu>
       </div>
     );
@@ -79,6 +88,7 @@ export default class Menus extends Component {
 }
 
 Menus.defaultProps = {
-  url: '/admin/sys/usersMG',
-  openKeys: ['sys'],
+  url: '/admin/index',
+  openKeys: ['admin'],
+  data: []
 }

@@ -1,27 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
-import styles from './dictionary.less';
 import { Popconfirm } from 'antd';
 import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 
-function Dictionary({dispatch, dictionary, menus}) {
-  console.log('字典管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = dictionary;
+function NoticeMG({dispatch, dictionary, notice, menus}) {
+  console.log('公告管理')
+  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = notice;
   const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
-
+  console.log(data)
   let t = -1;
   function onDeleteItem(id) {
     dispatch({
-      type: 'dictionary/remove',
+      type: 'notice/remove',
       id
     })
   }
   function openModal(type, record) {
     if (record) {
       dispatch({
-        type: 'dictionary/recordState',
+        type: 'notice/recordState',
         data: {
           modalType: type,
           record
@@ -30,7 +29,7 @@ function Dictionary({dispatch, dictionary, menus}) {
     } else {
       if (type === 'add') {
         dispatch({
-          type: 'dictionary/recordState',
+          type: 'notice/recordState',
           data: {
             modalType: type,
             record: null
@@ -38,7 +37,7 @@ function Dictionary({dispatch, dictionary, menus}) {
         })
       } else {
         dispatch({
-          type: 'dictionary/openModalState',
+          type: 'notice/openModalState',
           data: type
         })
       }
@@ -48,25 +47,17 @@ function Dictionary({dispatch, dictionary, menus}) {
   }
 
   const columns = [{
-    title: '字典编码',
-    dataIndex: 'code',
-    key: 'code',
+    title: '标题',
+    dataIndex: 'title',
+    key: 'title',
   }, {
-    title: '描述',
-    dataIndex: 'dicDesc',
-    key: 'dicDesc',
+    title: '内容',
+    dataIndex: 'content',
+    key: 'content',
   }, {
-    title: '顺序号',
-    dataIndex: 'dicIndex',
-    key: 'dicIndex',
-  }, {
-    title: '字典名称',
-    dataIndex: 'name',
-    key: 'name',
-  }, {
-    title: '字典值',
-    dataIndex: 'value',
-    key: 'value',
+    title: '时间',
+    dataIndex: 'createTime',
+    key: 'createTime',
   }, {
     title: '操作',
     key: 'action',
@@ -81,7 +72,7 @@ function Dictionary({dispatch, dictionary, menus}) {
   const searchFormProps = {
     handleChange(query) {
       dispatch({
-        type: 'dictionary/searchQueryChangeState',
+        type: 'notice/searchQueryChangeState',
         data: {
           name: query.name,
           value: query.value
@@ -90,7 +81,7 @@ function Dictionary({dispatch, dictionary, menus}) {
     },
     handleSearch(searchForm) {
       dispatch({
-        type: 'dictionary/query',
+        type: 'notice/query',
         args: {
           pageNo: 1
         }
@@ -98,13 +89,12 @@ function Dictionary({dispatch, dictionary, menus}) {
     },
     handleResetQuery() {
       dispatch({
-        type: 'dictionary/searchQueryState',
+        type: 'notice/searchQueryState',
         data: null
       })
     },
     forms: [
-      { label: '字典编码', field: 'code', type: 'Input' },
-      { label: '字典名称', field: 'name', type: 'Input' },
+      { label: '标题', field: 'title', type: 'Input' },
     ]
   };
 
@@ -113,7 +103,7 @@ function Dictionary({dispatch, dictionary, menus}) {
     openModal,
     deleteForids() {
       dispatch({
-        type: 'dictionary/removeIds'
+        type: 'notice/removeIds'
       })
     },
     auth: menuLeaf,
@@ -126,7 +116,7 @@ function Dictionary({dispatch, dictionary, menus}) {
       rowSelection: {
         onChange(selectedRowKeys, selectedRows) {
           dispatch({
-            type: 'dictionary/selectedRowKeysState',
+            type: 'notice/selectedRowKeysState',
             data: selectedRowKeys
           })
         }
@@ -138,7 +128,7 @@ function Dictionary({dispatch, dictionary, menus}) {
       total,
       onChange(current) {
         dispatch({
-          type: 'dictionary/query',
+          type: 'notice/query',
           args: {
             pageNo: current
           }
@@ -156,35 +146,26 @@ function Dictionary({dispatch, dictionary, menus}) {
     onSave(data) {
       if (modalType === "add") {
         dispatch({
-          type: 'dictionary/create',
+          type: 'notice/create',
           args: data
         })
       } else {
         dispatch({
-          type: 'dictionary/update',
+          type: 'notice/update',
           args: data
         })
       }
     },
     onCancel() {
       dispatch({
-        type: 'dictionary/closeModalState'
+        type: 'notice/closeModalState'
       })
     },
     modalForms: [
-      { label: '类别id', field: 'parentId', type: 'Input' },
-      {
-        label: '字典编码', field: 'code', type: 'Input', rules:
-        [{ required: true, message: '字典编码长度为1~20', min: 1, max: 20 }]
+      { label: '标题', field: 'title', type: 'Input' ,
+       rules: [{ required: true, message: '标题长度为1~20', min: 1, max: 20}]
       },
-      {
-        label: '字典名称', field: 'name', type: 'Input', rules:
-          [{ required: true, message: '字典名称长度为1~20', min: 1, max: 20 }]
-      },
-      { label: '字典值', field: 'value', type: 'Input' },
-      { label: '顺序号', field: 'dicIndex', type: 'InputNumber' },
-      { label: '描述', field: 'dicDesc', type: 'TextArea' },
-      { label: '备注', field: 'remark', type: 'TextArea' },
+      { label: '内容', field: 'content', type: 'TextArea' },
     ]
 
   }
@@ -198,10 +179,10 @@ function Dictionary({dispatch, dictionary, menus}) {
   );
 }
 
-Dictionary.propTypes = {
+NoticeMG.propTypes = {
 };
 
-function mapStateToProps({dictionary, menus}) {
-  return { dictionary, menus }
+function mapStateToProps({dictionary, notice, menus}) {
+  return { dictionary, notice, menus }
 }
-export default connect(mapStateToProps)(Dictionary);
+export default connect(mapStateToProps)(NoticeMG);

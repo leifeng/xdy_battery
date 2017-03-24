@@ -32,13 +32,13 @@ class Modalcus extends Component {
 
   render() {
     console.log('Modalcus')
-    const {title, visible, onSave, onCancel, modalForms, form, record, modalLoading, alertState, modalType, tabs} = this.props;
+    const {title, visible, onSave, onCancel, modalForms, form, record, modalLoading, alertState, modalType, tabs,width} = this.props;
     const { getFieldDecorator } = form;
 
     return (
       <Modal title={title}
         visible={visible}
-        width={600}
+        width={width||600}
         onOk={this.onOk}
         onCancel={this.onClose}
         footer={[
@@ -47,14 +47,14 @@ class Modalcus extends Component {
             确定
           </Button>
         ]}
-        >
+      >
         <Spin spinning={modalLoading}>
-          <Form horizontal>
+          <Form layout="horizontal" >
             <Tabs defaultActiveKey="base">
               <TabPane tab="基本信息" key="base">
                 {modalForms.map((item, index) => {
                   return (
-                    <Forms {...item} modalType={modalType} form={form} key={index} value={record && record[item.field]} />
+                    <Forms  value={record && record[item.field]}  {...item} modalType={modalType} form={form} key={index}/>
                   )
                 })}
               </TabPane>
@@ -66,10 +66,13 @@ class Modalcus extends Component {
                     return <TabPane tab={item.title} key={index}>
                       {item.otherForms.map((checkItem, index) => {
                         let value = '';
-                        if (item.nodeName && record && record[item.nodeName]) {
-                          console.log(record[item.nodeName])
-                          //  value = record[item.nodeName][index][item.field]
+                        if (checkItem.value == 0 || checkItem.value) {
+                          value = checkItem.value
                         }
+                        // if (item.nodeName && record && record[item.nodeName]) {
+                        //   console.log(record[item.nodeName])
+                        //   //  value = record[item.nodeName][index][item.field]
+                        // }
                         return <Forms {...checkItem} modalType={modalType} form={form} key={index} value={value} />
                       })}
                     </TabPane>
@@ -97,6 +100,12 @@ class Modalcus extends Component {
         values[name] = fieldsValue[name] ? fieldsValue[name].format(item.setting.format) : '';
       })
 
+      //TreeSelect格式转换
+      const treeSelectField = _.filter(modalForms, { type: 'TreeSelect' });
+      _.map(treeSelectField, (item, index) => {
+        const name = item['field'];
+        values[name] = fieldsValue[name].toString();
+      })
 
 
 
@@ -129,7 +138,6 @@ class Modalcus extends Component {
         })
       }
 
-      console.log(values);
       this.setState({ loading: true })
       onSave(values);
 

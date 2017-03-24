@@ -2,12 +2,16 @@ import React from 'react';
 import { Icon, Popover, Button } from 'antd';
 import styles from './index.less';
 import Cookies from 'js-cookie';
-function TopBar({visible, visibleChangeFN, toUrl, children}) {
+
+import EditPwd from '../../components/EditPwd';
+
+function TopBar({visible, visibleChangeFN, editPwdVisible, editPwdLoading, toUrl, onSavePwd, onClosePwd, OpenEditPwd, children}) {
+
   const userName = Cookies.get('userName')
   const content = (
     <div className={styles.pop}>
-      <a onClick={() => { toUrl('/admin/password') } }>修改密码</a>
-      <a onClick={() => { toUrl('/login') } }>退出</a>
+      <a onClick={() => OpenEditPwd()}>修改密码</a>
+      <a onClick={() => { toUrl('/login') }}>退出</a>
     </div>
   )
   const PopoverProps = {
@@ -17,6 +21,13 @@ function TopBar({visible, visibleChangeFN, toUrl, children}) {
     placement: "bottomRight",
     overlayClassName: 'Popover',
     onVisibleChange: visibleChangeFN
+  }
+
+  const editPwdProps = {
+    editPwdLoading,
+    editPwdVisible,
+    onSavePwd,
+    onClosePwd
   }
   return (
     <div className={styles.normal}>
@@ -28,6 +39,8 @@ function TopBar({visible, visibleChangeFN, toUrl, children}) {
           <Icon type="user" />{userName}
         </Button>
       </Popover>
+      <EditPwd {...editPwdProps} />
+
     </div>
   )
 }

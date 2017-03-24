@@ -1,10 +1,11 @@
-import React, { PropsType,Component } from 'react';
+import React, { PropsType, Component } from 'react';
 import styles from './index.less'
 import _ from 'lodash';
 import Forms from '../Forms';
 import { Form, Row, Col, Button } from 'antd';
+import QueueAnim from 'rc-queue-anim';
 
-function SearchForm({children, handleSearch, handleResetQuery, forms, form}) {
+function SearchForm({ children, handleSearch, handleResetQuery, forms, form }) {
   console.log('SearchForm')
   const { resetFields, validateFields } = form;
   const formItemLayout = {
@@ -27,28 +28,37 @@ function SearchForm({children, handleSearch, handleResetQuery, forms, form}) {
         const name = item['field']
         values[name] = fieldsValue[name] ? fieldsValue[name].format(item.setting.format) : '';
       })
-      console.log(values)
       handleSearch(values);
     })
   }
   return (
     <div className={styles.normal}>
       <Form
-        horizontal
+        layout="horizontal"
         className={styles.searchform}
         onSubmit={onSubmit}
-        >
+      >
         <Row gutter={40}>
-          {forms.map((item, i) => {
-            return <Col span={8} key={i}>
-              <Forms {...item} form={form} formItemLayout={formItemLayout} key={i} />
-            </Col>
-          })}
+          <QueueAnim
+            ease="easeInOutBack"
+            type={['left', 'right']}
+          >
+            {forms.map((item, i) => {
+              return <Col span={8} key={i}>
+                <Forms {...item} form={form} formItemLayout={formItemLayout} key={i} />
+              </Col>
+            })}
+          </QueueAnim>
         </Row>
         <Row>
           <Col span={24} style={{ textAlign: 'right' }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button onClick={handleReset}>重置</Button>
+            <QueueAnim
+              ease="easeInOutBack"
+              type={['left', 'right']}
+            >
+              <Button type="primary" htmlType="submit" key="select">查询</Button>
+              <Button onClick={handleReset} key="reset">重置</Button>
+            </QueueAnim>
           </Col>
         </Row>
       </Form>
@@ -60,6 +70,17 @@ SearchForm.PropsType = {
 }
 export default Form.create({
   onFieldsChange(props, changedFields) {
-    props.handleChange(changedFields[Object.keys(changedFields)[0]])
-  },
+
+    const o = changedFields[Object.keys(changedFields)[0]];
+    if (typeof o.value === 'string') {
+      o.value = o.value.trim();
+    } else {
+      props.forms.map((item) => {
+        if (item['field'] === Object.keys(changedFields)[0] && item['type'] === 'DatePicker') {
+          o.value = o.value.format(item['setting'].format)
+        }
+      })
+    }
+    props.handleChange(o)
+  }
 })(SearchForm);

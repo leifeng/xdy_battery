@@ -6,9 +6,10 @@ import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 import Modalcus from '../../components/Modalcus';
 
-function ServiceRunMG({dispatch, serviceRunMG}) {
+function ServiceRunMG({dispatch, serviceRunMG, menus}) {
   console.log('服务运行')
   const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery} = serviceRunMG;
+  const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
 
   function onDeleteItem(id) {
     dispatch({
@@ -74,11 +75,8 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
     key: 'action',
     render: (text, record) => (
       <span>
-        <a onClick={() => openModal('edit', record)}>编辑</a>
-        <span className="ant-divider" />
-        <Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}>
-          <a>删除</a>
-        </Popconfirm>
+        {menuLeaf.indexOf('update') !== -1 ? <span><a onClick={() => openModal('edit', record)}>编辑</a><span className="ant-divider" /></span> : null}
+        {menuLeaf.indexOf('delete') !== -1 ? <span><Popconfirm title="确定要删除吗？" onConfirm={() => onDeleteItem(record.id)}><a>删除</a></Popconfirm><span className="ant-divider" /></span> : null}
       </span>
     ),
   }];
@@ -120,6 +118,12 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
   const tableListProps = {
     curd: 'curd',
     openModal,
+    deleteForids() {
+      dispatch({
+        type: 'serviceRunMG/removeIds'
+      })
+    },
+    auth: menuLeaf,
     tableProps: {
       rowKey: 'id',
       data,
@@ -203,7 +207,7 @@ function ServiceRunMG({dispatch, serviceRunMG}) {
 ServiceRunMG.propTypes = {
 };
 
-function mapStateToProps({serviceRunMG}) {
-  return { serviceRunMG }
+function mapStateToProps({serviceRunMG, menus}) {
+  return { serviceRunMG, menus }
 }
 export default connect(mapStateToProps)(ServiceRunMG);

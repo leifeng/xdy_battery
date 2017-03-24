@@ -10,11 +10,11 @@ export default {
     loading: false,
     visible: false,
     current: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0,
     modalType: '',
     data: [{
-      
+
     }],
         record:null
 
@@ -46,6 +46,7 @@ export default {
           type: 'querySuccess',
           data
         })
+         yield put({ type: 'selectedRowKeysState', data: [] })
       }
     },
     *create() { },

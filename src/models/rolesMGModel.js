@@ -1,4 +1,5 @@
-import { query, created, update, remove, removeIds } from '../services/rolesMG'
+import { query, created, update, remove, removeIds, getBindRight, setBindRight } from '../services/rolesMG'
+import { queryTree } from '../services/menus';
 
 export default {
 
@@ -9,7 +10,7 @@ export default {
     loading: false,
     visible: false,
     pageNo: 1,
-    pageSize: 10,
+    pageSize: 6,
     total: 0,
     modalType: '',
     data: [],
@@ -17,15 +18,28 @@ export default {
     alertState: false,
     searchQuery: null,
     modalLoading: false,
+    authModalVisible: false,
+    roleid: '',
+    checkedKeys: [],
+    checkedAllKeys: [],
+    roleName: ''
   },
   subscriptions: {
     setup({dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/admin/sys/rolesMG') {
           dispatch({
+            type: 'searchQueryState',
+            data: null
+          })
+          dispatch({
+            type: 'menus/queryTree',
+          })
+
+          dispatch({
             type: 'query',
             args: {
-              pageSize: 10,
+              pageSize: 6,
               pageNo: 1,
               isPaging: true
             }
@@ -39,12 +53,13 @@ export default {
     *query({args}, {select, call, put}) {
       yield put({ type: 'loadingState', data: true });
       const searchQuery = yield select(state => state.rolesMG.searchQuery)
-      const {data} = yield call(query, Object.assign({}, args, searchQuery, { isPaging: true, pageSize: 10 }));
+      const {data} = yield call(query, Object.assign({}, args, searchQuery, { isPaging: true, pageSize: 6 }));
       if (data) {
         yield put({
           type: 'querySuccess',
           data
         })
+         yield put({ type: 'selectedRowKeysState', data: [] })
       }
     },
     *create({args}, { call, put}) {
@@ -64,7 +79,7 @@ export default {
         yield put({
           type: 'query',
           args: {
-            pageSize: 10,
+            pageSize: 6,
             pageNo: 1,
             isPaging: true
           }
@@ -78,11 +93,13 @@ export default {
         yield put({
           type: 'query',
           args: {
-            pageSize: 10,
+            pageSize: 6,
             pageNo: 1,
             isPaging: true
           }
         })
+        yield put({ type: 'selectedRowKeysState', data: [] })
+
       }
     },
     *update({args}, {select, call, put}) {
@@ -96,6 +113,42 @@ export default {
         yield put({ type: 'modalErrorState' });
       }
     },
+    *queryAuthbyRoleId({args}, {call, put}) {
+      const {data} = yield call(getBindRight, args.roleid);
+      if (data) {
+        yield put({
+          type: 'checkedKeysState',
+          data
+        });
+        yield put({
+          type: 'authModalShowState',
+          data: {
+            roleid: args.roleid,
+            roleName: args.roleName
+          }
+        })
+      }
+    },
+    *setBindRight({}, {select, call, put}) {
+      const checkedAllKeys = yield select(state => state.rolesMG.checkedAllKeys);
+      const roleid = yield select(state => state.rolesMG.roleid);
+
+      const data = yield call(setBindRight, { roleId: roleid, modelIds: checkedAllKeys });
+      if (data === 'success') {
+        yield put({
+          type: 'authModalHideState'
+        })
+        yield put({
+          type: 'query',
+          args: {
+            pageSize: 6,
+            pageNo: 1,
+            isPaging: true
+          }
+        })
+      }
+
+    }
   },
 
   reducers: {
@@ -104,7 +157,7 @@ export default {
       return { ...state, data: list, total: totalCount, pageNo: pageNo, loading: false }
     },
     createSuccess(state, action) {
-      return { ...state, visible: false, modalLoading: false }
+      return { ...state, visible: false, modalLoading: false, alertState: false }
     },
     loadingState(state, action) {
       return { ...state, loading: action.data }
@@ -138,7 +191,22 @@ export default {
       newState[name] = value;
       const newsearchQuery = Object.assign({}, searchQuery, newState)
       return { ...state, searchQuery: newsearchQuery }
-    }
+    },
+    authModalShowState(state, action) {
+      const {roleName, roleid} = action.data;
+      return { ...state, roleid, roleName, authModalVisible: true }
+    },
+    authModalHideState(state, action) {
+      return { ...state, roleid: '', checkedKeys: [], checkedAllKeys: [], authModalVisible: false }
+    },
+    checkedKeysState(state, action) {
+      return { ...state, checkedKeys: action.data }
+
+    },
+    checkedAllKeysState(state, action) {
+      return { ...state, checkedAllKeys: action.data }
+    },
+
   }
 
 }

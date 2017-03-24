@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Upload, Icon, message, Modal, Button } from 'antd'
 import { remove } from '../../services/uploadFile';
+import url from '../../services/api';
+
 class UpFile extends Component {
   constructor() {
     super();
@@ -8,7 +10,8 @@ class UpFile extends Component {
       previewVisible: false,
       previewImage: '',
       fileList: [],
-      responseName: ''
+      responseName: '',
+      uid: -1
     }
     this.onChange = this.onChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -17,37 +20,37 @@ class UpFile extends Component {
   }
 
   componentWillMount() {
-    const {form, linkField} = this.props;
-    if (form.getFieldValue(linkField) !== '') {
+    const { form, linkField } = this.props;
+    if (form.getFieldValue(linkField)) {
       this.setState({
         fileList: [{
           uid: -1,
           status: 'done',
-          url: '' + form.getFieldValue(linkField)
+          url: url + '/upload/image/' + form.getFieldValue(linkField)
         }]
       })
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const {form, linkField} = this.props;
-    if (form.getFieldValue(linkField) === '') {
+    const { form, linkField } = nextProps;
+    if (form.getFieldValue(linkField)) {
       this.setState({
-        fileList: []
+        fileList: [{
+          uid: this.state.uid || -1,
+          status: 'done',
+          url: url + '/upload/image/' + form.getFieldValue(linkField)
+        }]
       })
     } else {
       this.setState({
-        fileList: [{
-          uid: -1,
-          status: 'done',
-          url: '' + form.getFieldValue(linkField)
-        }]
+        fileList: []
       })
     }
   }
 
   onChange(info) {
-    const {form, linkField} = this.props;
+    const { form, linkField } = this.props;
     if (info.file.status === 'uploading') {
       console.log('------uploading')
     } else if (info.file.status === 'done') {
@@ -63,15 +66,16 @@ class UpFile extends Component {
       console.log('----------removed')
       this.removeImg();
     }
-    this.setState({
-      fileList: info.fileList
-    })
 
+    this.setState({
+      fileList: info.fileList,
+      uid: info.fileList.length > 0 ? info.fileList[0].uid : -1
+    })
   }
   async removeImg() {
     const data = await remove({ url: this.state.responseName })
     if (data === 'success') {
-      const {form, linkField} = this.props;
+      const { form, linkField } = this.props;
       const newState = {};
       newState[linkField] = '';
       form.setFieldsValue(newState);
@@ -91,8 +95,8 @@ class UpFile extends Component {
   }
   render() {
     console.log('UpFile')
-    const {batsCode, disabled} = this.props;
-    const {fileList, previewVisible, previewImage} = this.state;
+    const { batsCode, disabled } = this.props;
+    const { fileList, previewVisible, previewImage } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -104,13 +108,13 @@ class UpFile extends Component {
       <div className="clearfix">
         <Upload
           disabled={disabled}
-          action=""
+          action={url + "/fileUpload/fileUpload"}
           listType="picture-card"
           onPreview={this.handlePreview}
           onChange={this.onChange}
           fileList={fileList}
           data={{ fileType: 'jpg', batsCode }}
-          >
+        >
           {fileList.length === 1 ? null : uploadButton}
         </Upload>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
