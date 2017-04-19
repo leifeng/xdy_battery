@@ -94,6 +94,7 @@ function SysParamsSet({dispatch, sysParamsSet, dictionary, menus}) {
   }];
 
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'sysParamsSet/searchQueryChangeState',

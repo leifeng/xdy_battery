@@ -81,6 +81,7 @@ function ServiceRunMG({dispatch, serviceRunMG, menus}) {
     ),
   }];
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'usersMG/searchQueryChangeState',

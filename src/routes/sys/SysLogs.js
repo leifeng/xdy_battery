@@ -6,7 +6,7 @@ import SearchForm from '../../components/SearchForm';
 import TableList from '../../components/TableList';
 function SysLogs({dispatch, sysLogs}) {
   console.log('系统日志')
-  const {loading, data, pageSize, total, pageNo} = sysLogs;
+  const {loading, data, pageSize, total, pageNo,searchQuery,} = sysLogs;
 
   const columns = [{
     title: '应用程序',
@@ -27,6 +27,7 @@ function SysLogs({dispatch, sysLogs}) {
   }];
 
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'sysLogs/searchQueryChangeState',

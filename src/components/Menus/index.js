@@ -35,8 +35,6 @@ export default class Menus extends Component {
     });
   }
   onOpenChange(openKeys) {
-
-    console.log(openKeys)
     const latestOpenKey = openKeys.length === 2 ? openKeys[1] : openKeys[0]
     const {onOpenkeyChange} = this.props;
     Cookies.set('dir', latestOpenKey)

@@ -79,6 +79,7 @@ function Dictionary({dispatch, dictionary, menus}) {
   }];
 
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'dictionary/searchQueryChangeState',

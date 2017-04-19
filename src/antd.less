@@ -22,7 +22,7 @@
    }
    .ant-menu-dark.ant-menu-inline .ant-menu-item-selected {
      background-color: #202b3c!important;
-     color:#fff!important;
+     color: #fff!important;
      &:before {
        content: '';
        width: 5px;
@@ -51,11 +51,11 @@
    }
    .ant-table-thead > tr > th {
      background: #5a697e!important;
-     color: #fff;
+     color: #fff!important;
    }
    .ant-pagination {
      margin: 16px 10px!important;
-    // width: 600px;
+     // width: 600px;
      float: left!important;
    }
    .ant-btn-primary {
@@ -82,10 +82,17 @@
      border-color: @btnColor;
    }
    .ant-menu-sub.ant-menu-inline > .ant-menu-item, .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
-     line-height: 32px!important;
-     height: 32px!important;
+     line-height: 28px!important;
+     height: 28px!important;
    }
    .ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item > a {
-    color: #999!important;
-}
+     color: #999!important;
+   }
+   .ant-form-item {
+     margin-bottom: 15px!important;
+   }
+   .ant-menu-inline>.ant-menu-item, .ant-menu-inline>.ant-menu-submenu>.ant-menu-submenu-title, .ant-menu-item-group-list>.ant-menu-item, .ant-menu-item-group-list>.ant-menu-submenu>.ant-menu-submenu-title, .ant-menu-vertical>.ant-menu-item, .ant-menu-vertical>.ant-menu-submenu>.ant-menu-submenu-title {
+     line-height: 36px!important;
+     height: 36px!important;
+   }
  }

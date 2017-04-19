@@ -74,6 +74,7 @@ function AuthMG({dispatch, authMG, menus}) {
     ),
   }];
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'authMG/searchQueryChangeState',

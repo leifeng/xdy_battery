@@ -11,11 +11,11 @@ import { checkAcount } from '../../services/usersMG';
 import { getList, getName } from '../../utils/dicFilter';
 
 
-function UsersMG({dispatch, usersMG, dictionary, companylist, menus}) {
+function UsersMG({ dispatch, usersMG, dictionary, companylist, menus }) {
   console.log('用户管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, modalRolesVisible, roles, rolesbyUser, editPwdVisible, editPwdLoading, linkField, userName} = usersMG;
-  const {allData} = dictionary;
-  const {companyAllData} = companylist;
+  const { selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, modalRolesVisible, roles, rolesbyUser, editPwdVisible, editPwdLoading, linkField, userName } = usersMG;
+  const { allData } = dictionary;
+  const { companyAllData } = companylist;
   const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
   let t = -1;
   //字典处理
@@ -132,6 +132,7 @@ function UsersMG({dispatch, usersMG, dictionary, companylist, menus}) {
   }];
 
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'usersMG/searchQueryChangeState',
@@ -234,7 +235,7 @@ function UsersMG({dispatch, usersMG, dictionary, companylist, menus}) {
         label: '账号', field: 'account', type: 'Input', unique: true,
         rules: [
           { required: true, message: '请输入账号' },
-          { required: true, message: '账号名称长度为1~10', min: 1, max: 10 },
+          { required: true, message: '账号名称长度为1~20', min: 1, max: 20 },
           {
             validator: (rule, value, callback) => {
               clearTimeout(t)
@@ -251,11 +252,11 @@ function UsersMG({dispatch, usersMG, dictionary, companylist, menus}) {
           }]
       },
       {
-        label: '密码', field: 'password', type: 'Input', unique: true, formType: "password",
-        rules: [{ required: true, message: '请输入密码' },]
+        label: '密码', field: 'password', type: 'Input', unique: true,
+        rules: [{ required: true, message: '请输入密码' },{  message: '密码长度为3~10位', min: 3, max: 10}]
       },
-      { label: '名称', field: 'realName', type: 'Input' },
-      { label: '昵称', field: 'nickName', type: 'Input' },
+      { label: '名称', field: 'realName', type: 'Input', rules: [{ message: '最多16个字符', max: 16 }] },
+      { label: '昵称', field: 'nickName', type: 'Input', rules: [{ message: '最多16个字符', max: 16 }] },
       {
         label: '用户类型', field: 'userType', type: 'Select', dic: User_TypeDic,
         linkField: 'companyId',
@@ -282,7 +283,7 @@ function UsersMG({dispatch, usersMG, dictionary, companylist, menus}) {
       //   } },
       //   rules: [{ type: "object", required: true, message: '请选择到期日期' }]
       // },
-      { label: '备注', field: 'remark', type: 'TextArea' }
+      { label: '备注', field: 'remark', type: 'TextArea', rules: [{ message: '最多30个字符', max: 30 }] }
     ]
   }
   const rolesProps = {
@@ -340,7 +341,7 @@ function UsersMG({dispatch, usersMG, dictionary, companylist, menus}) {
 UsersMG.propTypes = {
 };
 
-function mapStateToProps({usersMG, dictionary, companylist, menus}) {
+function mapStateToProps({ usersMG, dictionary, companylist, menus }) {
   return { usersMG, dictionary, companylist, menus }
 }
 export default connect(mapStateToProps)(UsersMG);

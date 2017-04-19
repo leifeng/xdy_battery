@@ -1,5 +1,6 @@
 import React from 'react';
-import { AutoComplete, Modal, Button } from 'antd';
+import {  Modal, Button, Select } from 'antd';
+const Option = Select.Option;
 import styles from './index.less'
 const column = {
   batKind: '电池包种类',
@@ -38,14 +39,18 @@ export default class SearchBats extends React.Component {
     const data = dataSource.map((item) => { return item.batsCode })
     return (
       <div>
-        <AutoComplete
+        <Select
+          mode="combobox"
           allowClear={true}
-          dataSource={data}
-          style={{ width: 500 }}
-          onChange={this.handleChange}
           onSelect={this.onSelect}
+          onSearch={this.handleChange}
           placeholder="输入电池包编号"
-        />
+          style={{ width: '100%' }}
+        >
+          {data.map((item, index) => {
+            return <Option key={item} title={item}>{item}</Option>
+          })}
+        </Select>
         <Modal
           visible={this.state.visible}
           title="电池包详情"
@@ -57,7 +62,7 @@ export default class SearchBats extends React.Component {
           ]}
         >
           {Object.keys(this.state.item).map((item, index) => {
-            return column[item] ? <div className={styles.item} key={index}><label>{column[item]}：</label>{this.state.item[item]?this.state.item[item]:'无'}</div> : null
+            return column[item] ? <div className={styles.item} key={index}><label>{column[item]}：</label>{(this.state.item[item] || this.state.item[item] == 0) ? this.state.item[item] : '无'}</div> : null
           })}
         </Modal>
       </div>
@@ -71,11 +76,11 @@ export default class SearchBats extends React.Component {
     this.setState({ visible: true, item: dataSource[option.props.index] })
   }
   handleChange(value) {
-    const {getData} = this.props;
-    clearTimeout(this.t);
-    this.t = setTimeout(() => {
-      value && getData(value)
-    }, 1000)
+    const { getData } = this.props;
+    // clearTimeout(this.t);
+    //  this.t = setTimeout(() => {
+    value && getData(value)
+    //  }, 1000)
   }
 }
 SearchBats.defaultProps = {

@@ -32,13 +32,13 @@ class Modalcus extends Component {
 
   render() {
     console.log('Modalcus')
-    const {title, visible, onSave, onCancel, modalForms, form, record, modalLoading, alertState, modalType, tabs,width} = this.props;
+    const { title, visible, onSave, onCancel, modalForms, form, record, modalLoading, alertState, modalType, tabs, width } = this.props;
     const { getFieldDecorator } = form;
 
     return (
       <Modal title={title}
         visible={visible}
-        width={width||600}
+        width={width || 600}
         onOk={this.onOk}
         onCancel={this.onClose}
         footer={[
@@ -54,14 +54,16 @@ class Modalcus extends Component {
               <TabPane tab="基本信息" key="base">
                 {modalForms.map((item, index) => {
                   return (
-                    <Forms  value={record && record[item.field]}  {...item} modalType={modalType} form={form} key={index}/>
+                    <Forms  {...item} value={record && record[item.field]}  modalType={modalType} form={form} key={index} />
                   )
                 })}
               </TabPane>
               {tabs.map((item, index) => {
                 switch (item.title) {
                   case '地图信息':
-                    return <TabPane tab={item.title} key={index}><AMAP {...item} form={form} /></TabPane>
+                    return <TabPane tab={item.title} key={index}>
+                      {false?null:<AMAP {...item} form={form} />}
+                    </TabPane>
                   case '电池退役检查项目':
                     return <TabPane tab={item.title} key={index}>
                       {item.otherForms.map((checkItem, index) => {
@@ -86,7 +88,7 @@ class Modalcus extends Component {
     )
   }
   onOk() {
-    const {modalForms, onSave, form, modalType, tabs} = this.props;
+    const { modalForms, onSave, form, modalType, tabs } = this.props;
     this.props.form.validateFieldsAndScroll((err, fieldsValue) => {
       if (err) {
         return;
@@ -144,7 +146,7 @@ class Modalcus extends Component {
     });
   }
   onClose() {
-    const {form, onCancel} = this.props;
+    const { form, onCancel } = this.props;
     onCancel()
 
   }

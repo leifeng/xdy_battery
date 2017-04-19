@@ -10,12 +10,10 @@ module.exports = function (webpackConfig, env) {
   } else {
     webpackConfig.babel.plugins.push('dev-expression');
   }
-
   // Don't extract common.js and common.css
   webpackConfig.plugins = webpackConfig.plugins.filter(function (plugin) {
     return !(plugin instanceof webpack.optimize.CommonsChunkPlugin);
   });
-
   // Support CSS Modules
   // Parse all less files as css module.
   webpackConfig.module.loaders.forEach(function (loader, index) {

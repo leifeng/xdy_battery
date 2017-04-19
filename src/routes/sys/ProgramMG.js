@@ -96,6 +96,7 @@ function ProgramMG({dispatch, programMG, dictionary}) {
     ),
   }];
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'programMG/searchQueryChangeState',

@@ -21,10 +21,10 @@ class Forms extends Component {
 
   render() {
     //console.log('Forms')
-    const { field, valueField, value, type, rules, form, setting, label, formItemLayout, modalType, unique, dic, help, formType } = this.props;
+    const { field, valueField, value, type, rules, form, setting, label, formItemLayout, modalType, unique, dic, help, formType, defaultValue } = this.props;
     const { getFieldDecorator } = form;
 
-    // console.log(type)
+    //console.log(field,value)
     //初始化值-start
     let defaultvalue = ((value == 0 || value) && value + '') || '';
     if (valueField) {
@@ -42,9 +42,11 @@ class Forms extends Component {
         break;
       case 'InputNumber':
         defaultvalue = ((value == 0 || value) && value + '') || 0;
-        break
+        break;
     }
-
+    if (modalType === 'add'&&defaultValue) {
+      defaultvalue = defaultValue
+    }
     //初始化值-end
     // console.log(type, field, defaultvalue)
 
@@ -81,13 +83,17 @@ class Forms extends Component {
         </FormItem>
       )
     } else if (type === 'Image') {
-      return (
-        <FormItem {...FormItemProps}>
-          {getFieldDecorator(field, options)(
-            <CustomImage url={value} />
-          )}
-        </FormItem>
-      )
+      if (value) {
+        return (
+          <FormItem {...FormItemProps}>
+            {getFieldDecorator(field, options)(
+              <CustomImage url={value} />
+            )}
+          </FormItem>
+        )
+      }
+      return null
+
     } else {
       return (
         <FormItem {...FormItemProps}>
@@ -120,18 +126,18 @@ class Forms extends Component {
           const { linkField } = this.props;
           disabled = disabledFn(form.getFieldValue(linkField))
         }
-        return <InputNumber min={setting && setting.min || 0} max={setting && setting.max||Infinity} disabled={disabled} />
+        return <InputNumber min={setting && setting.min || 0} max={setting && setting.max || Infinity} disabled={disabled} />
       case 'Select':
         return <Select onChange={this.onSelectChange} disabled={modalType !== 'add' && unique}>
           <Option value="">请选择</Option>
           {dic.map((item, i) => {
-            return <Option value={(item.value).toString()} key={i}>{item.name}</Option>
+            return <Option value={(item.value || item.value == 0) && item.value.toString()} key={i}>{item.name}</Option>
           })}
         </Select>
       case 'Radio':
         return <RadioGroup disabled={modalType !== 'add' && unique} onChange={this.onRadioGroupChange} >
           {dic.map((item, i) => {
-            return <Radio value={(item.value).toString()} key={i}>{item.name}</Radio>
+            return <Radio value={(item.value || item.value == 0) && item.value.toString()} key={i}>{item.name}</Radio>
           })}
         </RadioGroup>
       case 'DatePicker':
@@ -157,9 +163,9 @@ class Forms extends Component {
           placeholder="请选择"
           treeDefaultExpandAll
         />
-      case 'AutoComplete':
-        const { AutoCompleteChange, AutoCompleteSelect } = this.props;
-        return <AutoComplete dataSource={dic} onChange={AutoCompleteChange} onSelect={AutoCompleteSelect} allowClear={true} optionLabelProp="value" />
+      // case 'AutoComplete':
+      //   const { AutoCompleteChange, AutoCompleteSelect } = this.props;
+      //   return <AutoComplete dataSource={dic} onChange={AutoCompleteChange} onSelect={AutoCompleteSelect} allowClear={true} optionLabelProp="value" />
       case 'disabled':
         return <Input disabled />
       case 'disabledSelect':
@@ -167,6 +173,19 @@ class Forms extends Component {
           <Option value="">请选择</Option>
           {dic.map((item, i) => {
             return <Option value={(item.value).toString()} key={i}>{item.name}</Option>
+          })}
+        </Select>
+      case 'SelectAuto':
+        const { AutoCompleteChange, AutoCompleteSelect, placeholder } = this.props;
+        return <Select
+          mode="combobox"
+          allowClear={true}
+          onSelect={AutoCompleteSelect}
+          onSearch={AutoCompleteChange}
+          placeholder={placeholder}
+        >
+          {dic.map((item, index) => {
+            return <Option key={item.value} title={item.value}>{item.text}</Option>
           })}
         </Select>
       default:
@@ -208,7 +227,8 @@ Forms.defaultProps = {
   setting: {//antd组件设置
     showTime: false,
     format: 'YYYY-MM-DD'
-  }
+  },
+  defaultValue: ''
 }
 export default Forms;
 
@@ -227,5 +247,6 @@ export default Forms;
   rules: 验证规则见antd的form
   setting: antd组件的配置(多用于时间控件)
   customer: { nodeName: '节点名称', keyName: "键名称", keyValue: '键值' } 用于自定义表单数据的结构
+  defaultValue:'默认值'
 }
  */

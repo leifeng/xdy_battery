@@ -6,11 +6,10 @@ import TopBar from '../components/TopBar/index';
 import AlertMessage from '../components/AlertMessage/index'
 import styles from './admin.less';
 
-function Admin(props, {router}) {
-  const {dispatch, children, admin, menus} = props;
-  const {visible, editPwdVisible, editPwdLoading, openKeys,url} = admin;
-  const {menuTree} = menus;
-  console.log(props)
+function Admin(props, { router }) {
+  const { dispatch, children, admin, menus } = props;
+  const { visible, editPwdVisible, editPwdLoading, openKeys, url } = admin;
+  const { menuTree } = menus;
   const topBarProps = {
     visible,
     editPwdVisible,
@@ -58,7 +57,7 @@ function Admin(props, {router}) {
   }
   const menuProps = {
     router,
-    data:menuTree,
+    data: menuTree,
     openKeys,
     onOpenkeyChange(dir) {
       dispatch({
@@ -88,7 +87,7 @@ function Admin(props, {router}) {
 Admin.contextTypes = {
   router: React.PropTypes.object
 };
-function mapStateToProps({admin, menus}) {
+function mapStateToProps({ admin, menus }) {
   return { admin, menus }
 }
 export default connect(mapStateToProps)(Admin);

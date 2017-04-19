@@ -4,8 +4,80 @@ import _ from 'lodash';
 import Forms from '../Forms';
 import { Form, Row, Col, Button } from 'antd';
 import QueueAnim from 'rc-queue-anim';
+class SearchForm extends Component {
+  handleReset = () => {
+    const { resetFields } = this.props.form;
+    resetFields();
+    this.props.handleResetQuery();
+  }
 
-function SearchForm({ children, handleSearch, handleResetQuery, forms, form }) {
+  onSubmit = (e) => {
+    const { handleSearch, forms, form } = this.props;
+    const { validateFields } = form;
+    e.preventDefault();
+    validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      let values = Object.assign({}, fieldsValue)
+      const dateTypeField = _.filter(forms, { type: 'DatePicker' });
+      _.map(dateTypeField, (item, index) => {
+        const name = item['field']
+        values[name] = fieldsValue[name] ? fieldsValue[name].format(item.setting.format) : '';
+      })
+      handleSearch(values);
+    })
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.searchQuery == null) {
+      const { resetFields } = this.props.form;
+      resetFields();
+    }
+
+  }
+
+  render() {
+    const { children, handleResetQuery, forms, form } = this.props;
+    const formItemLayout = {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
+    };
+    return (
+      <div className={styles.normal}>
+        <Form
+          layout="horizontal"
+          className={styles.searchform}
+          onSubmit={this.onSubmit}
+        >
+          <Row gutter={40}>
+            <QueueAnim
+              ease="easeInOutBack"
+              type={['left', 'right']}
+            >
+              {forms.map((item, i) => {
+                return <Col span={8} key={i}>
+                  <Forms {...item} form={form} formItemLayout={formItemLayout} key={i} />
+                </Col>
+              })}
+            </QueueAnim>
+          </Row>
+          <Row>
+            <Col span={24} style={{ textAlign: 'right' }}>
+              <QueueAnim
+                ease="easeInOutBack"
+                type={['left', 'right']}
+              >
+                <Button type="primary" htmlType="submit" key="select">查询</Button>
+                <Button onClick={this.handleReset} key="reset">重置</Button>
+              </QueueAnim>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    )
+  }
+}
+/*function SearchForm({ children, handleSearch, handleResetQuery, forms, form }) {
   console.log('SearchForm')
   const { resetFields, validateFields } = form;
   const formItemLayout = {
@@ -64,7 +136,7 @@ function SearchForm({ children, handleSearch, handleResetQuery, forms, form }) {
       </Form>
     </div>
   )
-}
+}*/
 SearchForm.PropsType = {
 
 }

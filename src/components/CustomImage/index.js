@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
+import url from '../../services/api';
 import styles from './index.less'
 export default class CustomImage extends React.Component {
   constructor() {
@@ -11,14 +12,14 @@ export default class CustomImage extends React.Component {
     this.onClose = this.onClose.bind(this);
   }
   render() {
-    const {url} = this.props;
-    const {visible} = this.state;
+    const path = this.props.url;
+    const { visible } = this.state;
     if (!url) {
       return null
     }
     return (
       <div className={styles.normal}>
-        <img src={'http://10.10.11.190/upload/image/' + url} onClick={this.openModal}  height={30} />
+        <img src={url + '/upload/image/' + path} onClick={this.openModal} height={30} />
         <Modal
           closable={false}
           visible={visible}
@@ -26,7 +27,7 @@ export default class CustomImage extends React.Component {
           width={500}
           footer={null}
         >
-          <img src={'http://10.10.11.190/upload/image/' + url} onClick={this.openModal} width="100%" />
+          <img src={url + '/upload/image/' + path} onClick={this.openModal} width="100%" />
         </Modal>
       </div>
     )

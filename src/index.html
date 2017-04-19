@@ -18,13 +18,21 @@
       }
     })();
   </script>
-<link rel="stylesheet" href="/dist/index.css" />
+  <link rel="stylesheet" href="/dist/index.css" />
 </head>
 
 <body>
 
   <div id="root"></div>
-  <script src="http://webapi.amap.com/maps?v=1.3&key=5cb2bcc48c4d1696540efb5ce8149aa1"></script>
+  <!--[if IE]>
+  <script src="/static/es5-shim.min.js"></script>
+  <script src="/static/es5-sham.min.js"></script>
+  <![endif]-->
+  <script src="/static/promise.js"></script>
+  <script>
+    if (!window.Promise) { window.Promise = Promise; }
+  </script>
+  <script src="http://webapi.amap.com/maps?v=1.3&key=5cb2bcc48c4d1696540efb5ce8149aa1&plugin=AMap.Geocoder,AMap.Autocomplete,AMap.PlaceSearch"></script>
   <script src="/dist/index.js"></script>
 </body>
 

@@ -52,18 +52,18 @@ class UpFile extends Component {
   onChange(info) {
     const { form, linkField } = this.props;
     if (info.file.status === 'uploading') {
-      console.log('------uploading')
+    //  console.log('------uploading')
     } else if (info.file.status === 'done') {
-      console.log('---------done')
+     // console.log('---------done')
       this.state.responseName = info.fileList[0].response;
       const newState = {};
       newState[linkField] = info.fileList[0].response;
       form.setFieldsValue(newState);
     } else if (info.file.status === 'error') {
-      console.log('----------error')
+    //  console.log('----------error')
       message.error(`${info.file.name} file upload failed.`);
     } else if (info.file.status === 'removed') {
-      console.log('----------removed')
+    //  console.log('----------removed')
       this.removeImg();
     }
 
@@ -93,8 +93,16 @@ class UpFile extends Component {
       previewVisible: true,
     });
   }
+  beforeUpload(file) {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片必须小于1MB');
+    }
+    return isLt1M;
+  }
+
   render() {
-    console.log('UpFile')
+    //console.log('UpFile')
     const { batsCode, disabled } = this.props;
     const { fileList, previewVisible, previewImage } = this.state;
     const uploadButton = (
@@ -112,6 +120,7 @@ class UpFile extends Component {
           listType="picture-card"
           onPreview={this.handlePreview}
           onChange={this.onChange}
+          beforeUpload={this.beforeUpload}
           fileList={fileList}
           data={{ fileType: 'jpg', batsCode }}
         >

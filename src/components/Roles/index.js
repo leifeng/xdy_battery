@@ -6,7 +6,7 @@ function Roles({modalRolesVisible, closeModalRoles, saveModalRoles, onChange, ro
 
   let options = [];
   roles.map((item, index) => {
-    options.push({ label: item.remark, value: item.id })
+    options.push({ label: item.roleName, value: item.id })
   })
   const radioStyle = {
     display: 'block',

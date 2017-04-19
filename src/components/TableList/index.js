@@ -16,22 +16,26 @@ class TableList extends Component {
     })
   }
   render() {
-    const {tableProps, pageProps, openModal, deleteForids, curd, auth} = this.props;
-    const {rowSelection = null, columns, data, rowKey, selectedRowKeys = [], loading, expandedRowRender} = tableProps;
-    const {onShowSizeChange = null, onChange, pageSize, pageNo, total} = pageProps;
+    const { tableProps, pageProps, openModal, deleteForids, curd, auth } = this.props;
+    const { rowSelection = null, columns, data, rowKey, selectedRowKeys = [], loading, expandedRowRender } = tableProps;
+    var pagination = false
+    if (pageProps) {
+      var { onShowSizeChange = null, onChange, pageSize, pageNo, total } = pageProps;
+      pagination = {
+        current: pageNo,
+        pageSize: pageSize,
+        total,
+        size: 'big',
+        showQuickJumper: true,
+        showTotal: total => `共 ${total} 条记录`,
+        showSizeChanger: false,
+        onShowSizeChange,
+        onChange
+      };
+    }
 
     const hasSelected = selectedRowKeys.length > 0;
-    const pagination = {
-      current: pageNo,
-      pageSize: pageSize,
-      total,
-      size: 'big',
-      showQuickJumper: true,
-      showTotal: total => `共 ${total} 条记录`,
-      showSizeChanger: false,
-      onShowSizeChange,
-      onChange
-    };
+
     const rowSelectionProps = {
       ...rowSelection,
       selectedRowKeys
@@ -49,7 +53,7 @@ class TableList extends Component {
         </div>
 
         <Table
-          rowSelection={auth.indexOf('delete') !== -1 ? rowSelectionProps : null}
+          rowSelection={(auth.indexOf('delete') !== -1 || auth.indexOf('batchDel') !== -1) ? rowSelectionProps : null}
           columns={columns}
           dataSource={data}
           loading={loading}

@@ -19,10 +19,11 @@ class AMAP extends Component {
     const lng = form.getFieldValue(lngField);
     const lat = form.getFieldValue(latField);
     this.setPoint(lng, lat)
+    this.placeSearch.clear()
   }
 
   componentDidMount() {
-    const { form, lngField, latField, modalType } = this.props;
+    const { form, lngField, latField, modalType,addressField } = this.props;
     const map = this.map = new AMap.Map('amap', {
       resizeEnable: true,
       zoom: 8
@@ -48,13 +49,20 @@ class AMAP extends Component {
         }
       });
     });
-    var auto = new AMap.Autocomplete({input:'tip'});
-    var placeSearch = new AMap.PlaceSearch({
-        map: map
+    var auto = new AMap.Autocomplete({ input: 'tip' });
+    var placeSearch=this.placeSearch = new AMap.PlaceSearch({
+      map: map
     });
-    AMap.event.addListener(auto, "select", (e)=>{
-        placeSearch.setCity(e.poi.adcode);
-        placeSearch.search(e.poi.name);
+    AMap.event.addListener(placeSearch, 'selectChanged', (e) => {
+      const newData = {};
+      newData[latField] = e.selected.data.location.lat;
+      newData[lngField] =  e.selected.data.location.lng
+      newData[addressField] =  e.selected.data.address;
+      form.setFieldsValue(newData)
+    })
+    AMap.event.addListener(auto, "select", (e) => {
+      placeSearch.setCity(e.poi.adcode);
+      placeSearch.search(e.poi.name);
     });
 
   }

@@ -9,11 +9,11 @@ import AuthModal from '../../components/AuthModal';
 import { checkRoleName } from '../../services/rolesMG';
 import { getList, getName } from '../../utils/dicFilter';
 
-function RolesMG({dispatch, rolesMG, dictionary, menus}) {
+function RolesMG({ dispatch, rolesMG, dictionary, menus }) {
   console.log('角色管理')
-  const {selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, authModalVisible, checkedKeys,roleName} = rolesMG;
-  const {allData} = dictionary
-  const {dataTree} = menus
+  const { selectedRowKeys, loading, data, pageSize, total, pageNo, visible, modalType, record, modalLoading, alertState, searchQuery, authModalVisible, checkedKeys, checkedAllKeys, roleName } = rolesMG;
+  const { allData } = dictionary
+  const { dataTree } = menus
   const menuLeaf = menus.menuLeaf ? menus.menuLeaf[location.pathname] : [];
   let t = -1;
   const StatusDic = getList(allData, 'Status');
@@ -86,6 +86,7 @@ function RolesMG({dispatch, rolesMG, dictionary, menus}) {
     ),
   }];
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'rolesMG/searchQueryChangeState',
@@ -209,18 +210,17 @@ function RolesMG({dispatch, rolesMG, dictionary, menus}) {
         rules: [{ type: "string", required: true, message: '请选择状态' }]
       },
       {
-        label: '备注', field: 'remark', type: 'TextArea',
-        rules: [{ required: true, message: '请输入中文名称' }]
+        label: '备注', field: 'remark', type: 'TextArea',help: '角色说明描述，最多30个字符' ,
+        rules: [{ required: true }, {  max: 30 }]
       }
     ]
   }
-
   const AuthModalProps = {
     roleName,
     visible: authModalVisible,
     data: dataTree,
     checkedKeys,
-    onChangekeys(keys, allKeys) {
+    onChangekeys(keys,allKeys) {
       dispatch({
         type: 'rolesMG/checkedKeysState',
         data: keys
@@ -254,7 +254,7 @@ function RolesMG({dispatch, rolesMG, dictionary, menus}) {
 RolesMG.propTypes = {
 };
 
-function mapStateToProps({rolesMG, dictionary, menus}) {
+function mapStateToProps({ rolesMG, dictionary, menus }) {
   return { rolesMG, dictionary, menus }
 }
 export default connect(mapStateToProps)(RolesMG);

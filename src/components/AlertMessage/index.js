@@ -36,7 +36,7 @@ class AlertMessage extends React.Component {
     notification.info({
       placement: 'bottomRight',
       message: '流程处理提醒',
-      description: '您在' + text + '中有 ' + num + ' 条信息需要处理', btn,
+      description: '您在' + text + '中有待办任务需要处理', btn,
       btn
     });
   }

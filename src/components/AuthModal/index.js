@@ -2,27 +2,23 @@ import React from 'react';
 import { Tree, Modal } from 'antd';
 const TreeNode = Tree.TreeNode;
 
-function AuthModal({visible, data, onOk, onCancel, onChangekeys, checkedKeys,roleName}) {
-
+function AuthModal({ visible, data, onOk, onCancel, onChangekeys, checkedKeys, roleName }) {
   function onCheck(info, e) {
-    console.log('onCheck', info);
-    console.log(e.halfCheckedKeys)
-    onChangekeys((info + '').split(','), (info + (e.halfCheckedKeys.length > 0 ? ',' + e.halfCheckedKeys : [])).split(','))
+    onChangekeys(info, info.concat(e.halfCheckedKeys))
+    // onChangekeys((info + '').split(','), (info + (e.halfCheckedKeys.length > 0 ? ',' + e.halfCheckedKeys : [])).split(','))
   }
 
   const ModalProps = {
-    title: roleName+'【权限分配】',
+    title: roleName + '【权限分配】',
     visible,
     onOk,
     onCancel
   }
-  const aaaa = checkedKeys.map((item) => {
-    return item + ''
-  })
+
   const TreeProps = {
     showLine: true,
     checkable: true,
-    checkedKeys: aaaa,
+    checkedKeys: checkedKeys.map((item) => { return item + '' }),
     onCheck,
   }
   return <Modal {...ModalProps}>
@@ -44,6 +40,6 @@ function AuthModal({visible, data, onOk, onCancel, onChangekeys, checkedKeys,rol
 AuthModal.defaultProps = {
   data: [],
   checkedKeys: [],
-  roleName:''
+  roleName: ''
 }
 export default AuthModal;

@@ -87,6 +87,7 @@ function Menus({dispatch, menus, dictionary}) {
     }
   }];
   const searchFormProps = {
+    searchQuery,
     handleChange(query) {
       dispatch({
         type: 'menus/searchQueryChangeState',
@@ -185,7 +186,7 @@ function Menus({dispatch, menus, dictionary}) {
         rules: [{ required: true, message: '请输入菜单名称' },
         { required: true, message: '菜单名称长度1~15', min: 1, max: 15 }]
       },
-      { label: '菜单URL', field: 'menuUrl', type: 'Input', },
+      { label: '菜单URL', field: 'menuUrl', type: 'Input'},
       { label: '父菜单ID', field: 'parentId', type: 'TreeSelect', dic: addTree },
       { label: '图标', field: 'menuCol1', type: 'Input' },
       {
